@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mausam - AI Weather & Persona Insights (SIH26076)</title>
+  
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- FontAwesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  
+
+  
+  <!-- Chart.js for 24-Hour Biometeorological Telemetry -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="/styles.css" />
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            mausam: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              500: '#0ea5e9',
+              600: '#0284c7',
+              700: '#0369a1',
+              800: '#075985',
+              900: '#0c4a6e'
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-sky-500 selection:text-white" data-lang="en">
+
+  <!-- ========================================================================= -->
+  <!-- Top Government Branding & Navigation Bar                                  -->
+  <!-- ========================================================================= -->
+  <div class="bg-slate-900 border-b border-slate-800/80 px-4 py-1.5 text-xs text-slate-400 flex items-center justify-between">
+    <div class="max-w-7xl mx-auto w-full flex items-center justify-between">
+      <span class="flex items-center gap-2 font-medium" data-i18n="govTag">
+        <i class="fa-solid fa-flag text-sky-400"></i> Ministry of Earth Sciences (MoES) • Govt. of India • IMD
+      </span>
+      <div class="flex items-center space-x-3">
+        <!-- Language Switcher Button -->
+        <button id="langToggleBtn" type="button" class="flex items-center space-x-1.5 px-2.5 py-0.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">
+          <i class="fa-solid fa-language text-sky-400"></i>
+          <span id="langLabel" class="font-bold">हिंदी</span>
+        </button>
+        <!-- Customize Homepage Widgets Button -->
+        <button id="customizeBtn" type="button" class="hidden sm:flex items-center space-x-1.5 px-2.5 py-0.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">
+          <i class="fa-solid fa-sliders text-amber-400"></i>
+          <span data-i18n="customizeBtn">Customize</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <header class="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <!-- App Branding -->
+      <div class="flex items-center space-x-3.5">
+        <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-sky-500 via-indigo-500 to-amber-400 flex items-center justify-center text-2xl shadow-lg shadow-sky-500/25 ring-1 ring-white/20 transform hover:scale-105 transition">
+          🌦️
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <span class="font-black text-2xl tracking-tight bg-gradient-to-r from-white via-slate-100 to-sky-300 bg-clip-text text-transparent">Mausam</span>
+            <span class="text-xs px-2.5 py-0.5 rounded-full bg-sky-500/15 text-sky-300 font-bold border border-sky-500/30 tracking-wide">SIH26076</span>
+          </div>
+          <p class="text-xs text-slate-400 hidden sm:block font-medium">Smart AI Meteorological & 8-Persona Bioclimatic Decision Engine</p>
+        </div>
+      </div>
+
+      <!-- Right Nav Status Badges & Quick Action Links -->
+      <div class="flex items-center space-x-3 text-sm">
+        <!-- Live Multi-Source vs Offline Fallback Status Indicator -->
+        <div id="sourceStatusBadge" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 shadow-sm transition">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span id="sourceStatusText">Multi-Source API (Live)</span>
+        </div>
+
+        <!-- 10-Minute Cache Indicator Badge -->
+        <div id="cacheBadge" class="hidden items-center space-x-1 px-2.5 py-1.5 rounded-full text-xs font-semibold bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">
+          <span>⚡ Cached</span>
+        </div>
+
+        <!-- Swagger Docs Link -->
+        <a href="/api-docs" target="_blank" class="hidden md:flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 hover:border-slate-600 transition shadow-sm">
+          <span>📚 API Docs</span>
+        </a>
+
+        <!-- Health Diagnostic Link -->
+        <a href="/health" target="_blank" class="hidden lg:flex items-center space-x-1 px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-800/80 hover:bg-slate-700 text-slate-300 border border-slate-700/80 transition">
+          <span>🩺 Health</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Navigation Tab Bar (Home / Forecast / Locations / IMD Alerts / Profile) -->
+    <div class="bg-slate-950/70 border-t border-slate-800/80 px-4">
+      <div class="max-w-7xl mx-auto flex items-center space-x-1 overflow-x-auto py-2 text-xs font-semibold">
+        <button type="button" class="nav-tab active px-4 py-2 rounded-xl flex items-center space-x-2 text-slate-300 hover:text-white" data-tab="home">
+          <i class="fa-solid fa-house"></i>
+          <span data-i18n="tabHome">Home</span>
+        </button>
+        <button type="button" class="nav-tab px-4 py-2 rounded-xl flex items-center space-x-2 text-slate-300 hover:text-white" data-tab="forecast">
+          <i class="fa-solid fa-chart-line"></i>
+          <span data-i18n="tabForecast">Forecast</span>
+        </button>
+        <button type="button" class="nav-tab px-4 py-2 rounded-xl flex items-center space-x-2 text-slate-300 hover:text-white" data-tab="locations">
+          <i class="fa-solid fa-location-dot"></i>
+          <span data-i18n="tabLocations">Locations</span>
+        </button>
+        <button type="button" class="nav-tab px-4 py-2 rounded-xl flex items-center space-x-2 text-slate-300 hover:text-white" data-tab="alerts">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          <span data-i18n="tabAlerts">IMD Alerts</span>
+        </button>
+        <button type="button" class="nav-tab px-4 py-2 rounded-xl flex items-center space-x-2 text-slate-300 hover:text-white" data-tab="profile">
+          <i class="fa-solid fa-user-gear"></i>
+          <span data-i18n="tabProfile">My Profile</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- Main Application Container                                                -->
+  <!-- ========================================================================= -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+    <!-- Fallback Offline Alert Banner (shown when isFallback === true) -->
+    <div id="offlineBanner" class="hidden p-4 rounded-2xl bg-amber-500/15 border border-amber-500/40 text-amber-200 flex items-start space-x-3.5 shadow-xl">
+      <span class="text-2xl mt-0.5">⚠️</span>
+      <div class="flex-grow text-sm">
+        <h4 class="font-bold text-amber-300">Offline Fallback Mode Active</h4>
+        <p class="text-amber-200/90 text-xs mt-0.5 leading-relaxed">
+          One or more live external data feeds (OpenWeather, Open-Meteo, Stormglass, ORS, IMD) timed out or encountered a network outage. Weather metrics are reliably served from the resilient local baseline dataset to guarantee 100% uninterrupted uptime.
+        </p>
+      </div>
+    </div>
+
+    <!-- IMD Meteorological Warning / Alert Bar -->
+    <div id="warningBar" class="warning-bar alert-green">
+      <div class="flex items-center space-x-3">
+        <i class="fa-solid fa-bell text-lg"></i>
+        <div>
+          <span id="warningLevelText" class="font-black tracking-wider uppercase">WEATHER WATCH</span>:
+          <span id="warningMsgText" class="ml-1 font-normal opacity-90">Normal seasonal weather conditions active across district.</span>
+        </div>
+      </div>
+      <button id="warningDetailBtn" type="button" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-white/15 hover:bg-white/25 transition whitespace-nowrap" data-i18n="advisoryBtn">
+        View Advisory
+      </button>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- TAB PAGE 1: HOME (Dashboard, Telemetry, Personas, Widgets)             -->
+    <!-- ======================================================================= -->
+    <div id="tab-home" class="tab-page active space-y-6">
+
+      <!-- Location Search & Preset Controls -->
+      <section class="bg-slate-900/80 backdrop-blur-md rounded-3xl border border-slate-800 p-6 sm:p-7 shadow-2xl space-y-6">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-xl font-bold text-white flex items-center gap-2">
+              <span>📍</span> Select or Search Location
+            </h2>
+            <p class="text-xs text-slate-400 mt-1">
+              Pick from preset Indian cities (Delhi, Mumbai, Bengaluru, Udaipur, Bikaner), search by name, or specify custom geographical coordinates.
+            </p>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex items-center space-x-2.5">
+            <button id="gpsBtn" type="button" class="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 hover:border-slate-600 transition shadow-sm active:scale-95">
+              <span>🧭</span>
+              <span>Use My GPS</span>
+            </button>
+            <button id="openSaveModalBtn" type="button" class="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-sky-500/15 hover:bg-sky-500/25 text-sky-300 border border-sky-500/30 transition shadow-sm active:scale-95">
+              <span>⭐</span>
+              <span>Bookmark City</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Searchable City Dropdown & Quick Search Bar -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5 pt-1">
+          <!-- Preset Dropdown Selector -->
+          <div>
+            <label for="presetCitySelect" class="block text-xs font-semibold text-slate-300 mb-1.5 flex items-center gap-1.5">
+              <span>🏙️</span> Preset Indian Cities Dropdown
+            </label>
+            <select id="presetCitySelect" class="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white text-sm focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition font-medium cursor-pointer">
+              <option value="" disabled selected>-- Select a Preset Indian City --</option>
+              <option value="Delhi">Delhi (NCR) - 28.61°N, 77.21°E</option>
+              <option value="Mumbai">Mumbai (Coastal Maharashtra) - 19.08°N, 72.88°E</option>
+              <option value="Bengaluru">Bengaluru (Karnataka Tech Plateau) - 12.97°N, 77.59°E</option>
+              <option value="Udaipur">Udaipur (City of Lakes, Rajasthan) - 24.59°N, 73.71°E</option>
+              <option value="Bikaner">Bikaner (Thar Desert, Rajasthan) - 28.02°N, 73.31°E</option>
+              <option value="Chennai">Chennai (Coromandel Coast) - 13.08°N, 80.27°E</option>
+              <option value="Kolkata">Kolkata (Ganges Delta) - 22.57°N, 88.36°E</option>
+              <option value="Shimla">Shimla (Himalayan Foothills) - 31.10°N, 77.17°E</option>
+              <option value="Kochi">Kochi (Malabar Coast) - 9.93°N, 76.27°E</option>
+              <option value="Hyderabad">Hyderabad (Deccan Plateau) - 17.39°N, 78.49°E</option>
+            </select>
+          </div>
+
+          <!-- Searchable City Input with Datalist -->
+          <div>
+            <label for="citySearchInput" class="block text-xs font-semibold text-slate-300 mb-1.5 flex items-center gap-1.5">
+              <span>🔍</span> Search City or Region
+            </label>
+            <div class="relative">
+              <input 
+                type="text" 
+                id="citySearchInput" 
+                list="presetCityDatalist" 
+                placeholder="Type city name (e.g. Udaipur, Bikaner, Delhi)..."
+                class="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition font-medium"
+              />
+              <datalist id="presetCityDatalist">
+                <option value="Delhi">Delhi (NCR)</option>
+                <option value="Mumbai">Mumbai (Coastal Maharashtra)</option>
+                <option value="Bengaluru">Bengaluru (Karnataka)</option>
+                <option value="Udaipur">Udaipur (Rajasthan)</option>
+                <option value="Bikaner">Bikaner (Rajasthan)</option>
+                <option value="Chennai">Chennai (Tamil Nadu)</option>
+                <option value="Kolkata">Kolkata (West Bengal)</option>
+                <option value="Shimla">Shimla (Himachal Pradesh)</option>
+                <option value="Kochi">Kochi (Kerala)</option>
+                <option value="Hyderabad">Hyderabad (Telangana)</option>
+              </datalist>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Preset Location Chips Container -->
+        <div class="space-y-1.5">
+          <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Quick Presets</span>
+          <div class="flex flex-wrap gap-2" id="presetChipsContainer">
+            <!-- Preset chips populated by app.js -->
+          </div>
+        </div>
+
+        <!-- Coordinate Input Form (Custom Search) -->
+        <form id="coordForm" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 pt-2 border-t border-slate-800/80">
+          <div>
+            <label for="latInput" class="block text-xs font-medium text-slate-300 mb-1">Latitude (-90° to 90°)</label>
+            <input type="number" step="any" id="latInput" required placeholder="e.g. 28.6139" value="28.6139"
+              class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition" />
+          </div>
+          <div>
+            <label for="lonInput" class="block text-xs font-medium text-slate-300 mb-1">Longitude (-180° to 180°)</label>
+            <input type="number" step="any" id="lonInput" required placeholder="e.g. 77.2090" value="77.2090"
+              class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition" />
+          </div>
+          <div class="sm:col-span-2 lg:col-span-2">
+            <label for="cityNameInput" class="block text-xs font-medium text-slate-300 mb-1">City / Region Label</label>
+            <input type="text" id="cityNameInput" placeholder="e.g. New Delhi" value="New Delhi"
+              class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition" />
+          </div>
+          <div class="flex items-end">
+            <button type="submit" id="searchBtn"
+              class="w-full py-2.5 px-4 rounded-xl font-bold text-sm bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white shadow-lg shadow-sky-500/25 flex items-center justify-center space-x-2 transition duration-150 active:scale-[0.98]">
+              <span id="btnSpinner" class="hidden animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"></span>
+              <span id="btnText">Get Forecast</span>
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Primary Weather Dashboard Card -->
+      <section id="weatherCard" class="relative overflow-hidden bg-gradient-to-br from-slate-900/90 via-slate-800/80 to-slate-900/95 rounded-3xl border border-slate-700/80 p-6 sm:p-8 shadow-2xl backdrop-blur-xl">
+        <div class="absolute -top-24 -right-24 w-80 h-80 bg-sky-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <!-- Top Row: City & Current Temp -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-slate-700/60">
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="text-sky-400 text-xs font-bold uppercase tracking-wider">Live Conditions</span>
+              <span class="text-xs px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-300 font-mono" id="cityCoordsDisplay">Lat: 28.61, Lon: 77.21</span>
+            </div>
+            <h1 class="text-3xl sm:text-4xl font-black text-white mt-1.5" id="currentCityDisplay">New Delhi</h1>
+            <p class="text-xs text-slate-400 mt-1" id="timestampDisplay">Updated: Just now</p>
+          </div>
+
+          <div class="flex items-center space-x-5">
+            <div class="text-5xl sm:text-6xl font-extrabold text-white tracking-tighter flex items-start">
+              <span id="tempValue">--</span>
+              <span class="text-3xl text-sky-400 font-bold ml-1">°C</span>
+            </div>
+            <div class="border-l border-slate-700 pl-4 space-y-1.5">
+              <div id="weatherBadge" class="text-xs font-bold px-2.5 py-1 rounded-lg bg-sky-500/20 text-sky-300 inline-block">
+                Pleasant
+              </div>
+              <p class="text-xs text-slate-400">Wind: <span id="windDisplay" class="text-white font-medium">-- km/h</span></p>
+              <p class="text-xs text-slate-400">Rain Prob: <span id="rainDisplay" class="text-white font-medium">--%</span></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Meteorological Metrics Grid -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 pt-6">
+          <!-- Relative Humidity -->
+          <div class="bg-slate-950/60 rounded-2xl p-4 border border-slate-800/80 flex flex-col justify-between">
+            <div class="text-slate-400 text-xs font-medium flex items-center justify-between">
+              <span data-i18n="humidity">Humidity</span>
+              <span class="text-base">💧</span>
+            </div>
+            <div class="mt-3">
+              <div class="text-xl font-bold text-white" id="humidityVal">--%</div>
+              <p class="text-[11px] text-slate-400 mt-0.5">Relative air moisture</p>
+            </div>
+          </div>
+
+          <!-- Air Quality (PM2.5) -->
+          <div class="bg-slate-950/60 rounded-2xl p-4 border border-slate-800/80 flex flex-col justify-between">
+            <div class="text-slate-400 text-xs font-medium flex items-center justify-between">
+              <span>Air Quality (PM2.5)</span>
+              <span class="text-base">🌫️</span>
+            </div>
+            <div class="mt-3">
+              <div class="text-xl font-bold text-white flex items-center space-x-1.5">
+                <span id="pm25Val">--</span>
+                <span class="text-xs text-slate-400 font-normal">µg/m³</span>
+              </div>
+              <div id="aqiBadge" class="text-[10px] font-bold px-1.5 py-0.5 rounded mt-1 inline-block bg-slate-800 text-slate-300">
+                Good
+              </div>
+            </div>
+          </div>
+
+          <!-- Solar UV Index -->
+          <div class="bg-slate-950/60 rounded-2xl p-4 border border-slate-800/80 flex flex-col justify-between">
+            <div class="text-slate-400 text-xs font-medium flex items-center justify-between">
+              <span data-i18n="uvIndex">UV Index</span>
+              <span class="text-base">☀️</span>
+            </div>
+            <div class="mt-3">
+              <div class="text-xl font-bold text-white" id="uvVal">--</div>
+              <div id="uvBadge" class="text-[10px] font-bold px-1.5 py-0.5 rounded mt-1 inline-block bg-slate-800 text-slate-300">
+                Moderate
+              </div>
+            </div>
+          </div>
+
+          <!-- Visibility -->
+          <div class="bg-slate-950/60 rounded-2xl p-4 border border-slate-800/80 flex flex-col justify-between">
+            <div class="text-slate-400 text-xs font-medium flex items-center justify-between">
+              <span>Visibility</span>
+              <span class="text-base">👁️</span>
+            </div>
+            <div class="mt-3">
+              <div class="text-xl font-bold text-white" id="visibilityVal">-- km</div>
+              <p class="text-[11px] text-slate-400 mt-0.5">Atmospheric sight</p>
+            </div>
+          </div>
+
+          <!-- Soil Moisture -->
+          <div class="bg-slate-950/60 rounded-2xl p-4 border border-slate-800/80 flex flex-col justify-between">
+            <div class="text-slate-400 text-xs font-medium flex items-center justify-between">
+              <span data-i18n="soilMoisture">Soil Moisture</span>
+              <span class="text-base">🌱</span>
+            </div>
+            <div class="mt-3">
+              <div class="text-xl font-bold text-white" id="soilVal">-- m³/m³</div>
+              <p class="text-[11px] text-slate-400 mt-0.5">Root layer (0-1cm)</p>
+            </div>
+          </div>
+
+          <!-- Marine / Wave Height -->
+          <div class="bg-slate-950/60 rounded-2xl p-4 border border-slate-800/80 flex flex-col justify-between">
+            <div class="text-slate-400 text-xs font-medium flex items-center justify-between">
+              <span>Wave & Current</span>
+              <span class="text-base">🌊</span>
+            </div>
+            <div class="mt-3">
+              <div class="text-xl font-bold text-white" id="waveVal">-- m</div>
+              <p class="text-[11px] text-slate-400 mt-0.5" id="currentSpeedVal">Speed: -- m/s</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hidden telemetry values used by new snippet engine -->
+        <div class="hidden">
+          <span id="heroTemp"></span>
+          <span id="heroCondition"></span>
+          <span id="heroHigh"></span>
+          <span id="heroLow"></span>
+          <span id="heroFeels"></span>
+          <span id="heroHumidity"></span>
+          <span id="heroWind"></span>
+          <span id="heroUv"></span>
+          <span id="heroRainChance"></span>
+        </div>
+
+        <!-- Multi-Source Provider Live Status Bar -->
+        <div id="sourcesContainer" class="mt-6 pt-4 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-3 text-xs">
+          <span class="text-slate-400 font-semibold flex items-center gap-1.5">
+            <span>📡</span> Multi-Source Provider Feeds:
+          </span>
+          <div class="flex flex-wrap gap-2 text-[11px]" id="providerStatusList">
+            <span class="px-2 py-0.5 rounded-md bg-slate-800 text-slate-300">Open-Meteo</span>
+            <span class="px-2 py-0.5 rounded-md bg-slate-800 text-slate-300">IMD Alerts</span>
+            <span class="px-2 py-0.5 rounded-md bg-slate-800 text-slate-300">OpenWeather</span>
+            <span class="px-2 py-0.5 rounded-md bg-slate-800 text-slate-300">Stormglass</span>
+            <span class="px-2 py-0.5 rounded-md bg-slate-800 text-slate-300">OpenRoute</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- Smart AI Personalization Engine & Quick Persona Switcher               -->
+      <!-- ===================================================================== -->
+      <section class="p-6 rounded-3xl bg-slate-900/80 border border-slate-800 backdrop-blur-md shadow-xl space-y-4">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-xl bg-sky-500/20 text-sky-400 flex items-center justify-center text-xl">
+              <i class="fa-solid fa-wand-magic-sparkles"></i>
+            </div>
+            <div>
+              <h3 class="font-bold text-white text-base" data-i18n="aiInsightTitle">Smart AI Personalization Insight</h3>
+              <p class="text-xs text-slate-400">
+                <span data-i18n="rankingLabel">AI Ranking Engine:</span>
+                <span id="rankingRoleText" class="text-sky-400 font-semibold">Runner / Fitness Profile</span>
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center space-x-2">
+            <span id="activeProfileChip" class="px-3 py-1 rounded-full text-xs font-bold bg-sky-500/15 text-sky-300 border border-sky-500/30">
+              Runner Active
+            </span>
+            <button id="openOnboardingBtn" type="button" class="px-3 py-1 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">
+              <i class="fa-solid fa-arrows-rotate"></i> Change Profile
+            </button>
+          </div>
+        </div>
+
+        <!-- AI Insight Banner Box -->
+        <div class="p-4 rounded-2xl bg-sky-950/40 border border-sky-800/40 text-sm leading-relaxed text-sky-100 flex items-start gap-3">
+          <i class="fa-solid fa-robot text-sky-400 text-lg mt-0.5"></i>
+          <div id="aiInsightText">
+            Analyzing current meteorological parameters to generate bioclimatic recommendations...
+          </div>
+        </div>
+
+        <!-- Quick Persona Switcher Chips Bar -->
+        <div class="pt-2 flex items-center justify-between gap-2 overflow-x-auto">
+          <span class="text-xs text-slate-400 font-semibold whitespace-nowrap">Switch Persona:</span>
+          <div class="flex items-center gap-2 overflow-x-auto pb-1">
+            <button class="demo-btn active px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 flex items-center gap-1.5" data-demo="runner">
+              <span>🏃</span> Runner
+            </button>
+            <button class="demo-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 flex items-center gap-1.5" data-demo="parent">
+              <span>👨‍👩‍👧</span> Parent
+            </button>
+            <button class="demo-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 flex items-center gap-1.5" data-demo="traveler">
+              <span>✈️</span> Traveler
+            </button>
+            <button class="demo-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 flex items-center gap-1.5" data-demo="farmer">
+              <span>🌾</span> Farmer
+            </button>
+            <button class="demo-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 flex items-center gap-1.5" data-demo="health">
+              <span>🫁</span> Health
+            </button>
+            <button class="demo-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 flex items-center gap-1.5" data-demo="commuter">
+              <span>🚗</span> Commuter
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- Dynamic Widgets Grid (Ordered dynamically by AI Personalization Engine)-->
+      <!-- ===================================================================== -->
+      <section class="space-y-4">
+        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+          <span>📊</span> Priority Decision Widgets
+        </h3>
+
+        <div id="widgetsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          
+          <!-- Widget 1: Fitness / Runner -->
+          <div class="glass-panel rounded-3xl p-5 border border-slate-800 flex flex-col justify-between" data-widget="fitness">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="font-bold text-white flex items-center gap-2 text-sm">
+                  <span>🏃</span> <span data-i18n="fitnessTitle">Running & Workout Guide</span>
+                </span>
+                <span class="text-xs px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 font-bold border border-emerald-500/30">Optimal</span>
+              </div>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                <strong data-i18n="bestWorkoutWindow">Optimal Workout Windows:</strong> Early morning before peak solar irradiance.
+              </p>
+              <div class="mt-3 grid grid-cols-3 gap-2 text-center text-xs">
+                <div class="p-2 rounded-xl bg-slate-900 border border-slate-800">
+                  <span class="text-[10px] text-slate-400 block" data-i18n="heatIndex">Heat Risk</span>
+                  <strong id="heatIndexVal" class="text-white font-semibold">Low Risk</strong>
+                </div>
+                <div class="p-2 rounded-xl bg-slate-900 border border-slate-800">
+                  <span class="text-[10px] text-slate-400 block">UV Gear</span>
+                  <strong id="uvFitVal" class="text-white font-semibold">SPF 30</strong>
+                </div>
+                <div class="p-2 rounded-xl bg-slate-900 border border-slate-800">
+                  <span class="text-[10px] text-slate-400 block" data-i18n="hydration">Hydration</span>
+                  <strong id="hydrationVal" class="text-sky-400 font-semibold">500 ml/hr</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Widget 2: School Commute & Parent -->
+          <div class="glass-panel rounded-3xl p-5 border border-slate-800 flex flex-col justify-between" data-widget="parent">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="font-bold text-white flex items-center gap-2 text-sm">
+                  <span>👨‍👩‍👧</span> <span data-i18n="parentTitle">School Commute & Family Outing</span>
+                </span>
+                <span class="text-xs px-2 py-0.5 rounded-full bg-sky-500/15 text-sky-400 font-bold border border-sky-500/30">Safe Commute</span>
+              </div>
+              <p id="parentAdvisoryText" class="text-xs text-slate-300 leading-relaxed">
+                Normal school commute precautions are recommended. Carry water bottles.
+              </p>
+            </div>
+          </div>
+
+          <!-- Widget 3: Traveler -->
+          <div class="glass-panel rounded-3xl p-5 border border-slate-800 flex flex-col justify-between" data-widget="traveler">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="font-bold text-white flex items-center gap-2 text-sm">
+                  <span>✈️</span> <span data-i18n="travelerTitle">Traveler & Destination Weather</span>
+                </span>
+                <span class="text-xs px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 font-bold border border-emerald-500/30">Travel Safe</span>
+              </div>
+              <div class="space-y-1.5 text-xs text-slate-300">
+                <div class="flex justify-between">
+                  <span class="text-slate-400">Destination Weather:</span>
+                  <strong id="destTemp" class="text-white">--</strong>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-slate-400">Flight Delay Risk:</span>
+                  <strong id="flightRisk" class="text-emerald-400">Low Risk</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Widget 4: Kisan / Agriculture -->
+          <div class="glass-panel rounded-3xl p-5 border border-slate-800 flex flex-col justify-between" data-widget="kisan">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="font-bold text-white flex items-center gap-2 text-sm">
+                  <span>🌾</span> <span data-i18n="kisanTitle">Gramin Krishi Mausam Sewa</span>
+                </span>
+                <span class="text-xs px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-400 font-bold border border-amber-500/30">Agromet Live</span>
+              </div>
+              <p id="cropAdvisoryText" class="text-xs text-slate-300 leading-relaxed mb-3">
+                Optimal conditions for field operations and seasonal crop care.
+              </p>
+              <div class="grid grid-cols-2 gap-2 text-xs">
+                <div class="p-2 rounded-xl bg-slate-900 border border-slate-800">
+                  <span class="text-[10px] text-slate-400 block" data-i18n="soilMoisture">Soil Moisture</span>
+                  <strong id="soilMoistureVal" class="text-white">--</strong>
+                </div>
+                <div class="p-2 rounded-xl bg-slate-900 border border-slate-800">
+                  <span class="text-[10px] text-slate-400 block" data-i18n="dewPoint">Dew Point</span>
+                  <strong id="dewPointVal" class="text-white">--</strong>
+                </div>
+                <div class="p-2 rounded-xl bg-slate-900 border border-slate-800">
+                  <span class="text-[10px] text-slate-400 block" data-i18n="hailRisk">Hail / Frost Risk</span>
+                  <strong id="hailRiskVal" class="text-emerald-400">Nil</strong>
+                </div>
+                <div class="p-2 rounded-xl bg-slate-900 border border-slate-800">
+                  <span class="text-[10px] text-slate-400 block" data-i18n="irrigationRec">Irrigation Advice</span>
+                  <strong id="irrigationVal" class="text-sky-400">Normal</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Widget 5: Health & AQI -->
+          <div class="glass-panel rounded-3xl p-5 border border-slate-800 flex flex-col justify-between" data-widget="health">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="font-bold text-white flex items-center gap-2 text-sm">
+                  <span>🫁</span> <span data-i18n="healthTitle">Air Quality & Health Risk</span>
+                </span>
+                <span class="text-xs px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 font-bold border border-emerald-500/30">Good</span>
+              </div>
+              <div class="flex items-center space-x-3 mb-2">
+                <div class="text-3xl font-black text-white" id="aqiNumber">--</div>
+                <div class="text-xs text-slate-400">
+                  <span>US-AQI / CPCB Scale</span>
+                  <p id="aqiDesc" class="text-emerald-400 font-semibold mt-0.5">Air quality is favorable</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Widget 6: Commuter & Nowcast -->
+          <div class="glass-panel rounded-3xl p-5 border border-slate-800 flex flex-col justify-between" data-widget="commuter">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="font-bold text-white flex items-center gap-2 text-sm">
+                  <span>🚗</span> <span data-i18n="commuterTitle">Daily Commuter & Nowcast</span>
+                </span>
+                <span class="text-xs px-2 py-0.5 rounded-full bg-sky-500/15 text-sky-400 font-bold border border-sky-500/30">Nowcast</span>
+              </div>
+              <p id="nowcastText" class="text-xs text-slate-300 leading-relaxed">
+                Clear transit corridors across main roads.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- 8 Persona Recommendations & Interactive Tab Grid Layout                -->
+      <!-- ===================================================================== -->
+      <section class="space-y-6">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+              <span>👥</span> 8-Persona Recommendation Engine
+            </h2>
+            <p class="text-xs text-slate-400 mt-0.5">
+              Real-time psychrometric and biometeorological advisories tailored for 8 user personas. Click any persona card to inspect full alert badges and customized guidance.
+            </p>
+          </div>
+
+          <!-- Responsive 8-Persona Category Filter Tabs -->
+          <div class="flex flex-wrap gap-1.5 p-1.5 rounded-2xl bg-slate-900/90 border border-slate-800" id="personaFilterTabs">
+            <button data-filter="all" class="filter-tab active px-3 py-1.5 rounded-xl text-xs font-bold bg-sky-500 text-white shadow transition">All (8)</button>
+            <button data-filter="Health-Conscious" class="filter-tab px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-white transition">🩺 Health</button>
+            <button data-filter="Commuters" class="filter-tab px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-white transition">🚗 Commuters</button>
+            <button data-filter="Agriculture/Gardeners" class="filter-tab px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-white transition">🌾 Farmers</button>
+            <button data-filter="Beachgoers/Surfers" class="filter-tab px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-white transition">🏄 Beachgoers</button>
+            <button data-filter="Parents & Families" class="filter-tab px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-white transition">👨‍👩‍👧 Parents</button>
+            <button data-filter="Event Planners" class="filter-tab px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-white transition">🎉 Event Planners</button>
+            <button data-filter="Travelers" class="filter-tab px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-white transition">🧳 Travelers</button>
+            <button data-filter="Outdoor Fitness" class="filter-tab px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-white transition">🏃 General</button>
+          </div>
+        </div>
+
+        <!-- Active Selected Persona Spotlight Detail Panel -->
+        <div id="activePersonaSpotlight" class="p-6 rounded-3xl bg-gradient-to-br from-slate-900/95 via-slate-800/80 to-slate-900/90 border border-sky-500/40 shadow-2xl backdrop-blur-xl transition duration-200">
+          <!-- Spotlight Content populated dynamically by app.js -->
+        </div>
+
+        <!-- Secondary Persona Spotlight Viewer Components from snippet -->
+        <div class="hidden">
+          <h4 id="personaSpotlightTitle"></h4>
+          <p id="personaSpotlightSummary"></p>
+          <span id="personaSpotlightChip"></span>
+          <div id="personaSpotlightGrid"></div>
+        </div>
+
+        <!-- 8-Persona Cards Grid Container -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5" id="personasContainer">
+          <!-- 8 Persona Cards rendered dynamically by app.js -->
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- TAB PAGE 2: FORECAST                                                    -->
+    <!-- ======================================================================= -->
+    <div id="tab-forecast" class="tab-page hidden space-y-6">
+
+      <!-- 24-Hour Trend Charts -->
+      <section class="p-6 rounded-3xl bg-slate-900/80 border border-slate-800 backdrop-blur-md shadow-xl space-y-4">
+        <div>
+          <h3 class="text-lg font-bold text-white flex items-center gap-2" data-i18n="chartTitle">
+            <i class="fa-solid fa-chart-area text-sky-400"></i> 24-Hour Temperature & Rain Probability Trend
+          </h3>
+          <p class="text-xs text-slate-400 mt-0.5" data-i18n="chartSubtitle">
+            Real-time psychrometric progression derived from active station telemetry
+          </p>
+        </div>
+        <div style="height: 260px;" class="w-full">
+          <canvas id="hourlyChart"></canvas>
+        </div>
+      </section>
+
+      <!-- Active Persona 24-Hour Focus Trend -->
+      <section class="p-6 rounded-3xl bg-slate-900/80 border border-slate-800 backdrop-blur-md shadow-xl space-y-4">
+        <div class="flex items-center justify-between">
+          <h3 class="text-base font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-person-running text-amber-400"></i> Persona Focused 24h Hourly Profile
+          </h3>
+          <span id="hourlyProfileChip" class="px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+            Runner Focus
+          </span>
+        </div>
+        <div style="height: 220px;" class="w-full">
+          <canvas id="personaHourlyChart"></canvas>
+        </div>
+      </section>
+
+      <!-- 7-Day Extended IMD Forecast -->
+      <section class="p-6 rounded-3xl bg-slate-900/80 border border-slate-800 backdrop-blur-md shadow-xl space-y-4">
+        <div>
+          <h3 class="text-lg font-bold text-white flex items-center gap-2" data-i18n="forecastTitle">
+            <i class="fa-solid fa-calendar-week text-emerald-400"></i> 7-Day IMD Official Extended Forecast
+          </h3>
+          <p class="text-xs text-slate-400 mt-0.5">
+            Medium-range numerical weather prediction based on regional synoptic circulation
+          </p>
+        </div>
+        <div id="forecastDays" class="space-y-2">
+          <!-- Populated dynamically by app.js -->
+        </div>
+      </section>
+
+
+
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- TAB PAGE 3: LOCATIONS (Preset Regional Hubs & Saved Cities)            -->
+    <!-- ======================================================================= -->
+    <div id="tab-locations" class="tab-page hidden space-y-6">
+      <section class="p-6 rounded-3xl bg-slate-900/80 border border-slate-800 backdrop-blur-md shadow-xl space-y-5">
+        <div>
+          <h3 class="text-xl font-bold text-white flex items-center gap-2">
+            <span>🏙️</span> Indian Regional Meteorological Observatories
+          </h3>
+          <p class="text-xs text-slate-400 mt-0.5">
+            Direct access to all major regional meteorological telemetry centers
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div onclick="window.switchCity('Delhi')" class="p-4 rounded-2xl bg-slate-950 border border-slate-800 hover:border-sky-500 cursor-pointer transition">
+            <div class="flex justify-between items-center">
+              <span class="font-bold text-white">New Delhi</span>
+              <span class="text-xs text-sky-400">NCR</span>
+            </div>
+            <p class="text-xs text-slate-400 mt-1">28.61°N, 77.21°E • Primary National Telemetry</p>
+          </div>
+
+          <div onclick="window.switchCity('Mumbai')" class="p-4 rounded-2xl bg-slate-950 border border-slate-800 hover:border-sky-500 cursor-pointer transition">
+            <div class="flex justify-between items-center">
+              <span class="font-bold text-white">Mumbai</span>
+              <span class="text-xs text-sky-400">Coastal Maharashtra</span>
+            </div>
+            <p class="text-xs text-slate-400 mt-1">19.08°N, 72.88°E • Marine & Monsoon Surge</p>
+          </div>
+
+          <div onclick="window.switchCity('Bengaluru')" class="p-4 rounded-2xl bg-slate-950 border border-slate-800 hover:border-sky-500 cursor-pointer transition">
+            <div class="flex justify-between items-center">
+              <span class="font-bold text-white">Bengaluru</span>
+              <span class="text-xs text-sky-400">Karnataka Plateau</span>
+            </div>
+            <p class="text-xs text-slate-400 mt-1">12.97°N, 77.59°E • Tech Plateau</p>
+          </div>
+
+          <div onclick="window.switchCity('Udaipur')" class="p-4 rounded-2xl bg-slate-950 border border-slate-800 hover:border-sky-500 cursor-pointer transition">
+            <div class="flex justify-between items-center">
+              <span class="font-bold text-white">Udaipur</span>
+              <span class="text-xs text-sky-400">Rajasthan</span>
+            </div>
+            <p class="text-xs text-slate-400 mt-1">24.59°N, 73.71°E • City of Lakes</p>
+          </div>
+
+          <div onclick="window.switchCity('Bikaner')" class="p-4 rounded-2xl bg-slate-950 border border-slate-800 hover:border-sky-500 cursor-pointer transition">
+            <div class="flex justify-between items-center">
+              <span class="font-bold text-white">Bikaner</span>
+              <span class="text-xs text-sky-400">Thar Desert</span>
+            </div>
+            <p class="text-xs text-slate-400 mt-1">28.02°N, 73.31°E • Arid Biometeorology</p>
+          </div>
+
+          <div onclick="window.switchCity('Shimla')" class="p-4 rounded-2xl bg-slate-950 border border-slate-800 hover:border-sky-500 cursor-pointer transition">
+            <div class="flex justify-between items-center">
+              <span class="font-bold text-white">Shimla</span>
+              <span class="text-xs text-sky-400">Himalayan Foothills</span>
+            </div>
+            <p class="text-xs text-slate-400 mt-1">31.10°N, 77.17°E • Mountain Weather</p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- TAB PAGE 4: IMD WARNINGS & ADVISORIES                                   -->
+    <!-- ======================================================================= -->
+    <div id="tab-alerts" class="tab-page hidden space-y-6">
+      <section class="p-6 rounded-3xl bg-slate-900/80 border border-slate-800 backdrop-blur-md shadow-xl space-y-5">
+        <div>
+          <h3 class="text-xl font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-triangle-exclamation text-amber-400"></i> IMD National Meteorological Bulletins
+          </h3>
+          <p class="text-xs text-slate-400 mt-0.5">
+            Active warnings, synoptic cyclone/depression tracks, and monsoon trough status
+          </p>
+        </div>
+
+        <div class="space-y-3">
+          <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 flex items-start gap-3.5">
+            <span class="text-2xl">🟢</span>
+            <div>
+              <h4 class="font-bold text-emerald-400 text-sm">Standard Seasonal Meteorological Circulation</h4>
+              <p class="text-xs text-slate-300 mt-1 leading-relaxed">
+                National weather conditions comply with seasonal forecasts. No severe tropical depression or cyclone alerts currently affecting central inland regions.
+              </p>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 flex items-start gap-3.5">
+            <span class="text-2xl">🌊</span>
+            <div>
+              <h4 class="font-bold text-sky-400 text-sm">Coastal & Marine Advisory</h4>
+              <p class="text-xs text-slate-300 mt-1 leading-relaxed">
+                Fishermen are advised to inspect offshore wave heights and ocean surface current speeds before deep sea voyage departures.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- TAB PAGE 5: MY PROFILE & PERSONA PREFERENCES                            -->
+    <!-- ======================================================================= -->
+    <div id="tab-profile" class="tab-page hidden space-y-6">
+      <section class="p-6 rounded-3xl bg-slate-900/80 border border-slate-800 backdrop-blur-md shadow-xl space-y-5">
+        <div>
+          <h3 class="text-xl font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-user-gear text-sky-400"></i> Personalized User Profile Configuration
+          </h3>
+          <p class="text-xs text-slate-400 mt-0.5">
+            Configure your active persona profile to automatically optimize dashboard card priorities
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h4 class="font-bold text-white text-sm">Active Decision Persona</h4>
+              <p class="text-xs text-slate-400">Controls psychrometric calculation thresholds and recommendation alerts</p>
+            </div>
+            <button id="changePersonaBtn" type="button" class="px-4 py-2 rounded-xl text-xs font-bold bg-sky-600 hover:bg-sky-500 text-white transition">
+              Rerun Persona Wizard
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- MODALS & DRAWERS                                                          -->
+  <!-- ========================================================================= -->
+
+  <!-- Modal 1: Bookmark / Save Location Modal -->
+  <div id="saveModal" class="modal-overlay">
+    <div class="bg-slate-900 border border-slate-700 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="text-lg font-bold text-white flex items-center space-x-2">
+          <span>💾</span>
+          <span>Bookmark Location</span>
+        </h3>
+        <button id="closeSaveModalBtn" type="button" class="text-slate-400 hover:text-white text-lg">✕</button>
+      </div>
+
+      <form id="saveLocationForm" class="space-y-4 text-xs">
+        <div>
+          <label class="block font-medium text-slate-300 mb-1">User Identifier</label>
+          <input type="text" id="saveUserId" required value="usr_mausam_guest"
+            class="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white text-sm focus:outline-none focus:border-sky-500" />
+        </div>
+        <div>
+          <label class="block font-medium text-slate-300 mb-1">City Name</label>
+          <input type="text" id="saveCityName" required
+            class="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white text-sm focus:outline-none focus:border-sky-500" />
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block font-medium text-slate-300 mb-1">Latitude</label>
+            <input type="number" step="any" id="saveLat" required readonly
+              class="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-800 text-slate-400 text-sm" />
+          </div>
+          <div>
+            <label class="block font-medium text-slate-300 mb-1">Longitude</label>
+            <input type="number" step="any" id="saveLon" required readonly
+              class="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-800 text-slate-400 text-sm" />
+          </div>
+        </div>
+        <div>
+          <label class="block font-medium text-slate-300 mb-1">Preferred Weather Persona</label>
+          <select id="savePersona" class="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white text-sm focus:outline-none focus:border-sky-500">
+            <option value="Health-Conscious">Health-Conscious (Respiratory / UV Sensitive)</option>
+            <option value="Outdoor Fitness">Outdoor Fitness (Athletes / Runners)</option>
+            <option value="Beachgoers/Surfers">Beachgoers & Surfers (Marine Safety)</option>
+            <option value="Agriculture/Gardeners">Agriculture & Gardeners (Frost & Soil)</option>
+            <option value="Commuters">Commuters (Fog & Rain Transit)</option>
+            <option value="Parents & Families">Parents & Families (School Gear)</option>
+            <option value="Event Planners">Event Planners (THI Comfort Index)</option>
+            <option value="Travelers">Travelers (Packing & Climate Advisory)</option>
+          </select>
+        </div>
+
+        <div id="saveFeedback" class="hidden p-2.5 rounded-xl text-xs font-medium"></div>
+
+        <div class="flex justify-end space-x-2 pt-2">
+          <button type="button" id="cancelSaveBtn" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold transition">Cancel</button>
+          <button type="submit" id="confirmSaveBtn" class="px-5 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-semibold shadow-lg shadow-sky-600/30 transition">Save Bookmark</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 2: IMD Warning Advisory Modal -->
+  <div id="advisoryModal" class="modal-overlay">
+    <div class="bg-slate-900 border border-slate-700 rounded-3xl max-w-lg w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="text-lg font-bold text-white flex items-center space-x-2">
+          <i class="fa-solid fa-triangle-exclamation text-amber-400"></i>
+          <span>Official IMD Weather Advisory</span>
+        </h3>
+        <button id="closeAdvisoryModal" type="button" class="text-slate-400 hover:text-white text-lg">✕</button>
+      </div>
+
+      <div id="advisoryModalBody" class="text-xs leading-relaxed text-slate-300">
+        <!-- Injected dynamically by app.js -->
+      </div>
+
+      <div class="flex justify-end pt-2">
+        <button type="button" id="dismissAdvisoryBtn" class="px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold transition">
+          Understood
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3: Customize Homepage Widgets Modal -->
+  <div id="customModal" class="modal-overlay">
+    <div class="bg-slate-900 border border-slate-700 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="text-lg font-bold text-white flex items-center space-x-2" data-i18n="modalTitle">
+          <i class="fa-solid fa-sliders text-amber-400"></i>
+          <span>Customize Homepage Widgets</span>
+        </h3>
+        <button id="closeCustomModal" type="button" class="text-slate-400 hover:text-white text-lg">✕</button>
+      </div>
+
+      <p class="text-xs text-slate-400" data-i18n="modalDesc">
+        Toggle which widgets you wish to prioritize on your personalized Mausam homepage:
+      </p>
+
+      <div class="space-y-2.5 text-xs text-slate-300">
+        <label class="flex items-center justify-between p-3 rounded-xl bg-slate-950 border border-slate-800 cursor-pointer">
+          <span>🏃 Running & Outdoor Fitness</span>
+          <input type="checkbox" checked class="accent-sky-500 rounded" />
+        </label>
+        <label class="flex items-center justify-between p-3 rounded-xl bg-slate-950 border border-slate-800 cursor-pointer">
+          <span>👨‍👩‍👧 School Commute & Family</span>
+          <input type="checkbox" checked class="accent-sky-500 rounded" />
+        </label>
+        <label class="flex items-center justify-between p-3 rounded-xl bg-slate-950 border border-slate-800 cursor-pointer">
+          <span>✈️ Traveler & Packing Guide</span>
+          <input type="checkbox" checked class="accent-sky-500 rounded" />
+        </label>
+        <label class="flex items-center justify-between p-3 rounded-xl bg-slate-950 border border-slate-800 cursor-pointer">
+          <span>🌾 Gramin Krishi (Agri Advisory)</span>
+          <input type="checkbox" checked class="accent-sky-500 rounded" />
+        </label>
+        <label class="flex items-center justify-between p-3 rounded-xl bg-slate-950 border border-slate-800 cursor-pointer">
+          <span>🫁 Air Quality Index (AQI)</span>
+          <input type="checkbox" checked class="accent-sky-500 rounded" />
+        </label>
+        <label class="flex items-center justify-between p-3 rounded-xl bg-slate-950 border border-slate-800 cursor-pointer">
+          <span>🚗 Daily Commuter & Nowcast</span>
+          <input type="checkbox" checked class="accent-sky-500 rounded" />
+        </label>
+      </div>
+
+      <div class="flex justify-end pt-2">
+        <button type="button" id="saveCustomBtn" class="px-5 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold transition" data-i18n="savePreferences">
+          Save Preferences
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 4: Onboarding Wizard / Persona Picker Modal -->
+  <div id="onboardingModal" class="modal-overlay">
+    <div class="bg-slate-900 border border-slate-700 rounded-3xl max-w-xl w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="text-lg font-bold text-white flex items-center space-x-2">
+          <i class="fa-solid fa-wand-magic-sparkles text-sky-400"></i>
+          <span>Select Your Daily Persona Profile</span>
+        </h3>
+        <button id="closeOnboardingModal" type="button" class="text-slate-400 hover:text-white text-lg">✕</button>
+      </div>
+
+      <p class="text-xs text-slate-400">
+        Choose your primary activity to let our AI personalize alerts, nowcast windows, and risk notifications:
+      </p>
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
+        <div class="purpose-card active p-3 rounded-2xl bg-slate-950 border border-slate-800" data-purpose="runner">
+          <span class="text-2xl block mb-1">🏃</span>
+          <strong class="text-white block font-bold">Runner / Fitness</strong>
+          <span class="text-[10px] text-slate-400">Workout windows & heat stress</span>
+        </div>
+        <div class="purpose-card p-3 rounded-2xl bg-slate-950 border border-slate-800" data-purpose="parent">
+          <span class="text-2xl block mb-1">👨‍👩‍👧</span>
+          <strong class="text-white block font-bold">Parent & Family</strong>
+          <span class="text-[10px] text-slate-400">School drops & rain safety</span>
+        </div>
+        <div class="purpose-card p-3 rounded-2xl bg-slate-950 border border-slate-800" data-purpose="traveler">
+          <span class="text-2xl block mb-1">✈️</span>
+          <strong class="text-white block font-bold">Traveler / Tourist</strong>
+          <span class="text-[10px] text-slate-400">Packing & flight delays</span>
+        </div>
+        <div class="purpose-card p-3 rounded-2xl bg-slate-950 border border-slate-800" data-purpose="farmer">
+          <span class="text-2xl block mb-1">🌾</span>
+          <strong class="text-white block font-bold">Farmer / Kisan</strong>
+          <span class="text-[10px] text-slate-400">Soil moisture & frost risk</span>
+        </div>
+        <div class="purpose-card p-3 rounded-2xl bg-slate-950 border border-slate-800" data-purpose="health">
+          <span class="text-2xl block mb-1">🫁</span>
+          <strong class="text-white block font-bold">Health / Sensitive</strong>
+          <span class="text-[10px] text-slate-400">AQI, dust & UV index</span>
+        </div>
+        <div class="purpose-card p-3 rounded-2xl bg-slate-950 border border-slate-800" data-purpose="commuter">
+          <span class="text-2xl block mb-1">🚗</span>
+          <strong class="text-white block font-bold">Daily Commuter</strong>
+          <span class="text-[10px] text-slate-400">Traffic, visibility & rain</span>
+        </div>
+      </div>
+
+      <div class="flex justify-end pt-2">
+        <button type="button" id="finishOnboardingBtn" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 text-white text-xs font-bold shadow-lg shadow-sky-500/30 transition">
+          Confirm Persona Selection
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating AI Assistant Action Button (FAB) -->
+  <button id="aiAssistantFab" type="button" class="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-gradient-to-tr from-sky-500 to-indigo-600 text-white text-2xl flex items-center justify-center shadow-2xl shadow-sky-500/40 hover:scale-110 active:scale-95 transition">
+    <i class="fa-solid fa-wand-magic-sparkles"></i>
+  </button>
+
+  <!-- Side Drawer: Mausam AI Assistant Chatbot -->
+  <div id="aiDrawer" class="drawer-side bg-slate-900 border-l border-slate-800 shadow-2xl flex flex-col justify-between">
+    <!-- Drawer Header -->
+    <div class="p-4 border-b border-slate-800 flex items-center justify-between bg-slate-950/70">
+      <div class="flex items-center space-x-3">
+        <div class="w-9 h-9 rounded-xl bg-sky-500/20 text-sky-400 flex items-center justify-center text-lg">
+          <i class="fa-solid fa-robot"></i>
+        </div>
+        <div>
+          <h3 class="font-bold text-white text-sm" data-i18n="aiTitle">Mausam AI Assistant</h3>
+          <p class="text-[11px] text-slate-400" data-i18n="aiSub">MoES Weather Recommendations</p>
+        </div>
+      </div>
+      <button id="closeAiDrawer" type="button" class="text-slate-400 hover:text-white text-lg">✕</button>
+    </div>
+
+    <!-- Drawer Chat Body -->
+    <div id="aiChatBody" class="flex-grow p-4 overflow-y-auto space-y-3">
+      <div class="chat-bubble ai-msg" data-i18n="aiWelcome">
+        Namaste! I am your <strong>Mausam AI Assistant</strong>. Ask me anything like: <em>"Can I go jogging today?", "What is the crop advice for wheat?", or "Is rain expected in Delhi?"</em>
+      </div>
+    </div>
+
+    <!-- Drawer Input Footer -->
+    <div class="p-3 border-t border-slate-800 bg-slate-950/80 flex items-center space-x-2">
+      <input type="text" id="aiInput" placeholder="Ask Mausam AI (English or Hindi)..."
+        class="flex-grow px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:outline-none focus:border-sky-500" />
+      <button id="aiSendBtn" type="button" class="px-3.5 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold transition">
+        <i class="fa-solid fa-paper-plane"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- Footer                                                                    -->
+  <!-- ========================================================================= -->
+  <footer class="border-t border-slate-800/80 bg-slate-950/80 py-8 mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 space-y-4 sm:space-y-0">
+      <p>© 2026 SIH26076: Mausam App. Engineered for Smart India Hackathon.</p>
+      <div class="flex items-center space-x-5">
+        <span class="text-slate-400">Open-Meteo • OWM • Stormglass • IMD</span>
+        <a href="/api-docs" class="text-sky-400 hover:underline">Swagger Specification</a>
+        <a href="/health" class="text-slate-400 hover:underline">Health Diagnostic</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/app.js?v=6"></script>
+</body>
+</html>

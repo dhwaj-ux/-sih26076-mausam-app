@@ -1,0 +1,333 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "SIH26076: Mausam App API",
+    "version": "1.0.0",
+    "description": "Production-grade meteorological microservice for SIH26076 Mausam App. Normalizes Open-Meteo weather, air quality, and marine data, calculates psychrometric indices (THI, Wet Bulb, Heat Index), generates real-time tailored advisories for 8 user personas, and manages user location bookmarks.",
+    "contact": {
+      "name": "SIH26076 Development Team"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Local Development Server"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Weather & Personas",
+      "description": "Meteorological data fetching and 8-persona advisory generation"
+    },
+    {
+      "name": "User Profile & Locations",
+      "description": "User preference and favorite location bookmarks"
+    },
+    {
+      "name": "System Health",
+      "description": "Diagnostic and service status endpoints"
+    }
+  ],
+  "paths": {
+    "/health": {
+      "get": {
+        "tags": ["System Health"],
+        "summary": "Service Health Diagnostic",
+        "description": "Returns current service uptime, server timestamp, and MongoDB connectivity state.",
+        "responses": {
+          "200": {
+            "description": "Service is healthy and operational",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "healthy" },
+                    "uptime": { "type": "number", "example": 142.5 },
+                    "timestamp": { "type": "string", "format": "date-time", "example": "2026-09-10T11:15:00.000Z" },
+                    "dbState": { "type": "string", "enum": ["connected", "disconnected"], "example": "disconnected" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/weather": {
+      "get": {
+        "tags": ["Weather & Personas"],
+        "summary": "Fetch Weather Metrics & 8-Persona Recommendations",
+        "description": "Validates coordinates with Zod, checks the 10-minute cache, retrieves live data from Open-Meteo (forecast, air quality, marine) with 5s timeout & mock fallback, and computes tailored actionable advisories across 8 personas.",
+        "parameters": [
+          {
+            "name": "latitude",
+            "in": "query",
+            "description": "Geographical latitude (-90.0 to 90.0)",
+            "required": false,
+            "schema": { "type": "number", "minimum": -90, "maximum": 90, "example": 28.6139 }
+          },
+          {
+            "name": "longitude",
+            "in": "query",
+            "description": "Geographical longitude (-180.0 to 180.0)",
+            "required": false,
+            "schema": { "type": "number", "minimum": -180, "maximum": 180, "example": 77.2090 }
+          },
+          {
+            "name": "lat",
+            "in": "query",
+            "description": "Shorthand alias for latitude",
+            "required": false,
+            "schema": { "type": "number", "example": 28.6139 }
+          },
+          {
+            "name": "lon",
+            "in": "query",
+            "description": "Shorthand alias for longitude",
+            "required": false,
+            "schema": { "type": "number", "example": 77.2090 }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved weather metrics and generated persona dashboards",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WeatherPersonaResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Coordinate validation failed (out of bounds, non-numeric, or missing)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests from this IP (rate limit exceeded)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/save-location": {
+      "post": {
+        "tags": ["User Profile & Locations"],
+        "summary": "Save User Favorite Location & Preferred Persona",
+        "description": "Validates coordinate bounds and persona enumeration, then stores the favorite location for the specified user in MongoDB.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaveLocationRequest"
+              },
+              "examples": {
+                "flat": {
+                  "summary": "Flat Location Format",
+                  "value": {
+                    "userId": "usr_sih_1001",
+                    "cityName": "New Delhi",
+                    "latitude": 28.6139,
+                    "longitude": 77.2090,
+                    "preferredPersona": "Health-Conscious"
+                  }
+                },
+                "nested": {
+                  "summary": "Nested Location Object Format",
+                  "value": {
+                    "userId": "usr_sih_1002",
+                    "location": {
+                      "cityName": "Bengaluru",
+                      "latitude": 12.9716,
+                      "longitude": 77.5946
+                    },
+                    "preferredPersona": "Outdoor Fitness"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Location saved or updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "message": { "type": "string", "example": "Location saved successfully." },
+                    "data": { "$ref": "#/components/schemas/UserDocument" }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed on payload coordinates, persona, or required fields",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "WeatherMetrics": {
+        "type": "object",
+        "properties": {
+          "latitude": { "type": "number", "example": 28.61 },
+          "longitude": { "type": "number", "example": 77.23 },
+          "temperature": { "type": "number", "description": "Air temperature at 2m (°C)", "example": 31.8 },
+          "humidity": { "type": "number", "description": "Relative humidity (%)", "example": 61 },
+          "soilMoisture": { "type": "number", "description": "Volumetric soil moisture 0-1cm (m³/m³)", "example": 0.369 },
+          "visibility": { "type": "number", "description": "Horizontal visibility in meters", "example": 10560 },
+          "pm2_5": { "type": "number", "description": "Fine particulate matter PM2.5 (µg/m³)", "example": 61.2 },
+          "pm10": { "type": "number", "description": "Respirable particulate matter PM10 (µg/m³)", "example": 146.2 },
+          "uvIndex": { "type": "number", "description": "Solar ultraviolet radiation index", "example": 5.95 },
+          "waveHeight": { "type": "number", "description": "Significant wave height (m)", "example": 1.1 },
+          "oceanCurrentVelocity": { "type": "number", "description": "Ocean surface current velocity (m/s)", "example": 0.35 },
+          "windSpeed": { "type": "number", "description": "Wind speed at 10m (km/h)", "example": 8.2 },
+          "rainProb": { "type": "number", "description": "Precipitation probability (%)", "example": 15 },
+          "timestamp": { "type": "string", "example": "2026-09-10T05:30" },
+          "isFallback": { "type": "boolean", "example": false },
+          "source": { "type": "string", "example": "open-meteo" },
+          "isCached": { "type": "boolean", "example": false }
+        }
+      },
+      "PersonaDashboardItem": {
+        "type": "object",
+        "properties": {
+          "alertLevel": { "type": "string", "enum": ["Safe", "Warning", "Danger"], "example": "Warning" },
+          "recommendationText": { "type": "string", "example": "Elevated particulate pollution (PM2.5: 61.2 µg/m³). Limit prolonged outdoor exertion." }
+        }
+      },
+      "PersonasDashboard": {
+        "type": "object",
+        "properties": {
+          "Health-Conscious": { "$ref": "#/components/schemas/PersonaDashboardItem" },
+          "Outdoor Fitness": { "$ref": "#/components/schemas/PersonaDashboardItem" },
+          "Beachgoers/Surfers": { "$ref": "#/components/schemas/PersonaDashboardItem" },
+          "Agriculture/Gardeners": { "$ref": "#/components/schemas/PersonaDashboardItem" },
+          "Commuters": { "$ref": "#/components/schemas/PersonaDashboardItem" },
+          "Parents & Families": { "$ref": "#/components/schemas/PersonaDashboardItem" },
+          "Event Planners": { "$ref": "#/components/schemas/PersonaDashboardItem" },
+          "Travelers": { "$ref": "#/components/schemas/PersonaDashboardItem" }
+        }
+      },
+      "WeatherPersonaResponse": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean", "example": true },
+          "coordinates": {
+            "type": "object",
+            "properties": {
+              "latitude": { "type": "number", "example": 28.61 },
+              "longitude": { "type": "number", "example": 77.23 }
+            }
+          },
+          "weather": { "$ref": "#/components/schemas/WeatherMetrics" },
+          "personas": { "$ref": "#/components/schemas/PersonasDashboard" }
+        }
+      },
+      "SaveLocationRequest": {
+        "type": "object",
+        "required": ["userId", "cityName", "latitude", "longitude"],
+        "properties": {
+          "userId": { "type": "string", "example": "usr_sih_1001" },
+          "cityName": { "type": "string", "example": "New Delhi" },
+          "latitude": { "type": "number", "minimum": -90, "maximum": 90, "example": 28.6139 },
+          "longitude": { "type": "number", "minimum": -180, "maximum": 180, "example": 77.2090 },
+          "preferredPersona": {
+            "type": "string",
+            "enum": [
+              "Health",
+              "Health-Conscious",
+              "Agriculture",
+              "Agriculture/Gardeners",
+              "Outdoor Fitness",
+              "Beachgoers/Surfers",
+              "Commuters",
+              "Parents & Families",
+              "Event Planners",
+              "Travelers"
+            ],
+            "default": "Health-Conscious",
+            "example": "Health-Conscious"
+          }
+        }
+      },
+      "UserDocument": {
+        "type": "object",
+        "properties": {
+          "userId": { "type": "string", "example": "usr_sih_1001" },
+          "savedLocations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "cityName": { "type": "string", "example": "New Delhi" },
+                "latitude": { "type": "number", "example": 28.6139 },
+                "longitude": { "type": "number", "example": 77.2090 },
+                "addedAt": { "type": "string", "format": "date-time" }
+              }
+            }
+          },
+          "preferredPersona": { "type": "string", "example": "Health-Conscious" },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "updatedAt": { "type": "string", "format": "date-time" }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean", "example": false },
+          "statusCode": { "type": "integer", "example": 400 },
+          "error": { "type": "string", "example": "Bad Request: Validation Failed" },
+          "message": { "type": "string", "example": "Latitude must be between -90 and 90 degrees." },
+          "issues": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "field": { "type": "string", "example": "latitude" },
+                "message": { "type": "string", "example": "Latitude must be between -90 and 90 degrees." }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
