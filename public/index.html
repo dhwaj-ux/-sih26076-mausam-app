@@ -21,8 +21,8 @@
 <link rel="icon" href="assets/favicon.png" type="image/png">
 <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
 <link rel="apple-touch-icon" sizes="192x192" href="assets/icon-192.png">
-<link rel="manifest" href="manifest.webmanifest?v=5">
-<link rel="stylesheet" href="css/style.css?v=5">
+<link rel="manifest" href="manifest.webmanifest?v=6">
+<link rel="stylesheet" href="css/style.css?v=6">
 </head>
 <body>
 <div class="wrap">
@@ -51,6 +51,8 @@
 
   <!-- ================= HOME ================= -->
   <section class="pane on" id="p-home">
+    <div class="note demo-note" id="demoNote" hidden></div>
+
     <div class="grid">
       <div class="card">
         <h3>Live Weather &amp; Air Quality <span>Open-Meteo &middot; free &middot; no key</span></h3>
@@ -151,7 +153,7 @@
   <footer>
     <img class="foot-logo" src="assets/logo-mark.png" alt="">
     <div>
-      <b>MAUSAM</b> <span class="build">v5</span> — Personalised Homepage for the MAUSAM Mobile Application<br>
+      <b>MAUSAM</b> <span class="build">v6</span> — Personalised Homepage for the MAUSAM Mobile Application<br>
       Smart India Hackathon SIH26076 &middot; Ministry of Earth Sciences (MoES) &middot; India Meteorological Department (IMD)<br>
       <span class="muted">Weather, air quality &amp; marine data: Open-Meteo (free, no key) &middot; AI: Gemini / Groq / OpenRouter free tier, with a built-in offline knowledge base fallback</span>
     </div>
@@ -163,6 +165,13 @@
   <div class="modal">
     <h2 id="cfgTitle">AI Settings</h2>
     <p id="cfgIntro"></p>
+
+    <label class="chk" for="demoToggle">
+      <input type="checkbox" id="demoToggle">
+      <span><b>Force demo mode</b> &mdash; always show the built-in sample data</span>
+    </label>
+    <div class="note">With no internet the app <b>already falls back to this sample data automatically</b> and labels it
+      <b>DEMO DATA</b>, so nothing is ever presented as live. This switch just forces it on for demos.</div>
 
     <div id="cfgServerBlock" hidden>
       <div class="note ok" id="cfgServerState"></div>
@@ -193,10 +202,10 @@
   </div>
 </div>
 
-<script src="js/data.js?v=5"></script>
-<script src="js/engine.js?v=5"></script>
-<script src="js/geo.js?v=5"></script>
-<script src="js/context.js?v=5"></script>
-<script src="js/app.js?v=5"></script>
+<script src="js/data.js?v=6"></script>
+<script src="js/engine.js?v=6"></script>
+<script src="js/geo.js?v=6"></script>
+<script src="js/context.js?v=6"></script>
+<script src="js/app.js?v=6"></script>
 </body>
 </html>

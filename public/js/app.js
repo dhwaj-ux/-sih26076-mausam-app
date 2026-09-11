@@ -160,12 +160,14 @@
   }
 
   function finishLoad() {
+    if (WX && WX.demo) isDemo = true; else isDemo = false;
     sync();
     renderWeather();
     renderProfile();
     renderSuggest();
     plan();
     renderForecast();
+    renderDemoNote();
   }
 
   /**
@@ -228,11 +230,147 @@
       : null;
   }
 
+
+  /* ======================================================================
+     Demo data
+     ----------------------------------------------------------------------
+     The judging venue Wi-Fi is not always reliable, so the app ships with a
+     realistic sample dataset. It is used automatically when a request fails,
+     or on demand from AI Settings. Every screen that shows it is labelled
+     "DEMO DATA" so sample values are never mistaken for live readings.
+     ====================================================================== */
+  var isDemo = false;
+  var LS_DEMO = 'mausam_demo';
+
+  function pad2(v) { return (v < 10 ? '0' : '') + v; }
+  function isoDay(d) { return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate()); }
+
+  function demoForced() {
+    try { return localStorage.getItem(LS_DEMO) === 'on'; } catch (e) { return false; }
+  }
+  function setDemoForced(on) {
+    try { on ? localStorage.setItem(LS_DEMO, 'on') : localStorage.removeItem(LS_DEMO); } catch (e) { /* ignore */ }
+  }
+
+  /** Builds a plausible, deterministic 7-day bundle for a place. */
+  function demoBundle(place) {
+    var seed = 20260911;
+    function rnd() {
+      seed = (seed * 1103515245 + 12345) % 2147483648;
+      return seed / 2147483648;
+    }
+
+    var today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    var dtime = [], dmax = [], dmin = [], dsum = [], duv = [], dcode = [];
+    var PATTERN = [0, 1, 2, 3, 61, 80, 2];
+
+    for (var i = 0; i < 7; i++) {
+      dtime.push(isoDay(new Date(today.getTime() + i * 86400000)));
+      var hi = 30 + Math.round(rnd() * 5) - 2;
+      dmax.push(hi);
+      dmin.push(hi - (6 + Math.round(rnd() * 3)));
+      dsum.push(Math.round(rnd() * 36) / 2);
+      duv.push(4 + Math.round(rnd() * 6));
+      dcode.push(PATTERN[Math.floor(rnd() * PATTERN.length)]);
+    }
+
+    // 7 days of hourly values (168 points) with a realistic daily temperature curve
+    var htime = [], htemp = [], hfeels = [], hhum = [], hrain = [], hprob = [], hcode = [], hwind = [], huv = [];
+    for (var h = 0; h < 7 * 24; h++) {
+      var dt = new Date(today.getTime() + h * 3600000);
+      var day = Math.floor(h / 24);
+      var hour = dt.getHours();
+      htime.push(isoDay(dt) + 'T' + pad2(hour) + ':00');
+
+      var curve = Math.sin(((hour - 9) / 24) * Math.PI * 2);   // coolest 05:00, warmest 15:00
+      var t = (dmin[day] + dmax[day]) / 2 + ((dmax[day] - dmin[day]) / 2) * curve;
+
+      htemp.push(Math.round(t * 10) / 10);
+      hfeels.push(Math.round((t + 3) * 10) / 10);
+      hhum.push(55 + Math.round(rnd() * 30));
+      hrain.push(hcode[day] >= 61 ? Math.round(rnd() * 30) / 10 : 0);
+      hprob.push(dcode[day] >= 61 ? 55 + Math.round(rnd() * 40) : Math.round(rnd() * 25));
+      hcode.push(dcode[day]);
+      hwind.push(6 + Math.round(rnd() * 16));
+      huv.push(hour >= 9 && hour <= 16 ? Math.max(2, Math.round(duv[day] - 2 + rnd() * 3)) : 0);
+    }
+
+    var nowIdx = new Date().getHours();
+
+    var WX = {
+      city: place.name || 'Demo City', state: place.state || '', lat: place.lat, lon: place.lon,
+      temp: htemp[nowIdx], hum: hhum[nowIdx], feels: hfeels[nowIdx],
+      rain: hrain[nowIdx], wind: hwind[nowIdx], code: hcode[nowIdx],
+      isDay: (nowIdx >= 6 && nowIdx < 19) ? 1 : 0,
+      dmax: dmax, dmin: dmin, dsum: dsum, duv: duv, dcode: dcode, dtime: dtime,
+      htime: htime, htemp: htemp, hfeels: hfeels, hhum: hhum, hrain: hrain,
+      hprob: hprob, hcode: hcode, hwind: hwind, huv: huv,
+      nowIdx: nowIdx, demo: true
+    };
+    WX.rain3 = dsum.slice(0, 3).reduce(function (a, b) { return a + b; }, 0);
+
+    var AQ = {
+      aqi: 78, pm25: 28, pm10: 52,
+      htime: htime,
+      haqi: htime.map(function (_, i) { return 60 + Math.round(Math.abs(Math.sin(i / 5)) * 45); }),
+      demo: true
+    };
+
+    // Marine demo values only make sense for a coastal-looking place.
+    var MAR = /goa|mumbai|chennai|kochi|puri|vizag|visakha|mangal|digha|thiruvananthapuram/i.test(WX.city)
+      ? {
+          wave: 1.4, dir: 225, per: 10, swell: 1.1, sst: 28.4,
+          htime: htime, hwave: htime.map(function () { return 1.4; }),
+          hper: htime.map(function () { return 10; }), hswell: htime.map(function () { return 1.1; }),
+          hlevel: htime.map(function (_, i) { return 1.5 + Math.sin(i / 6 * Math.PI); }),
+          demo: true
+        }
+      : null;
+
+    return { weather: WX, air: AQ, marine: MAR };
+  }
+
+  /** Swap in the sample dataset and refresh every pane. */
+  function loadDemo(place, reason) {
+    var b = demoBundle(place || { name: 'Demo City' });
+    WX = b.weather; AQ = b.air; MAR = b.marine;
+    isDemo = true;
+    if (place && place.state && STATES[place.state]) {
+      $('state').value = place.state;
+      $('state2').value = place.state;
+    }
+    $('city').value = WX.city;
+    finishLoad();
+    demoReason = reason || 'sample';
+    renderDemoNote();
+  }
+
+  var demoReason = 'sample';
+
+  function renderDemoNote() {
+    var el = $('demoNote');
+    if (!el) return;
+    if (!isDemo) { el.hidden = true; el.innerHTML = ''; return; }
+    el.hidden = false;
+    el.innerHTML = '<b>&#9888; DEMO DATA</b> &mdash; ' +
+      (demoReason === 'forced'
+        ? 'demo mode is switched on in AI Settings.'
+        : 'no internet connection, so built-in sample values are shown.') +
+      ' These are realistic examples, <b>not live readings</b>. Reconnect and press <b>Get</b> for real data.';
+  }
+
   /** Load by city name. */
   async function getWeather(opts) {
     var city = curCity();
     if (!city) return;
     if (!opts || opts.remember !== false) rememberCity(city);
+
+    if (demoForced()) {
+      loadDemo({ name: city }, 'forced');
+      return;
+    }
     status('Loading ' + esc(city) + '&hellip;');
 
     try {
@@ -262,14 +400,21 @@
       }
       finishLoad();
     } catch (err) {
-      status(err.message === 'CITY_NOT_FOUND'
-        ? 'City not found. Please check the spelling.'
-        : 'Could not load the weather. Check your internet connection.', 'err');
+      if (err.message === 'CITY_NOT_FOUND') {
+        status('City not found. Please check the spelling.', 'err');
+        return;
+      }
+      // No network: fall back to the built-in sample so the demo still works.
+      loadDemo({ name: city }, 'offline');
     }
   }
 
   /** Load by coordinates — used by "my location". */
   async function getWeatherAtCoords(lat, lon, place) {
+    if (demoForced()) {
+      loadDemo(place, 'forced');
+      return true;
+    }
     status('Loading ' + esc(place.name) + '&hellip;');
     try {
       if (API_BASE) {
@@ -290,8 +435,8 @@
       finishLoad();
       return true;
     } catch (e) {
-      status('Could not load the weather for your location.', 'err');
-      return false;
+      loadDemo(place, 'offline');
+      return true;
     }
   }
 
@@ -377,7 +522,8 @@
         '&deg;C sea temp &middot; surf: ' + E.surfRating(MAR.wave).c + '</div>' : '') +
       '<div class="badge warm">' + esc(E.wxAdvice()) + '</div>' +
       '<div class="secTitle">7-Day Forecast</div>' +
-      '<div class="fstrip">' + days + '</div>';
+      '<div class="fstrip">' + days + '</div>' +
+      (isDemo ? '<div class="badge demo">&#9888; DEMO DATA &mdash; sample values, not live</div>' : '');
   }
 
   /* ======================================================================
@@ -508,7 +654,7 @@
       return;
     }
 
-    $('fcPlace').textContent = WX.city + (WX.state ? ', ' + WX.state : '');
+    $('fcPlace').textContent = WX.city + (WX.state ? ', ' + WX.state : '') + (isDemo ? ' \u00B7 DEMO DATA' : '');
     chart.innerHTML = forecastChart(WX);
 
     var n = Math.min(7, WX.dtime.length);
@@ -841,6 +987,7 @@
      ====================================================================== */
   function openCfg() {
     $('mask').hidden = false;
+    $('demoToggle').checked = demoForced();
     if (API_BASE) {
       $('cfgTitle').textContent = 'AI Settings — server managed';
       $('cfgIntro').textContent = 'This page is running against the Express backend, so the AI provider and key live on the server.';
@@ -876,7 +1023,22 @@
     // Service worker only makes sense over http(s), not file://
     if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
       window.addEventListener('load', function () {
-        navigator.serviceWorker.register('sw.js').catch(function () { /* offline still works, just no cache */ });
+        navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' })
+          .then(function (reg) {
+            // check for a new build on every launch
+            reg.update().catch(function () { });
+          })
+          .catch(function () { /* offline still works, just no cache */ });
+      });
+
+      // When a freshly deployed worker takes control, reload exactly once so
+      // the new assets are used. Without this a visitor could keep seeing the
+      // previous build until they cleared their cache by hand.
+      var alreadyReloaded = false;
+      navigator.serviceWorker.addEventListener('controllerchange', function () {
+        if (alreadyReloaded) return;
+        alreadyReloaded = true;
+        window.location.reload();
       });
     }
 
@@ -957,6 +1119,21 @@
     });
     $('mask').addEventListener('click', function (e) { if (e.target === $('mask')) closeCfg(); });
 
+    // Demo mode: force the built-in sample data on or off.
+    $('demoToggle').addEventListener('change', function () {
+      setDemoForced(this.checked);
+      closeCfg();
+      if (this.checked) {
+        loadDemo({ name: curCity() || 'Demo City' }, 'forced');
+      } else {
+        var back = curCity();
+        if (!back || back === 'Demo City') { back = 'Nagpur'; $('city').value = back; }
+        WX = null; AQ = null; MAR = null; isDemo = false;
+        renderDemoNote();
+        getWeather({ remember: false });
+      }
+    });
+
     initPWA();
     applyDeepLink();
 
@@ -980,6 +1157,9 @@
 
   // Small surface exposed for the test suite and for debugging in the console.
   window.MAUSAM_APP = {
+    loadDemo: loadDemo,
+    demoForced: demoForced,
+    setDemoForced: setDemoForced,
     forecastChart: forecastChart,
     renderForecast: renderForecast,
     getWeatherAtCoords: getWeatherAtCoords,

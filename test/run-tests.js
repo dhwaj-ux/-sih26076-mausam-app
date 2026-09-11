@@ -348,15 +348,19 @@ ENGINE.setMarine(MAR);
       }
       check('standalone bundle executes without throwing', !bootError, bootError && bootError.message);
 
-      await new Promise((r) => setTimeout(r, 60));
+      await new Promise((r) => setTimeout(r, 250));
 
       const grid = els.pgrid ? els.pgrid.innerHTML : '';
       check('standalone renders the 8 persona cards', (grid.match(/data-persona=/g) || []).length === 8,
         String((grid.match(/data-persona=/g) || []).length) + ' cards');
       check('standalone wires up the data + engine modules',
         !!sandbox.MAUSAM_DATA && !!sandbox.MAUSAM_ENGINE && !!sandbox.MAUSAM_GEO && !!sandbox.MAUSAM_CONTEXT);
-      check('standalone shows a friendly message when offline',
-        /Could not load the weather|Loading|location/i.test(els.wout ? els.wout.innerHTML : ''));
+      // ---- offline behaviour: the app must fall back to sample data -------
+      const wout = els.wout ? els.wout.innerHTML : '';
+      check('offline boot falls back to demo data instead of an empty screen',
+        /DEMO DATA/i.test(wout), wout.slice(0, 80));
+      check('demo banner is shown to the user', els.demoNote && els.demoNote.hidden === false);
+      check('demo banner explains why', /no internet connection/i.test(els.demoNote ? els.demoNote.innerHTML : ''));
 
       // ---- 7-day forecast chart (pure function, no network needed) --------
       const APP = sandbox.MAUSAM_APP;
@@ -385,6 +389,32 @@ ENGINE.setMarine(MAR);
         check('chart handles a single day without crashing', /^<svg /.test(APP.forecastChart({
           dtime: ['2026-09-11'], dmax: [30], dmin: [20], dsum: [0], duv: [5], dcode: [0],
         })));
+      }
+
+      // ---- built-in sample dataset ----------------------------------------
+      check('demo controls are exposed', !!APP && typeof APP.loadDemo === 'function');
+
+      if (APP && APP.loadDemo) {
+        APP.setDemoForced(true);
+        check('demo flag can be turned on', APP.demoForced() === true);
+
+        APP.loadDemo({ name: 'Demo City' }, 'forced');
+        const st = APP.state();
+        check('demo weather is generated', !!st.WX && st.WX.demo === true);
+        check('demo dataset has 7 days', st.WX.dtime.length === 7, String(st.WX.dtime.length));
+        check('demo dataset has 168 hourly points', st.WX.htime.length === 168, String(st.WX.htime.length));
+        check('demo dataset has air quality', !!st.AQ && typeof st.AQ.aqi === 'number');
+        check('demo dataset is realistic (temps in range)',
+          st.WX.dmax.every((v) => v > 5 && v < 50) && st.WX.dmin.every((v) => v > 0 && v < 40));
+        check('demo dataset has rain and UV per day',
+          st.WX.dsum.length === 7 && st.WX.duv.length === 7);
+        check('demo current temp is an hourly value',
+          st.WX.temp === st.WX.htemp[st.WX.nowIdx]);
+        check('chart renders from demo data', /^<svg /.test(APP.forecastChart(st.WX)));
+        check('demo reason is reported as forced', /demo mode is switched on/i.test(els.demoNote.innerHTML));
+
+        APP.setDemoForced(false);
+        check('demo flag can be turned off', APP.demoForced() === false);
       }
     }
   }

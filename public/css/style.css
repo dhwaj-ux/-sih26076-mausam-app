@@ -362,6 +362,34 @@ footer {
 .frow span { color: var(--muted); }
 .frow b.hot { color: var(--orange-lt); }
 
+/* ------------------------------------------------------ demo data flag -- */
+.badge.demo {
+  background: rgba(245, 166, 35, .16);
+  color: var(--orange-lt);
+  border-color: rgba(245, 166, 35, .5);
+}
+.demo-note {
+  border-left-color: var(--orange);
+  background: rgba(245, 166, 35, .1);
+  color: #ffe0ac;
+  font-size: 12px;
+  margin-bottom: 14px;
+}
+.demo-note b { color: var(--orange-lt); }
+
+/* ------------------------------------------------------------- checkbox -- */
+.chk {
+  display: flex; align-items: flex-start; gap: 10px;
+  background: rgba(0, 0, 0, .24); border: 1px solid var(--line);
+  border-radius: var(--radius-sm); padding: 12px;
+  cursor: pointer; margin-bottom: 4px;
+}
+.chk input {
+  width: 18px; height: 18px; flex: 0 0 18px; margin: 1px 0 0;
+  accent-color: var(--teal);
+}
+.chk span { font-size: 12.5px; color: var(--txt); line-height: 1.5; }
+
 /* ------------------------------------------------- compact icon button -- */
 .btn.icon {
   flex: 0 0 auto;

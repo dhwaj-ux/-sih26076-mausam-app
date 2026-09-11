@@ -47,7 +47,7 @@ domain-expert AI advisor.
 | 🧠 **Smart windows** | Scores every hour and returns the best time to run / travel / hold an event |
 | 🤖 **AI advisor** | Answers any question, grounded in the live data, **always in English** |
 | 🗣️ **Multilingual input** | Understands **Hindi (Devanagari)**, **Hinglish** and **English** |
-| 🛟 **Never fails** | Falls back to a built-in offline knowledge base — the demo can never go blank |
+| 🛟 **Never fails** | No internet? It falls back to a built-in **sample dataset** (labelled `DEMO DATA`) for the weather, and the AI advisor answers from its **offline knowledge base** — the demo can never go blank |
 
 ---
 
@@ -249,6 +249,9 @@ and fill in what you have.
 | `OPENROUTER_API_KEY` | | Free models at [openrouter.ai](https://openrouter.ai) |
 | `HOME_COUNTRY` | `IN` | Country to prefer in geocoding |
 | `CACHE_TTL_SECONDS` | `600` | In-memory cache for upstream weather calls |
+| *(client)* `mausam_demo` | – | localStorage flag set by **Force demo mode** |
+| *(client)* `mausam_city` | – | localStorage — the city you typed, overriding auto-location |
+| `CACHE_TTL_SECONDS` | `600` | In-memory cache for upstream weather calls |
 
 ### Weather data costs nothing
 
@@ -261,6 +264,37 @@ and fill in what you have.
 | AI answers | Gemini / Groq / OpenRouter | ✅ optional (free tier) |
 
 **Running cost of the whole prototype: ₹0.**
+
+---
+
+## 🔌 What happens with no internet
+
+There are **two** independent offline layers, so a demo never depends on the venue Wi-Fi.
+
+### 1. Weather — built-in sample data
+
+If a weather request fails, the app silently loads a realistic 7-day sample dataset:
+168 hourly points with a proper daily temperature curve, per-day rain and UV, and demo AQI.
+Every screen showing it carries an orange **`⚠ DEMO DATA`** badge, so sample values are never
+mistaken for live readings.
+
+You can also force it on for a stage demo:
+
+> **AI Settings → Force demo mode**
+
+Offline is detected automatically — no switch is needed.
+
+### 2. AI answers — offline knowledge base
+
+The advisor has a built-in rule engine covering all 8 personas (agronomy for 32 states, the
+Comfort Index, AQI bands, nowcast logic, marine safety, and so on). If there is no API key, or
+the provider call fails, the answer comes from this engine and the reply is tagged as coming
+from the knowledge base.
+
+### 3. The app itself
+
+A service worker caches the whole app shell, so once the page has been opened it keeps working
+after a reload with no connection at all.
 
 ---
 
