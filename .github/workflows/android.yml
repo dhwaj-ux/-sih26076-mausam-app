@@ -57,14 +57,14 @@ jobs:
       - name: Rename the APK to something friendly
         run: |
           mkdir -p dist
-          cp android/app/build/outputs/apk/debug/app-debug.apk dist/mausam-ai.apk
+          cp android/app/build/outputs/apk/debug/app-debug.apk dist/mausam.apk
           ls -la dist/
 
       - name: Upload the APK as a build artifact
         uses: actions/upload-artifact@v4
         with:
-          name: mausam-ai-android-apk
-          path: dist/mausam-ai.apk
+          name: mausam-android-apk
+          path: dist/mausam.apk
           if-no-files-found: error
 
       - name: Publish the APK to a release (stable download link)
@@ -74,12 +74,12 @@ jobs:
         run: |
           TAG="apk-latest"
           gh release delete "$TAG" --yes --cleanup-tag 2>/dev/null || true
-          gh release create "$TAG" dist/mausam-ai.apk \
+          gh release create "$TAG" dist/mausam.apk \
             --title "MAUSAM — Android app (debug build)" \
             --notes "Automatic build from commit \`${GITHUB_SHA:0:7}\`.
 
           **Install on your phone**
-          1. Download \`mausam-ai.apk\` below
+          1. Download \`mausam.apk\` below
           2. Open it — Android will ask to allow installs from this source, tap Allow
           3. MAUSAM appears in your app drawer
 
