@@ -45,6 +45,28 @@ jobs:
       - name: Add the Android platform
         run: npx cap add android
 
+      - name: Grant location + internet permissions to the Android app
+        run: |
+          MANIFEST=android/app/src/main/AndroidManifest.xml
+          python3 - "$MANIFEST" <<'PY'
+          import io, sys
+          p = sys.argv[1]
+          s = io.open(p, encoding='utf-8').read()
+          if 'ACCESS_FINE_LOCATION' in s:
+              print('location permission already present')
+          else:
+              perms = (
+                  '    <uses-permission android:name="android.permission.INTERNET" />\n'
+                  '    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />\n'
+                  '    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />\n'
+                  '    <uses-feature android:name="android.hardware.location.gps" android:required="false" />\n'
+              )
+              s = s.replace('<application', perms + '\n    <application', 1)
+              io.open(p, 'w', encoding='utf-8').write(s)
+              print('added INTERNET + location permissions')
+          PY
+          grep -c 'uses-permission' "$MANIFEST"
+
       - name: Sync the web app into the native project
         run: npx cap sync android
 
@@ -82,5 +104,8 @@ jobs:
           1. Download \`mausam.apk\` below
           2. Open it — Android will ask to allow installs from this source, tap Allow
           3. MAUSAM appears in your app drawer
+
+          On first launch Android will ask for **location permission** - allow it and the
+          app shows the weather for wherever you are.
 
           This is a debug-signed build for demos, not a Play Store release."
