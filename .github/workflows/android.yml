@@ -75,12 +75,12 @@ jobs:
           TAG="apk-latest"
           gh release delete "$TAG" --yes --cleanup-tag 2>/dev/null || true
           gh release create "$TAG" dist/mausam-ai.apk \
-            --title "MAUSAM AI — Android app (debug build)" \
+            --title "MAUSAM — Android app (debug build)" \
             --notes "Automatic build from commit \`${GITHUB_SHA:0:7}\`.
 
           **Install on your phone**
           1. Download \`mausam-ai.apk\` below
           2. Open it — Android will ask to allow installs from this source, tap Allow
-          3. MAUSAM AI appears in your app drawer
+          3. MAUSAM appears in your app drawer
 
           This is a debug-signed build for demos, not a Play Store release."

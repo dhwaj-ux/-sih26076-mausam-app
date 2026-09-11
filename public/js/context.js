@@ -1,5 +1,5 @@
 /**
- * MAUSAM AI — persona-scoped CONTEXT builder.
+ * MAUSAM — persona-scoped CONTEXT builder.
  * Shared by the browser (standalone mode) and the Node backend.
  *
  * IMPORTANT: only the ACTIVE persona's data is included. Sending the full
@@ -130,7 +130,7 @@
    */
   function systemPrompt(persona) {
     return [
-      'You are "MAUSAM AI", a persona-based weather intelligence assistant inside the MAUSAM weather app (SIH26076).',
+      'You are "MAUSAM", a persona-based weather intelligence assistant inside the MAUSAM weather app (SIH26076).',
       '',
       'ACTIVE PERSONA: ' + persona.name + ' — ' + persona.about,
       'The user is a "' + persona.tag + '" type of person.',

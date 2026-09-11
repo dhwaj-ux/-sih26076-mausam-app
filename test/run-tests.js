@@ -1,5 +1,5 @@
 /**
- * MAUSAM AI — test suite.
+ * MAUSAM — test suite.
  *
  *   node test/run-tests.js
  *

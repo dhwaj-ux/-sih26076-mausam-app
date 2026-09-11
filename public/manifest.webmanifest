@@ -1,7 +1,7 @@
 {
   "id": "mausam-ai-sih26076",
-  "name": "MAUSAM AI — Personalised Weather Homepage",
-  "short_name": "MAUSAM AI",
+  "name": "MAUSAM — Personalised Weather Homepage",
+  "short_name": "MAUSAM",
   "description": "Persona-adaptive weather homepage with AI advisory for farmers, runners, parents, travellers, commuters, surfers and event planners. SIH26076 · MoES / India Meteorological Department.",
   "start_url": "./?source=pwa",
   "scope": "./",

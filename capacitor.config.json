@@ -1,6 +1,6 @@
 {
   "appId": "com.sih26076.mausamai",
-  "appName": "MAUSAM AI",
+  "appName": "MAUSAM",
   "webDir": "public",
   "bundledWebRuntime": false,
   "loggingBehavior": "none",

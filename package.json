@@ -2,7 +2,7 @@
   "name": "mausam-ai",
   "version": "1.0.0",
   "private": true,
-  "description": "MAUSAM AI — personalised weather homepage with persona-based AI advisory (SIH26076, MoES / IMD)",
+  "description": "MAUSAM — personalised weather homepage with persona-based AI advisory (SIH26076, MoES / IMD)",
   "main": "server/index.js",
   "engines": {
     "node": ">=18"

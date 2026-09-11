@@ -1,5 +1,5 @@
 /* ===========================================================================
-   MAUSAM AI — frontend application
+   MAUSAM — frontend application
    Talks to the Express backend when it is available (/api/*), and falls back to
    calling Open-Meteo directly when the page is opened as a plain file.
    =========================================================================== */
@@ -462,8 +462,8 @@
      ====================================================================== */
   function bootMsg() {
     var p = PERSONAS[CUR];
-    $('msgs').innerHTML = '<div class="msg a"><div class="who">MAUSAM AI</div>' +
-      'Hello &#128075; I am your <b>MAUSAM AI Assistant</b>.<br><br>' +
+    $('msgs').innerHTML = '<div class="msg a"><div class="who">MAUSAM</div>' +
+      'Hello &#128075; I am your <b>MAUSAM Assistant</b>.<br><br>' +
       'The <b>' + p.icon + ' ' + p.name + '</b> persona is active. ' + p.about + '<br><br>' +
       'Switch persona above and ask anything. Suggested questions are listed below.<br>' +
       '<span class="muted">Ask in Hindi, English or Hinglish — <b>answers are always in English</b>.</span></div>';
@@ -486,7 +486,7 @@
 
     addMsg('u', 'JUDGE / YOU', esc(text));
     var p = PERSONAS[CUR];
-    var load = addMsg('a', p.icon + ' MAUSAM AI', '<div class="typing"><i></i><i></i><i></i></div>');
+    var load = addMsg('a', p.icon + ' MAUSAM', '<div class="typing"><i></i><i></i><i></i></div>');
 
     var html;
     if (API_BASE) {
@@ -619,7 +619,7 @@
     window.addEventListener('appinstalled', function () {
       deferredPrompt = null;
       if (btn) btn.hidden = true;
-      addMsg('a', 'SYSTEM', 'App installed — open <b>MAUSAM AI</b> any time from your home screen.');
+      addMsg('a', 'SYSTEM', 'App installed — open <b>MAUSAM</b> any time from your home screen.');
     });
 
     if (btn) {
@@ -632,7 +632,7 @@
           return;
         }
         // iOS Safari never fires beforeinstallprompt — explain the manual route
-        window.alert('Install MAUSAM AI\n\niPhone / iPad:\n  Tap Share, then "Add to Home Screen"\n\nAndroid:\n  Tap the browser menu, then "Install app" / "Add to Home screen"');
+        window.alert('Install MAUSAM\n\niPhone / iPad:\n  Tap Share, then "Add to Home Screen"\n\nAndroid:\n  Tap the browser menu, then "Install app" / "Add to Home screen"');
       });
     }
   }

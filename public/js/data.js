@@ -1,5 +1,5 @@
 /**
- * MAUSAM AI - shared reference data.
+ * MAUSAM - shared reference data.
  * Single source of truth for BOTH the browser and the Node backend.
  */
 (function (root, factory) {

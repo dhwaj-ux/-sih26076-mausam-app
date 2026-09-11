@@ -1,5 +1,5 @@
 /**
- * MAUSAM AI - pure logic engine (no DOM).
+ * MAUSAM - pure logic engine (no DOM).
  * Shared by the browser and the Node backend, and unit-testable in isolation.
  */
 (function (root, factory) {

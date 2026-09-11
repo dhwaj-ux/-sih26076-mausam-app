@@ -1,5 +1,5 @@
 /* ===========================================================================
-   MAUSAM AI — service worker
+   MAUSAM — service worker
    Makes the app installable and usable with no network connection.
 
    Strategy:
@@ -9,7 +9,7 @@
    =========================================================================== */
 'use strict';
 
-const VERSION = 'mausam-ai-v1';
+const VERSION = 'mausam-v2';
 const SHELL_CACHE = VERSION + '-shell';
 const DATA_CACHE = VERSION + '-data';
 

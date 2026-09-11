@@ -1,5 +1,5 @@
 /**
- * MAUSAM AI — application server.
+ * MAUSAM — application server.
  *
  *   Frontend : static files served from /public (HTML + CSS + vanilla JS)
  *   Backend  : this Express app
@@ -71,7 +71,7 @@ app.use((err, _req, res, _next) => {
 if (require.main === module) {
   app.listen(PORT, () => {
     console.log('');
-    console.log('  🌦️  MAUSAM AI — personalised weather homepage (SIH26076)');
+    console.log('  🌦️  MAUSAM — personalised weather homepage (SIH26076)');
     console.log(`  ▶  http://localhost:${PORT}`);
     console.log(`  ▶  AI provider: ${llm.activeProvider() || 'offline knowledge base (no key configured)'}`);
     console.log('  ▶  Weather/AQI/Marine data: Open-Meteo (free, no key)');

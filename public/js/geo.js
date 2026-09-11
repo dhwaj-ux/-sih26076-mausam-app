@@ -1,5 +1,5 @@
 /**
- * MAUSAM AI — geocoding helpers, shared by the browser and the Node backend.
+ * MAUSAM — geocoding helpers, shared by the browser and the Node backend.
  *
  * Why this exists:
  *   • A plain lookup for "Panaji" returns a village in Guatemala, and "Goa"

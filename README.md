@@ -1,4 +1,4 @@
-# 🌦️ MAUSAM AI
+# 🌦️ MAUSAM
 
 **Personalised homepage for the MAUSAM mobile application**
 Smart India Hackathon **SIH26076** · Ministry of Earth Sciences (MoES) · India Meteorological Department (IMD)
@@ -87,7 +87,7 @@ npm run proof # boots the server and shows frontend + backend both responding
 
 ## 📱 Mobile app
 
-MAUSAM AI ships as a mobile application in **two ways** — both from the same codebase.
+MAUSAM ships as a mobile application in **two ways** — both from the same codebase.
 
 ### 1. Install as an app (PWA) — instant, no APK, no store
 
@@ -114,7 +114,7 @@ builds a native `.apk` on every push.
 [**Releases**](https://github.com/dhwaj-ux/-sih26076-mausam-app/releases/latest) page and grab
 `mausam-ai.apk`.
 
-Then on your phone: open the file, allow installs from this source, and **MAUSAM AI** appears in
+Then on your phone: open the file, allow installs from this source, and **MAUSAM** appears in
 your app drawer.
 
 **Build it yourself** (needs Node 20 + JDK 17 + Android SDK):
