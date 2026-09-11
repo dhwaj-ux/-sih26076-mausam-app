@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover">
+<title>MAUSAM — Personalised Weather Homepage</title>
+<meta name="description" content="AI-powered, persona-adaptive weather homepage for the MAUSAM mobile application. Smart India Hackathon SIH26076, Ministry of Earth Sciences / India Meteorological Department.">
+
+<!-- PWA / mobile app metadata -->
+<meta name="theme-color" content="#06243D">
+<meta name="color-scheme" content="dark">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="MAUSAM">
+<meta name="application-name" content="MAUSAM">
+<meta name="format-detection" content="telephone=no">
+<meta name="msapplication-TileColor" content="#06243D">
+<meta name="msapplication-tap-highlight" content="no">
+
+<link rel="icon" href="assets/favicon.png" type="image/png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="192x192" href="assets/icon-192.png">
+<link rel="manifest" href="manifest.webmanifest?v=7">
+<link rel="stylesheet" href="css/style.css?v=7">
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="brand">
+      <div class="logo-tile"><img src="assets/logo-mark.png" alt="MAUSAM Weather App logo"></div>
+      <div class="brand-text">
+        <h1>MAUSAM</h1>
+        <p>India Meteorological Department &middot; Ministry of Earth Sciences</p>
+      </div>
+    </div>
+    <div class="hbtns">
+      <span class="pill" id="modePill">checking backend&hellip;</span>
+      <button class="btn sm pri" id="installBtn" hidden>&#11015; Install app</button>
+      <button class="btn sm" id="cfgBtn">&#9881; AI Settings</button>
+    </div>
+  </header>
+
+  <div class="tabs">
+    <button class="tab on" data-t="home">Home &amp; Weather</button>
+    <button class="tab" data-t="forecast">7-Day Forecast</button>
+    <button class="tab" data-t="ai">AI Advisor</button>
+    <button class="tab" data-t="crop">Crop Planner</button>
+  </div>
+
+  <!-- ================= HOME ================= -->
+  <section class="pane on" id="p-home">
+    <div class="note demo-note" id="demoNote" hidden></div>
+
+    <div class="grid">
+      <div class="card">
+        <h3>Live Weather &amp; Air Quality <span>Open-Meteo &middot; free &middot; no key</span></h3>
+        <div class="row">
+          <input id="city" placeholder="Search a city — Mumbai, Delhi, Nagpur, Goa&hellip;" autocomplete="off">
+          <button class="btn icon" id="locBtn" title="Use my current location" aria-label="Use my current location">&#128205;</button>
+          <button class="btn pri" id="getBtn">Get</button>
+        </div>
+        <div id="wout"><p class="muted">Finding your location&hellip;</p></div>
+      </div>
+
+      <div class="card">
+        <h3>Profile <span>the AI personalises using this</span></h3>
+        <label for="state">State / Region (used for agriculture)</label>
+        <select id="state"></select>
+        <div class="gap"></div>
+        <label for="land">Land size (acre)</label>
+        <input id="land" type="number" value="2" min="0.1" step="0.1">
+        <div id="profileBox"></div>
+      </div>
+    </div>
+
+    <div class="card mt">
+      <h3>Choose Your Persona <span id="curP">selected: Agriculture</span></h3>
+      <div class="pgrid" id="pgrid"></div>
+      <div class="note ok mt-sm" id="personaInfo"></div>
+    </div>
+
+    <div class="card mt">
+      <h3>Today's Smart Suggestion <span id="sugFor">persona-based</span></h3>
+      <div id="dailyTips"></div>
+    </div>
+  </section>
+
+  <!-- ================= 7-DAY FORECAST ================= -->
+  <section class="pane" id="p-forecast">
+    <div class="card">
+      <h3>7-Day Forecast <span id="fcPlace">&mdash;</span></h3>
+      <div id="fcChart"><p class="muted">Load a location to see the forecast&hellip;</p></div>
+
+      <div class="secTitle">Day by day</div>
+      <div id="fcDays"></div>
+
+      <div class="secTitle">Rain &amp; UV outlook</div>
+      <div id="fcRain"></div>
+    </div>
+  </section>
+
+  <!-- ================= AI ================= -->
+  <section class="pane" id="p-ai">
+    <div class="card mb">
+      <h3>Persona Switch <span>select any persona</span></h3>
+      <div class="pgrid" id="pgrid2"></div>
+    </div>
+
+    <div class="card chatbox">
+      <h3><img class="chat-logo" src="assets/logo-mark.png" alt=""><span id="aiTitle">MAUSAM Advisor</span> <span id="aiMode">offline knowledge base</span></h3>
+      <div class="chips" id="chips"></div>
+      <div class="msgs" id="msgs"></div>
+      <div class="cin">
+        <textarea id="qi" rows="2" placeholder="Ask your question — Hindi, English or Hinglish (answers are always in English)"></textarea>
+        <button class="btn pri" id="sendBtn">Send</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CROP ================= -->
+  <section class="pane" id="p-crop">
+    <div class="card">
+      <h3>Season-wise Crop Planner <span>agriculture persona</span></h3>
+      <div class="grid3">
+        <div>
+          <label for="season">Season</label>
+          <select id="season">
+            <option value="all">All seasons</option>
+            <option value="kharif">Kharif (Jun–Oct &middot; Monsoon)</option>
+            <option value="rabi">Rabi (Oct–Mar &middot; Winter)</option>
+            <option value="zaid">Zaid (Mar–Jun &middot; Summer)</option>
+          </select>
+        </div>
+        <div>
+          <label for="state2">State</label>
+          <select id="state2"></select>
+        </div>
+        <div>
+          <label for="focus">Focus</label>
+          <select id="focus">
+            <option value="all">All crops</option>
+            <option value="water">Low water use</option>
+            <option value="profit">High profit</option>
+          </select>
+        </div>
+      </div>
+      <div id="planOut" class="mt"></div>
+    </div>
+  </section>
+
+  <footer>
+    <img class="foot-logo" src="assets/logo-mark.png" alt="">
+    <div>
+      <b>MAUSAM</b> <span class="build">v7</span> — Personalised Homepage for the MAUSAM Mobile Application<br>
+      Smart India Hackathon SIH26076 &middot; Ministry of Earth Sciences (MoES) &middot; India Meteorological Department (IMD)<br>
+      <span class="muted">Weather, air quality &amp; marine data: Open-Meteo (free, no key) &middot; AI: Gemini / Groq / OpenRouter free tier, with a built-in offline knowledge base fallback</span>
+    </div>
+  </footer>
+</div>
+
+<!-- ================= AI SETTINGS ================= -->
+<div class="mask" id="mask" hidden>
+  <div class="modal">
+    <h2 id="cfgTitle">AI Settings</h2>
+    <p id="cfgIntro"></p>
+
+    <label class="chk" for="demoToggle">
+      <input type="checkbox" id="demoToggle">
+      <span><b>Force demo mode</b> &mdash; always show the built-in sample data</span>
+    </label>
+    <div class="note">With no internet the app <b>already falls back to this sample data automatically</b> and labels it
+      <b>DEMO DATA</b>, so nothing is ever presented as live. This switch just forces it on for demos.</div>
+
+    <div id="cfgServerBlock" hidden>
+      <div class="note ok" id="cfgServerState"></div>
+      <div class="note">To change the provider, edit <code>.env</code> on the server and restart it. The API key never reaches the browser.</div>
+    </div>
+
+    <div id="cfgClientBlock" hidden>
+      <label for="prov">AI provider</label>
+      <select id="prov">
+        <option value="offline">Offline knowledge base (no key needed)</option>
+        <option value="gemini">Google Gemini — free tier</option>
+        <option value="groq">Groq (Llama 3.3 70B) — free tier</option>
+        <option value="openrouter">OpenRouter — free models</option>
+      </select>
+      <div class="gap"></div>
+      <label for="key">API key</label>
+      <input id="key" type="password" placeholder="Paste your free API key&hellip;" autocomplete="off">
+      <div class="note">Stored only in this browser's local storage. Get a free key from aistudio.google.com, console.groq.com or openrouter.ai.</div>
+      <div class="row mt-sm">
+        <button class="btn pri" id="saveCfg">Save</button>
+        <button class="btn" id="clearCfg">Clear</button>
+      </div>
+    </div>
+
+    <div class="row mt-sm">
+      <button class="btn" id="closeCfg" style="flex:1">Close</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/data.js?v=7"></script>
+<script src="js/engine.js?v=7"></script>
+<script src="js/geo.js?v=7"></script>
+<script src="js/context.js?v=7"></script>
+<script src="js/app.js?v=7"></script>
+</body>
+</html>
