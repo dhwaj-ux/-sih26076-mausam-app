@@ -188,13 +188,13 @@
         '&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m,is_day' +
         '&hourly=temperature_2m,apparent_temperature,relative_humidity_2m,precipitation,precipitation_probability,weather_code,wind_speed_10m,uv_index' +
         '&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,uv_index_max,weather_code' +
-        '&timezone=auto&forecast_days=5',
+        '&timezone=auto&forecast_days=7',
       'https://air-quality-api.open-meteo.com/v1/air-quality?latitude=' + lat + '&longitude=' + lon +
         '&current=us_aqi,pm2_5,pm10&hourly=us_aqi&timezone=auto&forecast_days=3',
       'https://marine-api.open-meteo.com/v1/marine?latitude=' + lat + '&longitude=' + lon +
         '&current=wave_height,wave_direction,wave_period,swell_wave_height,sea_surface_temperature' +
         '&hourly=wave_height,wave_period,swell_wave_height,sea_surface_temperature,sea_level_height_msl' +
-        '&timezone=auto&forecast_days=5'
+        '&timezone=auto&forecast_days=7'
     ];
     var res = await Promise.all(urls.map(function (u) {
       return fetch(u).then(function (x) { return x.json(); }).catch(function () { return null; });
@@ -241,10 +241,23 @@
   function renderWeather() {
     if (!WX) return;
     var ac = AQ ? E.aqiCat(AQ.aqi) : null;
+
+    // ---- 7-day forecast strip (today + the next 6 days)
+    var DAYN = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     var days = '';
-    for (var i = 1; i < 4; i++) {
-      days += '<div class="stat"><b>' + Math.round(WX.dmax[i]) + '&deg;/' + Math.round(WX.dmin[i]) +
-        '&deg;</b><span>' + WX.dtime[i].slice(5) + ' &middot; ' + (WX.dsum[i] || 0).toFixed(1) + 'mm</span></div>';
+    var nDays = Math.min(7, WX.dtime.length);
+    for (var i = 0; i < nDays; i++) {
+      var dt = new Date(WX.dtime[i] + 'T12:00:00');
+      var label = i === 0 ? 'Today' : DAYN[dt.getDay()];
+      var rain = WX.dsum[i] || 0;
+      days += '<div class="fday' + (i === 0 ? ' today' : '') + '">' +
+        '<span class="fdname">' + label + '</span>' +
+        '<span class="fdicon">' + E.wIcon(WX.dcode[i]) + '</span>' +
+        '<span class="fdmax">' + Math.round(WX.dmax[i]) + '&deg;</span>' +
+        '<span class="fdmin">' + Math.round(WX.dmin[i]) + '&deg;</span>' +
+        '<span class="fdrain"' + (rain >= 0.5 ? '' : ' data-dry="1"') + '>' + rain.toFixed(1) + ' mm</span>' +
+        '<span class="fduv"' + (WX.duv[i] >= 8 ? '' : ' data-low="1"') + '>UV ' + (WX.duv[i] == null ? '&ndash;' : Math.round(WX.duv[i])) + '</span>' +
+        '</div>';
     }
     $('wout').innerHTML =
       '<div class="whero">' +
@@ -269,7 +282,8 @@
       (MAR ? '<div class="badge">&#127754; ' + MAR.wave + ' m waves &middot; ' + (MAR.sst == null ? '&ndash;' : MAR.sst) +
         '&deg;C sea temp &middot; surf: ' + E.surfRating(MAR.wave).c + '</div>' : '') +
       '<div class="badge warm">' + esc(E.wxAdvice()) + '</div>' +
-      '<div class="wstats">' + days + '</div>';
+      '<div class="secTitle">7-Day Forecast</div>' +
+      '<div class="fstrip">' + days + '</div>';
   }
 
   /* ======================================================================
@@ -334,7 +348,7 @@
         (WX ? '<div class="note ok">' + WX.temp + '&deg;C &middot; ' + E.wIcon(WX.code) + ' &middot; rain next 3d ' +
           WX.rain3.toFixed(1) + 'mm &middot; wind ' + WX.wind + ' km/h</div>' : '<div class="note">Search your destination city.</div>') +
         '<label style="margin-top:10px">Packing hint</label>' + (WX ? '<div class="note">' + esc(E.packText()) + '</div>' : '') +
-        '</div><div><label>Best travel day (5-day)</label>' +
+        '</div><div><label>Best travel day (7-day)</label>' +
         (WX ? '<div class="note ok">' + E.bestDayText() + '</div>' : '') +
         '<div class="note"><b>Tip:</b> the risk of flight and train delays is highest with rain and strong wind.</div></div></div>';
     } else if (CUR === 'aqi') {
@@ -387,8 +401,8 @@
         '</div><div><label>Best event window (next 24h)</label>' +
         (eb ? '<div class="note ok"><b>around ' + E.hhmm(eb.t) + '</b> &middot; comfort ' + eb.sc + '/100 &middot; ' +
           eb.feels + '&deg;C &middot; rain ' + eb.prob + '%</div>' : '<div class="note">Load the weather first.</div>') +
-        '<label style="margin-top:10px">5-day Comfort Index</label>' +
-        '<div class="wstats" style="grid-template-columns:repeat(3,1fr)">' + dcs.map(function (x) {
+        '<label style="margin-top:10px">7-day Comfort Index</label>' +
+        '<div class="wstats" style="grid-template-columns:repeat(auto-fill,minmax(84px,1fr))">' + dcs.map(function (x) {
           var k = E.comfortInfo(x.s);
           return '<div class="stat"><b style="color:' + k.col + '">' + x.s + '</b><span>' + x.t.slice(5) + '<br>' +
             k.label.split(' — ')[0] + '</span></div>';

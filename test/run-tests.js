@@ -226,7 +226,7 @@ ENGINE.setMarine(MAR);
       check('geocoding resolved inside India', w.body.location && w.body.location.countryCode === 'IN',
         w.body.location && (w.body.location.name + ', ' + w.body.location.country));
       check('weather payload has hourly data for nowcast', Array.isArray(w.body.weather.htime) && w.body.weather.htime.length > 12);
-      check('weather payload has 5-day forecast', Array.isArray(w.body.weather.dtime) && w.body.weather.dtime.length === 5);
+      check('weather payload has a 7-day forecast', Array.isArray(w.body.weather.dtime) && w.body.weather.dtime.length === 7);
       check('coastal city returns marine data', !!w.body.marine && w.body.marine.wave != null);
       check('air quality present', !!w.body.air && typeof w.body.air.aqi === 'number');
     }

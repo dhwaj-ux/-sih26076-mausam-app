@@ -278,6 +278,47 @@ footer {
   width: 42px; height: 42px; object-fit: contain; background: #fff;
   border-radius: 11px; padding: 1px; flex: 0 0 42px;
 }
+/* ------------------------------------------------- 7-day forecast strip -- */
+.secTitle {
+  font-size: 11px; font-weight: 700; letter-spacing: .6px;
+  color: var(--muted); text-transform: uppercase;
+  margin: 18px 0 9px;
+}
+.fstrip {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 7px;
+}
+.fday {
+  background: rgba(0, 0, 0, .24);
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  padding: 9px 4px 8px;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  text-align: center;
+  transition: .18s;
+}
+.fday:hover { background: rgba(255, 255, 255, .09); }
+.fday.today {
+  border-color: rgba(44, 199, 199, .55);
+  background: linear-gradient(180deg, rgba(44, 199, 199, .16), rgba(44, 199, 199, .04));
+}
+.fdname {
+  font-size: 10px; font-weight: 700; letter-spacing: .4px;
+  color: var(--muted); text-transform: uppercase;
+}
+.fday.today .fdname { color: var(--teal-lt); }
+.fdicon { font-size: 19px; line-height: 1.15; }
+.fdmax { font-size: 14.5px; font-weight: 800; line-height: 1.1; }
+.fdmin { font-size: 11px; color: var(--muted); line-height: 1.1; }
+.fdrain { font-size: 9.5px; color: var(--teal-lt); }
+.fdrain[data-dry] { color: var(--muted); opacity: .5; }
+.fduv { font-size: 9px; color: var(--orange-lt); opacity: .85; }
+.fduv[data-low] { color: var(--muted); opacity: .45; }
+
+@media (max-width: 900px) { .fstrip { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (max-width: 430px) { .fstrip { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
 footer b { color: var(--txt); }
 .build {
   font-size: 10px; font-weight: 700; letter-spacing: .4px;

@@ -37,7 +37,7 @@ domain-expert AI advisor.
 | | |
 |---|---|
 | 🎭 **8 personas** | Agriculture · Running & Workout · School & Family · Traveler · Air Quality & Health · Commuter · Beach & Surf · Event Planner |
-| 🌦️ **Live weather** | Current + hourly + 5-day forecast, UV, wind, humidity |
+| 🌦️ **Live weather** | Current + hourly + 7-day forecast, UV, wind, humidity |
 | 🌫️ **Live air quality** | US AQI, PM2.5, PM10 with a colour-coded risk scale |
 | ⏱️ **Nowcast** | Next 4–24 hours of rain probability and intensity, hour by hour |
 | 🌊 **Marine** | Wave height, period, swell, direction, sea temperature, tide highs/lows |
@@ -245,7 +245,7 @@ and fill in what you have.
 
 | Data | Source | Key needed |
 |---|---|---|
-| Forecast (current/hourly/5-day) | Open-Meteo Forecast API | ❌ |
+| Forecast (current/hourly/7-day) | Open-Meteo Forecast API | ❌ |
 | Air quality (AQI, PM2.5, PM10) | Open-Meteo Air Quality API | ❌ |
 | Marine (waves, swell, tide, sea temp) | Open-Meteo Marine API | ❌ |
 | Geocoding | Open-Meteo Geocoding API | ❌ |

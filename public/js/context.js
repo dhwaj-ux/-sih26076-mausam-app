@@ -41,7 +41,7 @@
       out.push('Next 8h hourly: ' + E.nextHours(8).map(function (h) {
         return E.hhmm(h.t) + ' ' + h.temp + '\u00B0 ' + h.rain.toFixed(1) + 'mm ' + h.prob + '%';
       }).join(' | '));
-      out.push('5-day: ' + WX.dtime.map(function (t, i) {
+      out.push('7-day: ' + WX.dtime.map(function (t, i) {
         return t + ' ' + Math.round(WX.dmax[i]) + '/' + Math.round(WX.dmin[i]) + '\u00B0 rain ' +
           Number(WX.dsum[i] || 0).toFixed(1) + 'mm';
       }).join(' | '));
@@ -112,7 +112,7 @@
       out.push('Comfort Index now: ' + (nc != null ? nc + '/100 (' + E.comfortInfo(nc).label + ')' : 'n/a'));
       out.push('Best event window (next 24h): ' + (eb ? E.hhmm(eb.t) + ' — comfort ' + eb.sc +
         '/100, rain ' + eb.prob + '%' : 'n/a'));
-      out.push('5-day comfort: ' + (WX ? WX.dtime.map(function (t, i) {
+      out.push('7-day comfort: ' + (WX ? WX.dtime.map(function (t, i) {
         return t + ' ' + E.dayComfort(i);
       }).join(' | ') : 'n/a'));
     }

@@ -106,7 +106,7 @@ async function weatherBundle(lat, lon) {
     '&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m,is_day' +
     '&hourly=temperature_2m,apparent_temperature,relative_humidity_2m,precipitation,precipitation_probability,weather_code,wind_speed_10m,uv_index' +
     '&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,uv_index_max,weather_code' +
-    '&timezone=auto&forecast_days=5';
+    '&timezone=auto&forecast_days=7';
 
   const airUrl =
     `${ENDPOINTS.air}?latitude=${lat}&longitude=${lon}` +
@@ -116,7 +116,7 @@ async function weatherBundle(lat, lon) {
     `${ENDPOINTS.marine}?latitude=${lat}&longitude=${lon}` +
     '&current=wave_height,wave_direction,wave_period,swell_wave_height,sea_surface_temperature' +
     '&hourly=wave_height,wave_period,swell_wave_height,sea_surface_temperature,sea_level_height_msl' +
-    '&timezone=auto&forecast_days=5';
+    '&timezone=auto&forecast_days=7';
 
   const [forecast, air, marine] = await Promise.all([
     getJSON(forecastUrl),

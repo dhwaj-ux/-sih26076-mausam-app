@@ -70,7 +70,7 @@ function rainSummary(hs){
 function bestDayText(){
   if(!WX)return"";
   let bi=0,bs=1e9;
-  for(let i=0;i<Math.min(5,WX.dmax.length);i++){
+  for(let i=0;i<Math.min(7,WX.dmax.length);i++){
     const sc=(WX.dsum[i]||0)*3 + Math.abs(WX.dmax[i]-26)*1.2 + (WX.duv[i]>9?6:0);
     if(sc<bs){bs=sc;bi=i}
   }
@@ -263,7 +263,7 @@ function offTravel(ql){
   Rain next 3 days: <b>${WX.rain3.toFixed(1)} mm</b> · UV max <b>${WX.duv[0]}</b><br><br>
   <b>🧳 Packing list:</b><br>${packText()}<br><br>
   <b>📍 Next 12h:</b> ${rs.wet?rs.html:"Clear — no rain expected"}<br><br>
-  <b>📅 5-day outlook &amp; best day:</b><br>${bestDayText()}<br>
+  <b>📅 7-day outlook &amp; best day:</b><br>${bestDayText()}<br>
   <table style="width:100%;font-size:12px;margin-top:8px;border-collapse:collapse">
   ${WX.dtime.map((t,i)=>`<tr style="border-bottom:1px solid var(--line)"><td style="padding:5px 0">${t}</td><td>${wIcon(WX.dcode[i])}</td><td>${Math.round(WX.dmax[i])}°/${Math.round(WX.dmin[i])}°</td><td>${(WX.dsum[i]||0).toFixed(1)}mm</td></tr>`).join("")}</table><br>
   <b>⚠️ Travel advisories:</b><ul>
@@ -346,7 +346,7 @@ function offEvent(ql){
   <li>Wind: ${WX.wind} km/h <span style="color:#9fb0d0">(ideal below 20)</span></li>
   <li>UV index: ${WX.duv[0]} <span style="color:#9fb0d0">(ideal below 6)</span></li></ul>
   <b>⏰ Best event window (next 24h):</b> ${bw?`<b>around ${hhmm(bw.t)}</b> — comfort ${bw.sc}/100, ${bw.feels}°C, rain ${bw.prob}%`:"–"}<br><br>
-  <b>📅 5-day Comfort Index:</b><div class="wstats" style="grid-template-columns:repeat(3,1fr)">
+  <b>📅 7-day Comfort Index:</b><div class="wstats" style="grid-template-columns:repeat(auto-fill,minmax(84px,1fr))">
   ${WX.dtime.map((t,i)=>{const sc=dayComfort(i),k=comfortInfo(sc);return `<div class="stat"><b style="color:${k.col}">${sc}</b><span>${t.slice(5)} · ${k.label.split(" — ")[0]}<br>${(WX.dsum[i]||0).toFixed(1)}mm</span></div>`}).join("")}</div><br>
   <b>🌧️ Rain probability:</b><ul><li>Total rain over the next 3 days: <b>${WX.rain3.toFixed(1)} mm</b></li><li><b>${bestDayText()}</b></li></ul>
   <b>✅ Planning checklist:</b><ul>
