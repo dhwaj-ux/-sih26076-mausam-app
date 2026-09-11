@@ -18,8 +18,10 @@ git clone https://github.com/dhwaj-ux/-sih26076-mausam-app.git
 cd -- -sih26076-mausam-app && npm install && npm start
 ```
 
-> **Try it in 5 seconds:** open [`standalone/mausam-ai.html`](standalone/mausam-ai.html) in any browser —
-> the whole app (CSS, JS, logo) is inlined in that single file. No install, no server.
+> ### 🚀 Live demo: **https://dhwaj-ux.github.io/-sih26076-mausam-app/**
+>
+> Just click the link — the app opens straight in your browser. No install, no server, no API key.
+> (Offline copy: [`standalone/mausam-ai.html`](standalone/mausam-ai.html) — CSS, JS and the logo are all inlined.)
 
 📊 **Pitch deck:** [`docs/SIH26076_MAUSAM_AI_PitchDeck.pptx`](docs/SIH26076_MAUSAM_AI_PitchDeck.pptx)
 
