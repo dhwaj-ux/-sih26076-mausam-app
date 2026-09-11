@@ -2,12 +2,25 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover">
 <title>MAUSAM AI — Personalised Weather Homepage</title>
 <meta name="description" content="AI-powered, persona-adaptive weather homepage for the MAUSAM mobile application. Smart India Hackathon SIH26076, Ministry of Earth Sciences / India Meteorological Department.">
+
+<!-- PWA / mobile app metadata -->
 <meta name="theme-color" content="#06243D">
+<meta name="color-scheme" content="dark">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="MAUSAM AI">
+<meta name="application-name" content="MAUSAM AI">
+<meta name="format-detection" content="telephone=no">
+<meta name="msapplication-TileColor" content="#06243D">
+<meta name="msapplication-tap-highlight" content="no">
+
 <link rel="icon" href="assets/favicon.png" type="image/png">
-<link rel="apple-touch-icon" href="assets/logo-mark-white.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="192x192" href="assets/icon-192.png">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="stylesheet" href="css/style.css">
 </head>
@@ -24,7 +37,8 @@
     </div>
     <div class="hbtns">
       <span class="pill" id="modePill">checking backend&hellip;</span>
-      <button class="btn sm" id="cfgBtn">&plus; AI Settings</button>
+      <button class="btn sm pri" id="installBtn" hidden>&#11015; Install app</button>
+      <button class="btn sm" id="cfgBtn">AI Settings</button>
     </div>
   </header>
 

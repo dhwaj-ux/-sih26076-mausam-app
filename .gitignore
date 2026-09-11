@@ -7,3 +7,10 @@ npm-debug.log*
 coverage/
 .idea/
 .vscode/
+
+# Capacitor generates the native project - build it locally with:
+#   npm run android:add && npm run android:sync
+android/
+ios/
+dist/
+.gradle/

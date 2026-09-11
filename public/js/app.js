@@ -596,6 +596,56 @@
   }
 
   /* ======================================================================
+     PWA — service worker, install prompt, deep links
+     ====================================================================== */
+  var deferredPrompt = null;
+
+  function initPWA() {
+    // Service worker only makes sense over http(s), not file://
+    if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('sw.js').catch(function () { /* offline still works, just no cache */ });
+      });
+    }
+
+    var btn = $('installBtn');
+
+    window.addEventListener('beforeinstallprompt', function (e) {
+      e.preventDefault();
+      deferredPrompt = e;
+      if (btn) btn.hidden = false;
+    });
+
+    window.addEventListener('appinstalled', function () {
+      deferredPrompt = null;
+      if (btn) btn.hidden = true;
+      addMsg('a', 'SYSTEM', 'App installed — open <b>MAUSAM AI</b> any time from your home screen.');
+    });
+
+    if (btn) {
+      btn.addEventListener('click', async function () {
+        if (deferredPrompt) {
+          deferredPrompt.prompt();
+          try { await deferredPrompt.userChoice; } catch (e) { /* ignored */ }
+          deferredPrompt = null;
+          btn.hidden = true;
+          return;
+        }
+        // iOS Safari never fires beforeinstallprompt — explain the manual route
+        window.alert('Install MAUSAM AI\n\niPhone / iPad:\n  Tap Share, then "Add to Home Screen"\n\nAndroid:\n  Tap the browser menu, then "Install app" / "Add to Home screen"');
+      });
+    }
+  }
+
+  /** Support the PWA shortcuts: ./?tab=ai and ./?tab=crop */
+  function applyDeepLink() {
+    var wanted = new URLSearchParams(location.search).get('tab');
+    if (!wanted) return;
+    var tabEl = document.querySelector('.tab[data-t="' + wanted + '"]');
+    if (tabEl) tabEl.click();
+  }
+
+  /* ======================================================================
      Boot
      ====================================================================== */
   async function init() {
@@ -631,6 +681,9 @@
       setMode();
     });
     $('mask').addEventListener('click', function (e) { if (e.target === $('mask')) closeCfg(); });
+
+    initPWA();
+    applyDeepLink();
 
     var health = await detectBackend();
     setMode(health);

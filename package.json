@@ -12,11 +12,20 @@
     "dev": "node --watch server/index.js",
     "build:standalone": "node scripts/build-standalone.js",
     "proof": "node test/proof.js",
-    "test": "node test/run-tests.js"
+    "test": "node test/run-tests.js",
+    "android:add": "cap add android",
+    "android:sync": "cap sync android",
+    "android:apk": "cd android && ./gradlew assembleDebug",
+    "android:open": "cap open android"
   },
   "dependencies": {
     "dotenv": "^16.4.5",
     "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "@capacitor/android": "^6.2.0",
+    "@capacitor/cli": "^6.2.0",
+    "@capacitor/core": "^6.2.0"
   },
   "keywords": [
     "sih",

@@ -302,6 +302,12 @@ ENGINE.setMarine(MAR);
       };
       sandbox.window = sandbox;
       sandbox.self = sandbox;
+      // the app registers PWA listeners on window
+      sandbox.addEventListener = () => {};
+      sandbox.removeEventListener = () => {};
+      sandbox.navigator = { userAgent: 'node', serviceWorker: undefined };
+      sandbox.location = { protocol: 'file:', search: '', href: 'file:///standalone.html' };
+      sandbox.URLSearchParams = URLSearchParams;
       sandbox.document = {
         readyState: 'complete',
         getElementById: (id) => {

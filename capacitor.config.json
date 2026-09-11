@@ -1,0 +1,16 @@
+{
+  "appId": "com.sih26076.mausamai",
+  "appName": "MAUSAM AI",
+  "webDir": "public",
+  "bundledWebRuntime": false,
+  "loggingBehavior": "none",
+  "android": {
+    "backgroundColor": "#06243d",
+    "allowMixedContent": false,
+    "captureInput": true,
+    "webContentsDebuggingEnabled": false
+  },
+  "server": {
+    "androidScheme": "https"
+  }
+}

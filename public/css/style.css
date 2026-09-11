@@ -285,8 +285,66 @@ footer b { color: var(--txt); }
   * { animation-duration: .001ms !important; transition-duration: .001ms !important; }
 }
 :focus-visible { outline: 2px solid var(--teal-lt); outline-offset: 2px; }
+
+/* ===========================================================================
+   Mobile / installed-app behaviour
+   =========================================================================== */
+
+/* Respect notches, punch-holes and the home indicator when installed */
+body {
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+  padding-bottom: calc(40px + env(safe-area-inset-bottom));
+  overscroll-behavior-y: contain;          /* no rubber-band pull-to-refresh */
+  -webkit-user-select: none;
+  user-select: none;
+}
+.wrap { padding-top: calc(18px + env(safe-area-inset-top)); }
+
+/* Text should still be selectable - only controls lose it */
+.msg, .note, .stat, p, li { -webkit-user-select: text; user-select: text; }
+
+/* Native-feeling taps: no grey flash, no long-press menus on controls */
+.btn, .tab, .chip, .pc {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+}
+.btn:active, .tab:active, .chip:active, .pc:active { transform: scale(.97); }
+
+/* Comfortable minimum tap targets on touch devices */
+@media (hover: none) and (pointer: coarse) {
+  .btn, .tab { min-height: 44px; }
+  .chip { min-height: 38px; display: inline-flex; align-items: center; }
+  input, select, textarea { font-size: 16px; }  /* stops iOS zoom-on-focus */
+  .cin textarea { height: 64px; }
+  .msgs { -webkit-overflow-scrolling: touch; }
+}
+
+/* Installed (standalone) mode: reclaim the header space */
+@media (display-mode: standalone) {
+  .wrap { padding-top: calc(6px + env(safe-area-inset-top)); }
+}
+
 @media (max-width: 600px) {
-  header { flex-direction: column; align-items: stretch; }
-  .hbtns { justify-content: space-between; }
+  .wrap { padding: 12px; padding-top: calc(12px + env(safe-area-inset-top)); }
+  header { flex-direction: column; align-items: stretch; gap: 10px; }
+  .hbtns { justify-content: space-between; flex-wrap: wrap; }
+  .hbtns .btn { flex: 1; }
   .wtemp { font-size: 42px; }
+  .wicon { font-size: 44px; }
+  .card { padding: 15px; border-radius: 16px; }
+  .card h3 { font-size: 13.5px; }
+  .pgrid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 9px; }
+  .pc { padding: 12px; }
+  .pc .ic { font-size: 22px; }
+  .pc b { font-size: 12px; }
+  .msg { max-width: 94%; font-size: 13px; }
+  .wstats { gap: 8px; }
+  .stat { padding: 9px; }
+  .stat b { font-size: 15px; }
+  .tabs { gap: 6px; }
+  .tab { flex: 1; text-align: center; padding: 10px 10px; font-size: 12px; }
+  footer { flex-direction: column; gap: 10px; }
+  .chatbox { height: min(560px, 72vh); }
 }

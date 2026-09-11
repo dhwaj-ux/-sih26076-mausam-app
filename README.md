@@ -85,6 +85,61 @@ npm run proof # boots the server and shows frontend + backend both responding
 
 ---
 
+## 📱 Mobile app
+
+MAUSAM AI ships as a mobile application in **two ways** — both from the same codebase.
+
+### 1. Install as an app (PWA) — instant, no APK, no store
+
+Open the live link on your phone:
+
+**[https://dhwaj-ux.github.io/-sih26076-mausam-app/](https://dhwaj-ux.github.io/-sih26076-mausam-app/)**
+
+| Platform | How to install |
+|---|---|
+| **Android (Chrome)** | Tap the **Install app** button in the header, or menu then *Install app* |
+| **iPhone / iPad (Safari)** | Tap **Share** then *Add to Home Screen* |
+| **Desktop (Chrome/Edge)** | Click the install icon in the address bar |
+
+Once installed it gets its own home-screen icon, opens full-screen without the browser chrome,
+and **works with no internet connection** — a service worker caches the whole app shell plus the
+last weather response for your city.
+
+### 2. Build a real Android APK
+
+The repo includes a [Capacitor](https://capacitorjs.com) setup and a GitHub Actions workflow that
+builds a native `.apk` on every push.
+
+**Download the latest APK:** open the repo's
+[**Releases**](https://github.com/dhwaj-ux/-sih26076-mausam-app/releases/latest) page and grab
+`mausam-ai.apk`.
+
+Then on your phone: open the file, allow installs from this source, and **MAUSAM AI** appears in
+your app drawer.
+
+**Build it yourself** (needs Node 20 + JDK 17 + Android SDK):
+
+```bash
+npm install
+npm run android:add     # generates the native android/ project
+npm run android:sync    # copies public/ into the native app
+npm run android:apk     # -> android/app/build/outputs/apk/debug/app-debug.apk
+npm run android:open    # optional: open Android Studio
+```
+
+> The APK is debug-signed, which is perfect for demos and sharing with judges. A Play Store
+> release would need a signing key and `assembleRelease`.
+
+### Mobile-specific behaviour
+
+- Safe-area insets for notched phones and the home indicator
+- 44 px minimum tap targets, no tap-highlight flash, `touch-action: manipulation`
+- 16 px inputs so iOS does not zoom on focus
+- Portrait-first layout, `overscroll-behavior: contain`
+- PWA shortcuts jump straight to *AI Advisor* or *Crop Planner*
+
+---
+
 ## 🏗️ Project structure
 
 ```
@@ -111,12 +166,14 @@ mausam-ai/
 │   │   ├── engine.js              #    all weather maths + the offline answer engine (shared)
 │   │   ├── geo.js                 #    geocoding helpers: aliases, India-first, scoring (shared)
 │   │   ├── context.js             #    persona-scoped LLM context + system prompt (shared)
-│   │   └── app.js                 #    UI, rendering, chat, backend detection
-│   ├── assets/                    #    logo mark, wordmark, favicon
-│   └── manifest.webmanifest
+│   │   └── app.js                 #    UI, rendering, chat, PWA install, backend detection
+│   ├── assets/                    #    logo mark, app icons, favicon
+│   ├── manifest.webmanifest       #    PWA manifest — makes it installable
+│   └── sw.js                      #    service worker — offline support
 │
 ├── scripts/build-standalone.js    # inlines everything into one .html
 ├── standalone/                    # generated single-file website
+├── capacitor.config.json          # native Android / iOS wrapper config
 ├── test/
 │   ├── run-tests.js               # 80 checks: unit + API + standalone smoke test
 │   └── proof.js                   # proves frontend + backend both respond
