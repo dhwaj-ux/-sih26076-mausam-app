@@ -24,8 +24,9 @@ const dataUri = (p) =>
 let html = read('index.html');
 
 // ---- 1. inline the stylesheet -------------------------------------------------
+// asset URLs carry a ?v=N cache-buster, so match them loosely
 html = html.replace(
-  '<link rel="stylesheet" href="css/style.css">',
+  /<link rel="stylesheet" href="css\/style\.css(\?[^"]*)?">/,
   '<style>\n' + read('css/style.css') + '\n</style>'
 );
 
@@ -34,10 +35,10 @@ const scripts = ['js/data.js', 'js/engine.js', 'js/geo.js', 'js/context.js', 'js
 const bundle = scripts
   .map((s) => '/* ===== ' + s + ' ===== */\n' + read(s))
   .join('\n\n');
-html = html.replace(
-  scripts.map((s) => '<script src="' + s + '"></script>').join('\n'),
-  '<script>\n' + bundle + '\n</script>'
-);
+// strip the individual <script src> tags (they may carry a ?v=N query)
+html = html.replace(/[ \t]*<script src="js\/[a-z]+\.js(\?[^"]*)?"><\/script>\s*\n?/g, '');
+// and drop the inlined bundle in just before </body>
+html = html.replace('</body>', '<script>\n' + bundle + '\n</script>\n</body>');
 
 // ---- 3. inline the images -----------------------------------------------------
 const mark = dataUri('assets/logo-mark-96.png');
@@ -47,7 +48,7 @@ html = html.replace(/<link rel="manifest"[^>]*>\s*/g, '');
 html = html
   .replace(/<link rel="icon"[^>]*>/g, '<link rel="icon" href="' + favicon + '">')
   .replace(/<link rel="apple-touch-icon"[^>]*>/g, '')
-  .replace(/src="assets\/logo-mark\.png"/g, 'src="' + mark + '"');
+  .replace(/src="assets\/logo-mark\.png(\?[^"]*)?"/g, 'src="' + mark + '"');
 
 // ---- 4. make sure it is obvious this is the offline-capable build -------------
 html = html.replace(

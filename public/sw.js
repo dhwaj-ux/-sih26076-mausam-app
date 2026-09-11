@@ -9,7 +9,7 @@
    =========================================================================== */
 'use strict';
 
-const VERSION = 'mausam-v2';
+const VERSION = 'mausam-v3';
 const SHELL_CACHE = VERSION + '-shell';
 const DATA_CACHE = VERSION + '-data';
 
@@ -90,7 +90,33 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // ---- same-origin app shell: cache first, update in the background
+  // ---- page navigations: NETWORK FIRST
+  // A new deploy must show up on the very next load, not after two reloads.
+  // The cache is only used when the device is genuinely offline.
+  if (req.mode === 'navigate') {
+    event.respondWith(
+      fetch(req)
+        .then((res) => {
+          if (res && res.ok) {
+            const copy = res.clone();
+            caches.open(SHELL_CACHE).then((c) => c.put('./index.html', copy)).catch(() => {});
+          }
+          return res;
+        }
+        .catch(() => caches.match('./index.html')
+          .then((hit) => hit || caches.match('./'))
+          .then((hit) => hit || new Response(
+            '<!doctype html><meta charset="utf-8"><title>MAUSAM</title>' +
+            '<body style="font:16px system-ui;background:#04182b;color:#eaf2fb;padding:40px;text-align:center">' +
+            '<h1>MAUSAM</h1><p>You are offline and the app has not been cached yet. ' +
+            'Reconnect once and it will work offline afterwards.</p>',
+            { headers: { 'Content-Type': 'text/html' } }
+          )))
+    );
+    return;
+  }
+
+  // ---- other same-origin assets: cache first, refreshed in the background
   if (url.origin === self.location.origin) {
     event.respondWith(
       caches.match(req).then((hit) => {
