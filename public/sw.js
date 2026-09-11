@@ -9,7 +9,7 @@
    =========================================================================== */
 'use strict';
 
-const VERSION = 'mausam-v4';
+const VERSION = 'mausam-v5';
 const SHELL_CACHE = VERSION + '-shell';
 const DATA_CACHE = VERSION + '-data';
 

@@ -143,46 +143,36 @@
   /* ======================================================================
      Weather
      ====================================================================== */
-  async function getWeather() {
-    var city = curCity();
-    if (!city) return;
-    $('wout').innerHTML = '<p class="muted">Loading ' + esc(city) + '&hellip;</p>';
+  var LS_CITY = 'mausam_city';   // remembers a manually chosen city
 
+  function savedCity() {
+    try { return localStorage.getItem(LS_CITY) || ''; } catch (e) { return ''; }
+  }
+  function rememberCity(c) {
     try {
-      if (API_BASE) {
-        var r = await fetch(API_BASE + '/weather?city=' + encodeURIComponent(city));
-        if (r.status === 404) throw new Error('CITY_NOT_FOUND');
-        if (!r.ok) throw new Error('HTTP ' + r.status);
-        var j = await r.json();
-        WX = j.weather; AQ = j.air; MAR = j.marine;
-      } else {
-        await getWeatherDirect(city);
-      }
-      sync();
-      renderWeather();
-      renderProfile();
-      renderSuggest();
-      plan();
-    } catch (err) {
-      $('wout').innerHTML = err.message === 'CITY_NOT_FOUND'
-        ? '<p class="err">City not found. Please check the spelling.</p>'
-        : '<p class="err">Could not load the weather. Check your internet connection.</p>';
-    }
+      if (c) localStorage.setItem(LS_CITY, c);
+      else localStorage.removeItem(LS_CITY);
+    } catch (e) { /* ignore */ }
   }
 
-  /** Standalone path: call Open-Meteo directly from the browser (India first). */
-  async function getWeatherDirect(city) {
-    var G = window.MAUSAM_GEO;
-    var query = G.queryFor(city);
-    var base = 'https://geocoding-api.open-meteo.com/v1/search?name=' +
-      encodeURIComponent(query) + '&count=10&language=en';
-    var g = await (await fetch(base + '&countryCode=IN')).json().catch(function () { return null; });
-    if (!g || !g.results || !g.results.length) g = await (await fetch(base)).json();
-    if (!g.results || !g.results.length) throw new Error('CITY_NOT_FOUND');
-    var r = G.pickPlace(g.results, query) || g.results[0];
-    var p = { name: r.name, admin1: r.admin1, latitude: r.latitude, longitude: r.longitude };
-    var lat = p.latitude, lon = p.longitude;
+  function status(html, cls) {
+    $('wout').innerHTML = '<p class="' + (cls || 'muted') + '">' + html + '</p>';
+  }
 
+  function finishLoad() {
+    sync();
+    renderWeather();
+    renderProfile();
+    renderSuggest();
+    plan();
+    renderForecast();
+  }
+
+  /**
+   * Fetch weather + air quality + marine for a coordinate pair.
+   * Used by both the city-name path and the "my location" path.
+   */
+  async function fetchBundleByCoords(lat, lon) {
     var urls = [
       'https://api.open-meteo.com/v1/forecast?latitude=' + lat + '&longitude=' + lon +
         '&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m,is_day' +
@@ -196,6 +186,7 @@
         '&hourly=wave_height,wave_period,swell_wave_height,sea_surface_temperature,sea_level_height_msl' +
         '&timezone=auto&forecast_days=7'
     ];
+
     var res = await Promise.all(urls.map(function (u) {
       return fetch(u).then(function (x) { return x.json(); }).catch(function () { return null; });
     }));
@@ -207,7 +198,7 @@
     var idx = h.time.findIndex(function (t) { return t.slice(0, 13) === key; });
 
     WX = {
-      city: p.name, state: p.admin1 || '', lat: lat, lon: lon,
+      city: '', state: '', lat: lat, lon: lon,
       temp: c.temperature_2m, hum: c.relative_humidity_2m, feels: c.apparent_temperature,
       rain: c.precipitation, wind: c.wind_speed_10m, code: c.weather_code, isDay: c.is_day,
       dmax: d.temperature_2m_max, dmin: d.temperature_2m_min, dsum: d.precipitation_sum,
@@ -220,22 +211,126 @@
     WX.rain3 = (d.precipitation_sum || []).slice(0, 3).reduce(function (x, y) { return x + (y || 0); }, 0);
 
     AQ = (a && a.current && a.current.us_aqi != null)
-      ? { aqi: Math.round(a.current.us_aqi), pm25: a.current.pm2_5, pm10: a.current.pm10,
-          htime: a.hourly ? a.hourly.time : [], haqi: a.hourly ? a.hourly.us_aqi : [] }
+      ? {
+          aqi: Math.round(a.current.us_aqi), pm25: a.current.pm2_5, pm10: a.current.pm10,
+          htime: a.hourly ? a.hourly.time : [], haqi: a.hourly ? a.hourly.us_aqi : []
+        }
       : null;
 
     MAR = (m && m.current && m.current.wave_height != null)
-      ? { wave: m.current.wave_height, dir: m.current.wave_direction, per: m.current.wave_period,
+      ? {
+          wave: m.current.wave_height, dir: m.current.wave_direction, per: m.current.wave_period,
           swell: m.current.swell_wave_height, sst: m.current.sea_surface_temperature,
           htime: m.hourly ? m.hourly.time : [], hwave: m.hourly ? m.hourly.wave_height : [],
           hper: m.hourly ? m.hourly.wave_period : [], hswell: m.hourly ? m.hourly.swell_wave_height : [],
-          hlevel: m.hourly ? m.hourly.sea_level_height_msl : [] }
+          hlevel: m.hourly ? m.hourly.sea_level_height_msl : []
+        }
       : null;
+  }
 
-    if (STATES[p.admin1]) {
-      $('state').value = p.admin1;
-      $('state2').value = p.admin1;
+  /** Load by city name. */
+  async function getWeather(opts) {
+    var city = curCity();
+    if (!city) return;
+    if (!opts || opts.remember !== false) rememberCity(city);
+    status('Loading ' + esc(city) + '&hellip;');
+
+    try {
+      if (API_BASE) {
+        var r = await fetch(API_BASE + '/weather?city=' + encodeURIComponent(city));
+        if (r.status === 404) throw new Error('CITY_NOT_FOUND');
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        var j = await r.json();
+        WX = j.weather; AQ = j.air; MAR = j.marine;
+        if (j.location && j.location.name) $('city').value = j.location.name;
+      } else {
+        var G = window.MAUSAM_GEO;
+        var query = G.queryFor(city);
+        var base = 'https://geocoding-api.open-meteo.com/v1/search?name=' +
+          encodeURIComponent(query) + '&count=10&language=en';
+        var g = await fetch(base + '&countryCode=IN')
+          .then(function (x) { return x.json(); }).catch(function () { return null; });
+        if (!g || !g.results || !g.results.length) g = await (await fetch(base)).json();
+        if (!g.results || !g.results.length) throw new Error('CITY_NOT_FOUND');
+
+        var hit = G.pickPlace(g.results, query) || g.results[0];
+        await fetchBundleByCoords(hit.latitude, hit.longitude);
+        WX.city = hit.name;
+        WX.state = hit.admin1 || '';
+        $('city').value = hit.name;
+        if (STATES[hit.admin1]) { $('state').value = hit.admin1; $('state2').value = hit.admin1; }
+      }
+      finishLoad();
+    } catch (err) {
+      status(err.message === 'CITY_NOT_FOUND'
+        ? 'City not found. Please check the spelling.'
+        : 'Could not load the weather. Check your internet connection.', 'err');
     }
+  }
+
+  /** Load by coordinates — used by "my location". */
+  async function getWeatherAtCoords(lat, lon, place) {
+    status('Loading ' + esc(place.name) + '&hellip;');
+    try {
+      if (API_BASE) {
+        var r = await fetch(API_BASE + '/weather?lat=' + lat + '&lon=' + lon);
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        var j = await r.json();
+        WX = j.weather; AQ = j.air; MAR = j.marine;
+      } else {
+        await fetchBundleByCoords(lat, lon);
+      }
+      WX.city = place.name || 'Your location';
+      WX.state = place.state || '';
+      $('city').value = WX.city;
+      if (place.state && STATES[place.state]) {
+        $('state').value = place.state;
+        $('state2').value = place.state;
+      }
+      finishLoad();
+      return true;
+    } catch (e) {
+      status('Could not load the weather for your location.', 'err');
+      return false;
+    }
+  }
+
+  /**
+   * Ask the device for the current position and load that location.
+   * Used automatically on first launch, and by the 📍 button afterwards.
+   */
+  function useMyLocation(silent) {
+    if (!navigator.geolocation) {
+      if (!silent) window.alert('This browser does not support location access.\nPlease type a city name instead.');
+      return Promise.resolve(false);
+    }
+    if (!silent) status('Getting your location&hellip;');
+
+    return new Promise(function (resolve) {
+      navigator.geolocation.getCurrentPosition(async function (pos) {
+        var lat = Math.round(pos.coords.latitude * 10000) / 10000;
+        var lon = Math.round(pos.coords.longitude * 10000) / 10000;
+        var place = { name: 'Your location', state: '' };
+
+        // Open-Meteo has no reverse geocoding, so resolve the name separately.
+        try {
+          var r = await fetch('https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=' +
+            lat + '&longitude=' + lon + '&localityLanguage=en');
+          var j = await r.json();
+          place.name = j.city || j.locality || j.principalSubdivision || 'Your location';
+          place.state = j.principalSubdivision || '';
+        } catch (e) { /* keep the generic label */ }
+
+        var ok = await getWeatherAtCoords(lat, lon, place);
+        if (ok) rememberCity('');   // stay on auto-location until a city is typed
+        resolve(ok);
+      }, function () {
+        if (!silent) {
+          window.alert('Could not get your location.\n\nAllow location access for this site, or type a city name.');
+        }
+        resolve(false);
+      }, { enableHighAccuracy: false, timeout: 12000, maximumAge: 600000 });
+    });
   }
 
   function renderWeather() {
@@ -243,7 +338,6 @@
     var ac = AQ ? E.aqiCat(AQ.aqi) : null;
 
     // ---- 7-day forecast strip (today + the next 6 days)
-    var DAYN = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     var days = '';
     var nDays = Math.min(7, WX.dtime.length);
     for (var i = 0; i < nDays; i++) {
@@ -284,6 +378,170 @@
       '<div class="badge warm">' + esc(E.wxAdvice()) + '</div>' +
       '<div class="secTitle">7-Day Forecast</div>' +
       '<div class="fstrip">' + days + '</div>';
+  }
+
+  /* ======================================================================
+     7-Day Forecast tab — inline SVG chart, day cards, rain/UV outlook
+     ====================================================================== */
+  var DAYN = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  var MONN = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+  function dayLabel(i, iso) {
+    if (i === 0) return 'Today';
+    var d = new Date(iso + 'T12:00:00');
+    return DAYN[d.getDay()];
+  }
+  function dayDate(iso) {
+    var d = new Date(iso + 'T12:00:00');
+    return d.getDate() + ' ' + MONN[d.getMonth()];
+  }
+
+  /**
+   * Temperature + rain chart, drawn as inline SVG.
+   * No charting library — keeps the app dependency-free and fully offline.
+   */
+  function forecastChart(wx) {
+    var n = Math.min(7, wx.dtime.length);
+    if (!n) return '';
+
+    var W = 720, PAD_L = 44, PAD_R = 22, PAD_T = 36;
+    var TEMP_H = 185;
+    var BAR_TOP = PAD_T + TEMP_H + 24;
+    var BAR_H = 46;
+    var H = BAR_TOP + BAR_H + 48;
+    var plotW = W - PAD_L - PAD_R;
+
+    var tmax = wx.dmax.slice(0, n);
+    var tmin = wx.dmin.slice(0, n);
+    var rain = wx.dsum.slice(0, n).map(function (v) { return Math.max(0, v || 0); });
+
+    var lo = Math.min.apply(null, tmin) - 3;
+    var hi = Math.max.apply(null, tmax) + 3;
+    if (hi - lo < 8) { var mid = (hi + lo) / 2; lo = mid - 4; hi = mid + 4; }
+
+    function X(i) { return PAD_L + (n === 1 ? plotW / 2 : (plotW * i) / (n - 1)); }
+    function Y(t) { return PAD_T + TEMP_H * (1 - (t - lo) / (hi - lo)); }
+
+    var maxRain = Math.max.apply(null, rain.concat([1]));
+    function BY(v) { return BAR_TOP + BAR_H - (BAR_H * v) / maxRain; }
+    var bw = Math.min(34, (plotW / n) * 0.44);
+
+    var p = [];
+    p.push('<svg class="fc-svg" viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="xMidYMid meet" ' +
+      'role="img" aria-label="7-day temperature and rain chart">');
+    p.push('<defs><linearGradient id="fcMax" x1="0" y1="0" x2="0" y2="1">' +
+      '<stop offset="0%" stop-color="#f5a623" stop-opacity="0.40"/>' +
+      '<stop offset="100%" stop-color="#f5a623" stop-opacity="0.02"/></linearGradient></defs>');
+
+    // horizontal grid + y-axis labels
+    for (var g = 0; g <= 4; g++) {
+      var gv = lo + ((hi - lo) * g) / 4;
+      var gy = Y(gv);
+      p.push('<line x1="' + PAD_L + '" y1="' + gy.toFixed(1) + '" x2="' + (W - PAD_R) + '" y2="' + gy.toFixed(1) +
+        '" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>');
+      p.push('<text x="' + (PAD_L - 9) + '" y="' + (gy + 4).toFixed(1) +
+        '" text-anchor="end" font-size="10" fill="#9db2cc">' + Math.round(gv) + '\u00B0</text>');
+    }
+
+    // max temperature: filled area + line
+    var maxPts = [];
+    for (var a = 0; a < n; a++) maxPts.push(X(a).toFixed(1) + ',' + Y(tmax[a]).toFixed(1));
+    p.push('<path d="M' + PAD_L + ',' + (PAD_T + TEMP_H) + ' L' + maxPts.join(' L') +
+      ' L' + (W - PAD_R) + ',' + (PAD_T + TEMP_H) + ' Z" fill="url(#fcMax)"/>');
+    p.push('<polyline points="' + maxPts.join(' ') + '" fill="none" stroke="#f5a623" stroke-width="3" ' +
+      'stroke-linecap="round" stroke-linejoin="round"/>');
+
+    // min temperature: dashed line
+    var minPts = [];
+    for (var b = 0; b < n; b++) minPts.push(X(b).toFixed(1) + ',' + Y(tmin[b]).toFixed(1));
+    p.push('<polyline points="' + minPts.join(' ') + '" fill="none" stroke="#2cc7c7" stroke-width="2.5" ' +
+      'stroke-dasharray="6 5" stroke-linecap="round"/>');
+
+    // points + values
+    for (var k = 0; k < n; k++) {
+      var mx = X(k).toFixed(1), my = Y(tmax[k]), ny = Y(tmin[k]);
+      p.push('<circle cx="' + mx + '" cy="' + my.toFixed(1) + '" r="4.5" fill="#f5a623" stroke="#04182b" stroke-width="1.5"/>');
+      p.push('<text x="' + mx + '" y="' + (my - 11).toFixed(1) +
+        '" text-anchor="middle" font-size="11.5" font-weight="700" fill="#ffc15e">' + Math.round(tmax[k]) + '\u00B0</text>');
+      p.push('<circle cx="' + mx + '" cy="' + ny.toFixed(1) + '" r="3.6" fill="#2cc7c7" stroke="#04182b" stroke-width="1.5"/>');
+      p.push('<text x="' + mx + '" y="' + (ny + 17).toFixed(1) +
+        '" text-anchor="middle" font-size="10.5" fill="#9db2cc">' + Math.round(tmin[k]) + '\u00B0</text>');
+    }
+
+    // rain bars
+    p.push('<text x="' + PAD_L + '" y="' + (BAR_TOP - 9) +
+      '" font-size="9.5" fill="#9db2cc" letter-spacing="0.7">RAIN (mm)</text>');
+    for (var q = 0; q < n; q++) {
+      var bx = X(q) - bw / 2;
+      var by = BY(rain[q]);
+      var bh = BAR_TOP + BAR_H - by;
+      p.push('<rect x="' + bx.toFixed(1) + '" y="' + by.toFixed(1) + '" width="' + bw.toFixed(1) +
+        '" height="' + Math.max(2, bh).toFixed(1) + '" rx="4" fill="#2cc7c7" opacity="' +
+        (rain[q] > 0.2 ? 0.85 : 0.22) + '"/>');
+      p.push('<text x="' + X(q).toFixed(1) + '" y="' + (BAR_TOP + BAR_H + 14) +
+        '" text-anchor="middle" font-size="9.5" fill="' + (rain[q] > 0.2 ? '#2cc7c7' : '#9db2cc') + '">' +
+        rain[q].toFixed(1) + '</text>');
+    }
+
+    // x-axis labels
+    for (var x = 0; x < n; x++) {
+      var cx = X(x).toFixed(1);
+      p.push('<text x="' + cx + '" y="' + (H - 20) + '" text-anchor="middle" font-size="11.5" font-weight="700" fill="' +
+        (x === 0 ? '#2cc7c7' : '#eaf2fb') + '">' + dayLabel(x, wx.dtime[x]) + '</text>');
+      p.push('<text x="' + cx + '" y="' + (H - 6) + '" text-anchor="middle" font-size="9.5" fill="#9db2cc">' +
+        dayDate(wx.dtime[x]) + '</text>');
+    }
+
+    p.push('</svg>');
+    return p.join('');
+  }
+
+  function renderForecast() {
+    var chart = $('fcChart');
+    if (!chart) return;
+
+    if (!WX) {
+      chart.innerHTML = '<p class="muted">Load a location to see the forecast&hellip;</p>';
+      $('fcDays').innerHTML = '';
+      $('fcRain').innerHTML = '';
+      $('fcPlace').textContent = '\u2014';
+      return;
+    }
+
+    $('fcPlace').textContent = WX.city + (WX.state ? ', ' + WX.state : '');
+    chart.innerHTML = forecastChart(WX);
+
+    var n = Math.min(7, WX.dtime.length);
+
+    var cards = '';
+    for (var i = 0; i < n; i++) {
+      var uv = WX.duv[i];
+      var comfort = E.dayComfort(i);
+      cards += '<div class="fcard' + (i === 0 ? ' today' : '') + '">' +
+        '<div class="fch"><b>' + dayLabel(i, WX.dtime[i]) + '</b><span>' + dayDate(WX.dtime[i]) + '</span></div>' +
+        '<div class="fcicon">' + E.wIcon(WX.dcode[i]) + '</div>' +
+        '<div class="fctemp"><b>' + Math.round(WX.dmax[i]) + '&deg;</b><span>/ ' + Math.round(WX.dmin[i]) + '&deg;</span></div>' +
+        '<div class="frow"><span>Rain</span><b>' + (WX.dsum[i] || 0).toFixed(1) + ' mm</b></div>' +
+        '<div class="frow"><span>UV</span><b class="' + (uv >= 8 ? 'hot' : '') + '">' + (uv == null ? '&ndash;' : Math.round(uv)) + '</b></div>' +
+        '<div class="frow"><span>Comfort</span><b style="color:' + E.comfortInfo(comfort).col + '">' + comfort + '</b></div>' +
+        '</div>';
+    }
+    $('fcDays').innerHTML = '<div class="fgrid">' + cards + '</div>';
+
+    var totalRain = 0, wet = 0, peakUv = 0, peakIdx = 0;
+    for (var r = 0; r < n; r++) {
+      totalRain += (WX.dsum[r] || 0);
+      if ((WX.dsum[r] || 0) >= 2.5) wet++;
+      if ((WX.duv[r] || 0) > peakUv) { peakUv = WX.duv[r] || 0; peakIdx = r; }
+    }
+
+    $('fcRain').innerHTML =
+      '<div class="grid3">' +
+        '<div class="stat"><b>' + totalRain.toFixed(1) + ' mm</b><span>Total rain &middot; 7 days</span></div>' +
+        '<div class="stat"><b>' + wet + ' / ' + n + '</b><span>Wet days (&ge;2.5 mm)</span></div>' +
+        '<div class="stat"><b>' + Math.round(peakUv) + '</b><span>Peak UV &middot; ' + dayLabel(peakIdx, WX.dtime[peakIdx]) + '</span></div>' +
+      '</div>' +
+      '<div class="note ok"><b>Best day:</b> ' + E.bestDayText() + '</div>';
   }
 
   /* ======================================================================
@@ -674,8 +932,11 @@
     setPersona('agri');
     booted = true;
 
-    $('getBtn').addEventListener('click', getWeather);
-    $('city').addEventListener('keydown', function (e) { if (e.key === 'Enter') getWeather(); });
+    $('getBtn').addEventListener('click', function () { getWeather({ remember: true }); });
+    $('city').addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') getWeather({ remember: true });
+    });
+    $('locBtn').addEventListener('click', function () { useMyLocation(false); });
     $('sendBtn').addEventListener('click', function () { ask(); });
     $('qi').addEventListener('keydown', function (e) {
       if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); ask(); }
@@ -701,8 +962,30 @@
 
     var health = await detectBackend();
     setMode(health);
-    getWeather();
+
+    // Location: a city the user typed earlier wins. Until then we show the
+    // device's current location, falling back to a default if that is denied.
+    var remembered = savedCity();
+    if (remembered) {
+      $('city').value = remembered;
+      getWeather({ remember: false });
+    } else {
+      var located = await useMyLocation(true);
+      if (!located) {
+        $('city').value = 'Nagpur';
+        getWeather({ remember: false });
+      }
+    }
   }
+
+  // Small surface exposed for the test suite and for debugging in the console.
+  window.MAUSAM_APP = {
+    forecastChart: forecastChart,
+    renderForecast: renderForecast,
+    getWeatherAtCoords: getWeatherAtCoords,
+    useMyLocation: useMyLocation,
+    state: function () { return { WX: WX, AQ: AQ, MAR: MAR, CUR: CUR }; }
+  };
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();

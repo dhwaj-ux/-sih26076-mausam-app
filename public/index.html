@@ -21,8 +21,8 @@
 <link rel="icon" href="assets/favicon.png" type="image/png">
 <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
 <link rel="apple-touch-icon" sizes="192x192" href="assets/icon-192.png">
-<link rel="manifest" href="manifest.webmanifest?v=4">
-<link rel="stylesheet" href="css/style.css?v=4">
+<link rel="manifest" href="manifest.webmanifest?v=5">
+<link rel="stylesheet" href="css/style.css?v=5">
 </head>
 <body>
 <div class="wrap">
@@ -44,6 +44,7 @@
 
   <div class="tabs">
     <button class="tab on" data-t="home">Home &amp; Weather</button>
+    <button class="tab" data-t="forecast">7-Day Forecast</button>
     <button class="tab" data-t="ai">AI Advisor</button>
     <button class="tab" data-t="crop">Crop Planner</button>
   </div>
@@ -54,10 +55,11 @@
       <div class="card">
         <h3>Live Weather &amp; Air Quality <span>Open-Meteo &middot; free &middot; no key</span></h3>
         <div class="row">
-          <input id="city" placeholder="Search a city — Mumbai, Delhi, Nagpur, Goa&hellip;" value="Nagpur" autocomplete="off">
+          <input id="city" placeholder="Search a city — Mumbai, Delhi, Nagpur, Goa&hellip;" autocomplete="off">
+          <button class="btn icon" id="locBtn" title="Use my current location" aria-label="Use my current location">&#128205;</button>
           <button class="btn pri" id="getBtn">Get</button>
         </div>
-        <div id="wout"><p class="muted">Type a city and press <b>Get</b>&hellip;</p></div>
+        <div id="wout"><p class="muted">Finding your location&hellip;</p></div>
       </div>
 
       <div class="card">
@@ -80,6 +82,20 @@
     <div class="card mt">
       <h3>Today's Smart Suggestion <span id="sugFor">persona-based</span></h3>
       <div id="dailyTips"></div>
+    </div>
+  </section>
+
+  <!-- ================= 7-DAY FORECAST ================= -->
+  <section class="pane" id="p-forecast">
+    <div class="card">
+      <h3>7-Day Forecast <span id="fcPlace">&mdash;</span></h3>
+      <div id="fcChart"><p class="muted">Load a location to see the forecast&hellip;</p></div>
+
+      <div class="secTitle">Day by day</div>
+      <div id="fcDays"></div>
+
+      <div class="secTitle">Rain &amp; UV outlook</div>
+      <div id="fcRain"></div>
     </div>
   </section>
 
@@ -135,7 +151,7 @@
   <footer>
     <img class="foot-logo" src="assets/logo-mark.png" alt="">
     <div>
-      <b>MAUSAM</b> <span class="build">v4</span> — Personalised Homepage for the MAUSAM Mobile Application<br>
+      <b>MAUSAM</b> <span class="build">v5</span> — Personalised Homepage for the MAUSAM Mobile Application<br>
       Smart India Hackathon SIH26076 &middot; Ministry of Earth Sciences (MoES) &middot; India Meteorological Department (IMD)<br>
       <span class="muted">Weather, air quality &amp; marine data: Open-Meteo (free, no key) &middot; AI: Gemini / Groq / OpenRouter free tier, with a built-in offline knowledge base fallback</span>
     </div>
@@ -177,10 +193,10 @@
   </div>
 </div>
 
-<script src="js/data.js?v=4"></script>
-<script src="js/engine.js?v=4"></script>
-<script src="js/geo.js?v=4"></script>
-<script src="js/context.js?v=4"></script>
-<script src="js/app.js?v=4"></script>
+<script src="js/data.js?v=5"></script>
+<script src="js/engine.js?v=5"></script>
+<script src="js/geo.js?v=5"></script>
+<script src="js/context.js?v=5"></script>
+<script src="js/app.js?v=5"></script>
 </body>
 </html>

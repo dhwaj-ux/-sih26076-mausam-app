@@ -216,6 +216,24 @@ ENGINE.setMarine(MAR);
   const bogus = await get('/api/weather?city=zzzznotarealcity123');
   check('GET /api/weather with unknown city -> 404', bogus.status === 404, String(bogus.status));
 
+  const noArgs = await get('/api/weather');
+  check('GET /api/weather with no args -> 400 (asks for city or lat/lon)', noArgs.status === 400, String(noArgs.status));
+
+  const badCoords = await get('/api/weather?lat=999&lon=0');
+  check('GET /api/weather with out-of-range coords -> 400', badCoords.status === 400, String(badCoords.status));
+
+  try {
+    // Nagpur coordinates - the "my current location" path
+    const byCoords = await get('/api/weather?lat=21.15&lon=79.09');
+    check('GET /api/weather?lat&lon -> 200 (my-location path)', byCoords.status === 200 && byCoords.body.weather.temp != null,
+      byCoords.status + ' ' + JSON.stringify(byCoords.body && byCoords.body.error));
+    check('coordinate lookup returns a 7-day forecast',
+      byCoords.body && Array.isArray(byCoords.body.weather.dtime) && byCoords.body.weather.dtime.length === 7,
+      byCoords.body && String(byCoords.body.weather.dtime && byCoords.body.weather.dtime.length));
+  } catch (e) {
+    check('GET /api/weather?lat&lon -> 200 (my-location path)', false, 'network: ' + e.message);
+  }
+
   let weatherOk = false;
   try {
     const w = await get('/api/weather?city=Panjim');
@@ -338,7 +356,36 @@ ENGINE.setMarine(MAR);
       check('standalone wires up the data + engine modules',
         !!sandbox.MAUSAM_DATA && !!sandbox.MAUSAM_ENGINE && !!sandbox.MAUSAM_GEO && !!sandbox.MAUSAM_CONTEXT);
       check('standalone shows a friendly message when offline',
-        /Could not load the weather|Loading/i.test(els.wout ? els.wout.innerHTML : ''));
+        /Could not load the weather|Loading|location/i.test(els.wout ? els.wout.innerHTML : ''));
+
+      // ---- 7-day forecast chart (pure function, no network needed) --------
+      const APP = sandbox.MAUSAM_APP;
+      check('app exposes a test hook', !!APP && typeof APP.forecastChart === 'function');
+
+      if (APP && APP.forecastChart) {
+        const fx = {
+          city: 'Nagpur', state: 'Maharashtra',
+          dtime: ['2026-09-11', '2026-09-12', '2026-09-13', '2026-09-14', '2026-09-15', '2026-09-16', '2026-09-17'],
+          dmax: [31, 28, 29, 30, 32, 32, 32],
+          dmin: [24, 24, 23, 24, 24, 23, 24],
+          dsum: [26.1, 16.1, 22.3, 1.7, 0.6, 1.5, 0.6],
+          duv: [8, 8, 4, 8, 7, 7, 7],
+          dcode: [2, 61, 80, 2, 0, 0, 1],
+        };
+        const svg = APP.forecastChart(fx);
+        check('chart returns an <svg>', /^<svg /.test(svg) && /<\/svg>$/.test(svg), svg.slice(0, 40));
+        check('chart has a viewBox (responsive)', /viewBox="0 0 \d+ \d+"/.test(svg));
+        check('chart plots both temperature lines', (svg.match(/<polyline/g) || []).length === 2);
+        check('chart fills the area under the max line', svg.indexOf('url(#fcMax)') !== -1);
+        check('chart draws 7 rain bars', (svg.match(/<rect /g) || []).length === 7,
+          String((svg.match(/<rect /g) || []).length) + ' bars');
+        check('chart labels all 7 days', ['Today', 'Sat', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu'].every((d) => svg.indexOf('>' + d + '<') !== -1));
+        check('chart shows rain values', svg.indexOf('26.1') !== -1 && svg.indexOf('0.6') !== -1);
+        check('chart has no undefined/NaN', !/undefined|NaN/.test(svg));
+        check('chart handles a single day without crashing', /^<svg /.test(APP.forecastChart({
+          dtime: ['2026-09-11'], dmax: [30], dmin: [20], dsum: [0], duv: [5], dcode: [0],
+        })));
+      }
     }
   }
 

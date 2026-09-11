@@ -37,7 +37,9 @@ domain-expert AI advisor.
 | | |
 |---|---|
 | 🎭 **8 personas** | Agriculture · Running & Workout · School & Family · Traveler · Air Quality & Health · Commuter · Beach & Surf · Event Planner |
+| 📍 **Auto location** | On first launch it uses your device location; once you type a city, that city wins. A 📍 button switches back |
 | 🌦️ **Live weather** | Current + hourly + 7-day forecast, UV, wind, humidity |
+| 📈 **7-Day Forecast tab** | Inline-SVG graph of max/min temperature + rain bars per day, day cards with comfort score, and a rain/UV outlook |
 | 🌫️ **Live air quality** | US AQI, PM2.5, PM10 with a colour-coded risk scale |
 | ⏱️ **Nowcast** | Next 4–24 hours of rain probability and intensity, hour by hour |
 | 🌊 **Marine** | Wave height, period, swell, direction, sea temperature, tide highs/lows |
@@ -50,6 +52,13 @@ domain-expert AI advisor.
 ---
 
 ## 🚀 Quick start
+
+### Option 0 — the live app
+
+**[https://dhwaj-ux.github.io/-sih26076-mausam-app/](https://dhwaj-ux.github.io/-sih26076-mausam-app/)**
+
+Opens straight in the browser. It asks for location permission on first load so it can show
+your own weather; type a city any time to override.
 
 ### Option 1 — just open the website (no install, no server)
 
