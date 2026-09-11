@@ -1,8 +1,6 @@
 MIT License
 
 Copyright (c) 2026 MAUSAM AI contributors
-Smart India Hackathon SIH26076 — Ministry of Earth Sciences (MoES) /
-India Meteorological Department (IMD)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -21,15 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
----
-
-Third-party notices
-
-Weather, air-quality, marine and geocoding data are provided by Open-Meteo
-(https://open-meteo.com), licensed under CC-BY-4.0.
-
-The "MAUSAM" name and logo depict the official weather application of the India
-Meteorological Department, Ministry of Earth Sciences, Government of India.
-They are used here solely for a hackathon prototype and remain the property of
-their respective owners.
