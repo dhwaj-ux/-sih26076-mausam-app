@@ -64,6 +64,9 @@ header {
   border-radius: var(--radius); padding: 12px 16px;
   backdrop-filter: blur(14px);
 }
+/* make the settings entry point impossible to miss */
+#cfgBtn { border-color: rgba(44, 199, 199, .5); color: var(--teal-lt); }
+#cfgBtn:hover { background: rgba(44, 199, 199, .18); }
 .brand { display: flex; align-items: center; gap: 13px; min-width: 0; }
 .logo-tile {
   width: 52px; height: 52px; flex: 0 0 52px; border-radius: 14px;
