@@ -1,27 +1,32 @@
 {
-  "name": "sih26076-mausam-app",
+  "name": "mausam-ai",
   "version": "1.0.0",
-  "description": "SIH26076 Mausam App - AI-Personalized Weather Dashboard for 8 User Personas (MoES/IMD)",
-  "main": "backend/server.js",
-  "scripts": {
-    "start": "node backend/server.js"
+  "private": true,
+  "description": "MAUSAM AI — personalised weather homepage with persona-based AI advisory (SIH26076, MoES / IMD)",
+  "main": "server/index.js",
+  "engines": {
+    "node": ">=18"
   },
-  "keywords": ["weather", "mausam", "imd", "sih2026", "express", "nodejs"],
-  "author": "SIH26076 Team",
-  "license": "ISC",
-  "type": "commonjs",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js",
+    "build:standalone": "node scripts/build-standalone.js",
+    "proof": "node test/proof.js",
+    "test": "node test/run-tests.js"
+  },
   "dependencies": {
-    "axios": "^1.20.0",
-    "cors": "^2.8.6",
-    "dotenv": "^17.4.2",
-    "express": "^5.2.1",
-    "express-rate-limit": "^8.7.0",
-    "helmet": "^8.3.0",
-    "mongoose": "^9.9.5",
-    "morgan": "^1.12.0",
-    "node-cache": "^5.1.2",
-    "swagger-ui-express": "^5.0.1",
-    "yamljs": "^0.3.0",
-    "zod": "^4.6.1"
-  }
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  },
+  "keywords": [
+    "sih",
+    "sih26076",
+    "mausam",
+    "imd",
+    "weather",
+    "aqi",
+    "monsoon",
+    "hackathon"
+  ],
+  "license": "MIT"
 }

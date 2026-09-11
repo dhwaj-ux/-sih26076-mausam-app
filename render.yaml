@@ -1,0 +1,23 @@
+# Render blueprint — deploy MAUSAM AI in one click.
+# https://render.com/docs/blueprint-spec
+services:
+  - type: web
+    name: mausam-ai
+    runtime: node
+    plan: free
+    buildCommand: npm install && npm run build:standalone
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      # Weather / AQI / marine data need no key at all.
+      # The app runs fully on the offline knowledge base if these stay blank.
+      - key: LLM_PROVIDER
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+      - key: OPENROUTER_API_KEY
+        sync: false

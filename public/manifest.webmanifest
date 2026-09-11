@@ -1,0 +1,14 @@
+{
+  "name": "MAUSAM AI — Personalised Weather Homepage",
+  "short_name": "MAUSAM AI",
+  "description": "Persona-adaptive weather homepage with AI advisory. SIH26076, MoES / IMD.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#04182b",
+  "theme_color": "#06243d",
+  "orientation": "portrait-primary",
+  "icons": [
+    { "src": "assets/favicon.png", "sizes": "64x64", "type": "image/png" },
+    { "src": "assets/logo-mark-white.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

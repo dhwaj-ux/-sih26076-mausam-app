@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Build + test on Node ${{ matrix.node }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ['18', '20', '22']
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Build the standalone single-file website
+        run: npm run build:standalone
+
+      - name: Run the test suite
+        run: npm test
+        env:
+          # blank on purpose: the suite must pass using the offline knowledge base
+          LLM_PROVIDER: ''
+          GEMINI_API_KEY: ''
+          GROQ_API_KEY: ''
+          OPENROUTER_API_KEY: ''
+
+      - name: Verify the server boots and both layers respond
+        run: node test/proof.js
+        env:
+          LLM_PROVIDER: ''
+          GEMINI_API_KEY: ''
+          GROQ_API_KEY: ''
+          OPENROUTER_API_KEY: ''
+
+      - name: Upload the standalone build
+        if: matrix.node == '20'
+        uses: actions/upload-artifact@v4
+        with:
+          name: mausam-ai-standalone
+          path: standalone/mausam-ai.html
+          if-no-files-found: error

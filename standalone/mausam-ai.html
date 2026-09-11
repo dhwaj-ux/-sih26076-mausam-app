@@ -1,0 +1,1859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MAUSAM AI — Personalised Weather Homepage</title>
+<meta name="description" content="AI-powered, persona-adaptive weather homepage for the MAUSAM mobile application. Smart India Hackathon SIH26076, Ministry of Earth Sciences / India Meteorological Department.">
+<meta name="theme-color" content="#06243D">
+<link rel="icon" href="data:image/png;base64,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">
+
+<style>
+/* ===========================================================================
+   MAUSAM AI — stylesheet
+   Brand palette extracted from the IMD / MAUSAM Weather App logo:
+     navy #001830 · teal #007878 · orange #F09030
+   =========================================================================== */
+
+:root {
+  /* brand */
+  --navy-900: #04182b;
+  --navy-800: #06243d;
+  --navy-700: #0a2f4f;
+  --navy-600: #123c63;
+  --teal: #0e9b9b;
+  --teal-lt: #2cc7c7;
+  --orange: #f5a623;
+  --orange-lt: #ffc15e;
+
+  /* surfaces */
+  --card: rgba(255, 255, 255, 0.07);
+  --card-2: rgba(255, 255, 255, 0.13);
+  --line: rgba(255, 255, 255, 0.15);
+
+  /* text */
+  --txt: #eaf2fb;
+  --muted: #9db2cc;
+
+  /* semantic */
+  --good: #35d07f;
+  --warn: #f6c445;
+  --bad: #ff6b6b;
+  --info: var(--teal-lt);
+
+  --radius: 18px;
+  --radius-sm: 11px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
+  color: var(--txt);
+  min-height: 100vh;
+  background:
+    radial-gradient(1100px 700px at 12% -10%, rgba(14, 155, 155, 0.22), transparent 60%),
+    radial-gradient(900px 600px at 105% 0%, rgba(245, 166, 35, 0.13), transparent 55%),
+    linear-gradient(165deg, var(--navy-900) 0%, var(--navy-800) 48%, #0b3358 100%);
+  background-attachment: fixed;
+  padding-bottom: 40px;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap { max-width: 1140px; margin: 0 auto; padding: 18px; }
+.muted { color: var(--muted); }
+.mt { margin-top: 14px; }
+.mt-sm { margin-top: 10px; }
+.mb { margin-bottom: 14px; }
+.gap { height: 12px; }
+.note + .gap { height: 10px; }
+
+/* ---------------------------------------------------------------- header -- */
+header {
+  display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  background: var(--card); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 12px 16px;
+  backdrop-filter: blur(14px);
+}
+.brand { display: flex; align-items: center; gap: 13px; min-width: 0; }
+.logo-tile {
+  width: 52px; height: 52px; flex: 0 0 52px; border-radius: 14px;
+  background: #fff; display: grid; place-items: center; padding: 4px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+.logo-tile img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.brand-text { min-width: 0; }
+.brand-text h1 { font-size: 20px; letter-spacing: 1.2px; line-height: 1.15; }
+.brand-text p { font-size: 11px; color: var(--muted); margin-top: 3px; }
+
+.hbtns { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.pill {
+  font-size: 10.5px; font-weight: 700; letter-spacing: .4px; padding: 6px 11px;
+  border-radius: 20px; border: 1px solid var(--line); color: var(--muted);
+  background: rgba(0, 0, 0, .2); white-space: nowrap;
+}
+.pill.live { color: var(--good); border-color: rgba(53, 208, 127, .45); background: rgba(53, 208, 127, .12); }
+.pill.off  { color: var(--orange-lt); border-color: rgba(245, 166, 35, .45); background: rgba(245, 166, 35, .12); }
+
+/* --------------------------------------------------------------- buttons -- */
+.btn {
+  border: 1px solid var(--line); background: var(--card-2); color: var(--txt);
+  padding: 10px 15px; border-radius: var(--radius-sm); cursor: pointer;
+  font-size: 12.5px; font-weight: 600; font-family: inherit; transition: .18s;
+  white-space: nowrap;
+}
+.btn:hover { background: rgba(255, 255, 255, .22); transform: translateY(-1px); }
+.btn:active { transform: none; }
+.btn.pri {
+  background: linear-gradient(135deg, var(--teal-lt), var(--teal));
+  color: #03231f; border: none;
+}
+.btn.pri:hover { background: linear-gradient(135deg, #43d9d9, #11adad); }
+.btn.sm { padding: 8px 12px; font-size: 11.5px; }
+
+/* ------------------------------------------------------------------ tabs -- */
+.tabs { display: flex; gap: 8px; margin: 18px 0 14px; flex-wrap: wrap; }
+.tab {
+  padding: 10px 18px; border-radius: 12px; border: 1px solid var(--line);
+  background: var(--card); cursor: pointer; font-size: 13px; font-weight: 600;
+  color: var(--muted); font-family: inherit; transition: .18s;
+}
+.tab:hover { color: var(--txt); }
+.tab.on {
+  background: linear-gradient(135deg, rgba(44, 199, 199, .22), rgba(245, 166, 35, .12));
+  color: var(--txt); border-color: rgba(44, 199, 199, .55);
+}
+.pane { display: none; }
+.pane.on { display: block; animation: fade .28s ease; }
+@keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+/* ----------------------------------------------------------------- cards -- */
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+@media (max-width: 860px) { .grid, .grid3 { grid-template-columns: 1fr; } }
+
+.card {
+  background: var(--card); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 18px; backdrop-filter: blur(10px);
+}
+.card h3 {
+  font-size: 14px; margin-bottom: 12px; display: flex; align-items: center;
+  gap: 8px; letter-spacing: .2px; flex-wrap: wrap;
+}
+.card h3 span { font-size: 11px; color: var(--muted); font-weight: 500; }
+.card h3 span:last-child { margin-left: auto; }
+.chat-logo { width: 20px; height: 20px; object-fit: contain; background: #fff; border-radius: 5px; padding: 1px; }
+
+/* ----------------------------------------------------------------- forms -- */
+label { font-size: 11.5px; color: var(--muted); display: block; margin-bottom: 6px; font-weight: 600; }
+input, select, textarea {
+  width: 100%; background: rgba(0, 0, 0, .3); border: 1px solid var(--line);
+  color: var(--txt); padding: 11px 13px; border-radius: var(--radius-sm);
+  font-size: 13.5px; outline: none; font-family: inherit;
+}
+input:focus, select:focus, textarea:focus { border-color: var(--teal-lt); }
+select option { background: var(--navy-700); color: var(--txt); }
+.row { display: flex; gap: 8px; align-items: stretch; }
+.row input { flex: 1; min-width: 0; }
+
+/* --------------------------------------------------------------- weather -- */
+.whero { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+.wtemp { font-size: 52px; font-weight: 800; line-height: 1; letter-spacing: -1px; }
+.wicon { font-size: 56px; line-height: 1; }
+.wmeta { font-size: 13px; color: var(--muted); line-height: 1.7; }
+.wmeta b { color: var(--txt); }
+.wstats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 16px; }
+@media (max-width: 620px) { .wstats { grid-template-columns: repeat(2, 1fr); } }
+.stat {
+  background: rgba(0, 0, 0, .24); border: 1px solid var(--line);
+  border-radius: 13px; padding: 11px; text-align: center;
+}
+.stat b { display: block; font-size: 16px; margin-bottom: 3px; }
+.stat span { font-size: 10.5px; color: var(--muted); line-height: 1.45; display: block; }
+
+.badge {
+  display: inline-block; padding: 6px 12px; border-radius: 20px; font-size: 11.5px;
+  font-weight: 700; background: rgba(44, 199, 199, .14); color: var(--teal-lt);
+  border: 1px solid rgba(44, 199, 199, .4); margin: 8px 6px 0 0;
+}
+.badge.warm { background: rgba(245, 166, 35, .14); color: var(--orange-lt); border-color: rgba(245, 166, 35, .45); }
+
+/* AQI gradient bar with a marker */
+.aqib {
+  height: 9px; border-radius: 6px; position: relative; margin-top: 10px;
+  background: linear-gradient(90deg, #35d07f, #f6c445, #fb923c, #ef4444, #a855f7, #7f1d1d);
+}
+.aqib i {
+  position: absolute; top: -4px; width: 4px; height: 17px; background: #fff;
+  border-radius: 2px; box-shadow: 0 0 6px rgba(0, 0, 0, .8);
+}
+
+/* ---------------------------------------------------------------- notes --- */
+.note {
+  font-size: 11.5px; color: var(--muted); background: rgba(0, 0, 0, .26);
+  padding: 11px; border-radius: var(--radius-sm); margin-top: 10px;
+  line-height: 1.65; border-left: 3px solid var(--warn);
+}
+.note:first-child { margin-top: 0; }
+.note.ok { border-left-color: var(--good); }
+.note.d { border-left-color: var(--bad); }
+.note code { background: rgba(255, 255, 255, .1); padding: 1px 5px; border-radius: 4px; font-size: 11px; }
+
+/* --------------------------------------------------------------- persona -- */
+.pgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(215px, 1fr)); gap: 11px; }
+.pc {
+  background: rgba(0, 0, 0, .24); border: 1px solid var(--line);
+  border-radius: 15px; padding: 14px; cursor: pointer; transition: .2s;
+  position: relative; overflow: hidden;
+}
+.pc:hover { transform: translateY(-3px); background: rgba(255, 255, 255, .1); }
+.pc.on {
+  border-color: rgba(44, 199, 199, .7);
+  background: linear-gradient(135deg, rgba(44, 199, 199, .18), rgba(245, 166, 35, .08));
+}
+.pc .ic { font-size: 25px; margin-bottom: 7px; }
+.pc b { font-size: 12.5px; display: block; line-height: 1.35; }
+.pc span { font-size: 10.5px; color: var(--muted); display: block; margin-top: 5px; line-height: 1.5; }
+.pc .tick { position: absolute; top: 11px; right: 12px; font-size: 13px; color: var(--teal-lt); display: none; }
+.pc.on .tick { display: block; }
+
+/* ------------------------------------------------------------------ chat -- */
+.chatbox { display: flex; flex-direction: column; height: min(620px, 78vh); }
+.msgs {
+  flex: 1; overflow-y: auto; padding: 6px 4px 12px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.msgs::-webkit-scrollbar { width: 6px; }
+.msgs::-webkit-scrollbar-thumb { background: var(--line); border-radius: 8px; }
+.msg { max-width: 87%; padding: 12px 15px; border-radius: 15px; font-size: 13.5px; line-height: 1.65; }
+.msg.u {
+  align-self: flex-end; background: linear-gradient(135deg, #1f6fb2, var(--teal));
+  color: #f2fbff; border-bottom-right-radius: 5px;
+}
+.msg.a {
+  align-self: flex-start; background: var(--card-2); border: 1px solid var(--line);
+  border-bottom-left-radius: 5px;
+}
+.msg.a b { color: var(--teal-lt); }
+.msg.a ul { margin: 7px 0 7px 18px; }
+.msg.a li { margin-bottom: 4px; }
+.msg .who {
+  font-size: 10.5px; color: var(--muted); margin-bottom: 5px;
+  font-weight: 700; letter-spacing: .4px;
+}
+.cin { display: flex; gap: 8px; padding-top: 12px; border-top: 1px solid var(--line); }
+.cin textarea { flex: 1; resize: none; height: 56px; }
+.chips { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 10px; }
+.chip {
+  font-size: 11.5px; padding: 7px 12px; border-radius: 20px;
+  background: rgba(44, 199, 199, .12); border: 1px solid rgba(44, 199, 199, .35);
+  color: var(--teal-lt); cursor: pointer; transition: .18s; font-family: inherit;
+  text-align: left;
+}
+.chip:hover { background: rgba(44, 199, 199, .26); }
+.typing { display: flex; gap: 4px; padding: 4px 0; }
+.typing i { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); animation: bounce 1.2s infinite; }
+.typing i:nth-child(2) { animation-delay: .15s; }
+.typing i:nth-child(3) { animation-delay: .3s; }
+@keyframes bounce { 0%, 60%, 100% { transform: none; opacity: .4; } 30% { transform: translateY(-6px); opacity: 1; } }
+
+/* ------------------------------------------------------------------ tags -- */
+.tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 8px; }
+.tag {
+  font-size: 11.5px; padding: 5px 11px; border-radius: 8px;
+  background: rgba(255, 255, 255, .09); border: 1px solid var(--line);
+}
+.tag.g { border-color: rgba(44, 199, 199, .45); color: var(--teal-lt); }
+
+/* ----------------------------------------------------------------- modal -- */
+.mask {
+  position: fixed; inset: 0; background: rgba(3, 12, 22, .84);
+  display: grid; place-items: center; z-index: 99; padding: 18px;
+}
+.mask[hidden] { display: none; }
+.modal {
+  background: var(--navy-700); border: 1px solid var(--line); border-radius: 20px;
+  padding: 24px; max-width: 540px; width: 100%; max-height: 88vh; overflow-y: auto;
+}
+.modal h2 { font-size: 17px; margin-bottom: 8px; }
+.modal > p { font-size: 12.5px; color: var(--muted); line-height: 1.7; margin-bottom: 14px; }
+
+/* ---------------------------------------------------------------- footer -- */
+footer {
+  display: flex; gap: 14px; align-items: flex-start;
+  text-align: left; font-size: 11.5px; color: var(--muted);
+  margin-top: 26px; line-height: 1.85;
+  border-top: 1px solid var(--line); padding-top: 18px;
+}
+.foot-logo {
+  width: 42px; height: 42px; object-fit: contain; background: #fff;
+  border-radius: 11px; padding: 1px; flex: 0 0 42px;
+}
+footer b { color: var(--txt); }
+
+/* --------------------------------------------------------- accessibility -- */
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+}
+:focus-visible { outline: 2px solid var(--teal-lt); outline-offset: 2px; }
+@media (max-width: 600px) {
+  header { flex-direction: column; align-items: stretch; }
+  .hbtns { justify-content: space-between; }
+  .wtemp { font-size: 42px; }
+}
+
+</style>
+<!-- MAUSAM AI - standalone build. Generated by scripts/build-standalone.js -->
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="brand">
+      <div class="logo-tile"><img src="data:image/png;base64,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" alt="MAUSAM Weather App logo"></div>
+      <div class="brand-text">
+        <h1>MAUSAM AI</h1>
+        <p>India Meteorological Department &middot; Ministry of Earth Sciences</p>
+      </div>
+    </div>
+    <div class="hbtns">
+      <span class="pill" id="modePill">checking backend&hellip;</span>
+      <button class="btn sm" id="cfgBtn">&plus; AI Settings</button>
+    </div>
+  </header>
+
+  <div class="tabs">
+    <button class="tab on" data-t="home">Home &amp; Weather</button>
+    <button class="tab" data-t="ai">AI Advisor</button>
+    <button class="tab" data-t="crop">Crop Planner</button>
+  </div>
+
+  <!-- ================= HOME ================= -->
+  <section class="pane on" id="p-home">
+    <div class="grid">
+      <div class="card">
+        <h3>Live Weather &amp; Air Quality <span>Open-Meteo &middot; free &middot; no key</span></h3>
+        <div class="row">
+          <input id="city" placeholder="Search a city — Mumbai, Delhi, Nagpur, Goa&hellip;" value="Nagpur" autocomplete="off">
+          <button class="btn pri" id="getBtn">Get</button>
+        </div>
+        <div id="wout"><p class="muted">Type a city and press <b>Get</b>&hellip;</p></div>
+      </div>
+
+      <div class="card">
+        <h3>Profile <span>the AI personalises using this</span></h3>
+        <label for="state">State / Region (used for agriculture)</label>
+        <select id="state"></select>
+        <div class="gap"></div>
+        <label for="land">Land size (acre)</label>
+        <input id="land" type="number" value="2" min="0.1" step="0.1">
+        <div id="profileBox"></div>
+      </div>
+    </div>
+
+    <div class="card mt">
+      <h3>Choose Your Persona <span id="curP">selected: Agriculture</span></h3>
+      <div class="pgrid" id="pgrid"></div>
+      <div class="note ok mt-sm" id="personaInfo"></div>
+    </div>
+
+    <div class="card mt">
+      <h3>Today's Smart Suggestion <span id="sugFor">persona-based</span></h3>
+      <div id="dailyTips"></div>
+    </div>
+  </section>
+
+  <!-- ================= AI ================= -->
+  <section class="pane" id="p-ai">
+    <div class="card mb">
+      <h3>Persona Switch <span>select any persona</span></h3>
+      <div class="pgrid" id="pgrid2"></div>
+    </div>
+
+    <div class="card chatbox">
+      <h3><img class="chat-logo" src="data:image/png;base64,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" alt=""><span id="aiTitle">MAUSAM AI Advisor</span> <span id="aiMode">offline knowledge base</span></h3>
+      <div class="chips" id="chips"></div>
+      <div class="msgs" id="msgs"></div>
+      <div class="cin">
+        <textarea id="qi" rows="2" placeholder="Ask your question — Hindi, English or Hinglish (answers are always in English)"></textarea>
+        <button class="btn pri" id="sendBtn">Send</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CROP ================= -->
+  <section class="pane" id="p-crop">
+    <div class="card">
+      <h3>Season-wise Crop Planner <span>agriculture persona</span></h3>
+      <div class="grid3">
+        <div>
+          <label for="season">Season</label>
+          <select id="season">
+            <option value="all">All seasons</option>
+            <option value="kharif">Kharif (Jun–Oct &middot; Monsoon)</option>
+            <option value="rabi">Rabi (Oct–Mar &middot; Winter)</option>
+            <option value="zaid">Zaid (Mar–Jun &middot; Summer)</option>
+          </select>
+        </div>
+        <div>
+          <label for="state2">State</label>
+          <select id="state2"></select>
+        </div>
+        <div>
+          <label for="focus">Focus</label>
+          <select id="focus">
+            <option value="all">All crops</option>
+            <option value="water">Low water use</option>
+            <option value="profit">High profit</option>
+          </select>
+        </div>
+      </div>
+      <div id="planOut" class="mt"></div>
+    </div>
+  </section>
+
+  <footer>
+    <img class="foot-logo" src="data:image/png;base64,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" alt="">
+    <div>
+      <b>MAUSAM AI</b> — Personalised Homepage for the MAUSAM Mobile Application<br>
+      Smart India Hackathon SIH26076 &middot; Ministry of Earth Sciences (MoES) &middot; India Meteorological Department (IMD)<br>
+      <span class="muted">Weather, air quality &amp; marine data: Open-Meteo (free, no key) &middot; AI: Gemini / Groq / OpenRouter free tier, with a built-in offline knowledge base fallback</span>
+    </div>
+  </footer>
+</div>
+
+<!-- ================= AI SETTINGS ================= -->
+<div class="mask" id="mask" hidden>
+  <div class="modal">
+    <h2 id="cfgTitle">AI Settings</h2>
+    <p id="cfgIntro"></p>
+
+    <div id="cfgServerBlock" hidden>
+      <div class="note ok" id="cfgServerState"></div>
+      <div class="note">To change the provider, edit <code>.env</code> on the server and restart it. The API key never reaches the browser.</div>
+    </div>
+
+    <div id="cfgClientBlock" hidden>
+      <label for="prov">AI provider</label>
+      <select id="prov">
+        <option value="offline">Offline knowledge base (no key needed)</option>
+        <option value="gemini">Google Gemini — free tier</option>
+        <option value="groq">Groq (Llama 3.3 70B) — free tier</option>
+        <option value="openrouter">OpenRouter — free models</option>
+      </select>
+      <div class="gap"></div>
+      <label for="key">API key</label>
+      <input id="key" type="password" placeholder="Paste your free API key&hellip;" autocomplete="off">
+      <div class="note">Stored only in this browser's local storage. Get a free key from aistudio.google.com, console.groq.com or openrouter.ai.</div>
+      <div class="row mt-sm">
+        <button class="btn pri" id="saveCfg">Save</button>
+        <button class="btn" id="clearCfg">Clear</button>
+      </div>
+    </div>
+
+    <div class="row mt-sm">
+      <button class="btn" id="closeCfg" style="flex:1">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===== js/data.js ===== */
+/**
+ * MAUSAM AI - shared reference data.
+ * Single source of truth for BOTH the browser and the Node backend.
+ */
+(function (root, factory) {
+  var api = factory();
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else root.MAUSAM_DATA = api;
+})(typeof self !== 'undefined' ? self : this, function () {
+  'use strict';
+
+const PERSONAS = {
+  agri:{icon:"🌾",name:"Agriculture & Crop Advisory",tag:"Soil · Crop · Season · Fertilizer",
+    about:"For farmers — soil type, seasonal crops, fertilizer, irrigation, pests and government schemes.",
+    chips:["Which soil does my state have and which crop should I grow?","Which crop should I sow this season?","How much fertilizer and water does my crop need?","My crop has a pest problem — what should I do?","Tell me about government schemes and MSP","What field work should I do today based on the weather?"]},
+  run:{icon:"🏃",name:"Running & Workout Guide",tag:"Best time · Heat · Hydration",
+    about:"For runners and fitness lovers — safe training window, heat index, hydration and air-quality safety.",
+    chips:["What is the best time to run today?","How should I adjust my pace in heat and humidity?","How much water should I drink, and when?","Is it safe to run outdoors with this AQI?","Gym or outdoor — which is better today?","Give me clothing, footwear and warm-up advice"]},
+  school:{icon:"🎒",name:"School Commute & Family Outing",tag:"Kids · Umbrella · Picnic",
+    about:"For parents — the school run, umbrella and raincoat decisions, and weekend family outing planning.",
+    chips:["Should I pack an umbrella or raincoat today?","What should I watch out for when sending kids to school?","Plan a family outing for this weekend","How do I keep kids safe in this heat?","Which day is best for a picnic?","School bus and auto timing advice for rain"]},
+  travel:{icon:"✈️",name:"Traveler & Destination Weather",tag:"Packing · Best time · Trip",
+    about:"For travellers — destination weather, packing list, best time to visit and travel advisories.",
+    chips:["What will the weather be at my destination?","Build me a packing list for my trip","What is the best time to visit?","Is it safe to travel during the monsoon?","Which day is good for sightseeing?","Is there a risk of flight or train delays?"]},
+  aqi:{icon:"😷",name:"Air Quality & Health Risk",tag:"AQI · Mask · Asthma",
+    about:"Health-focused — AQI reading, mask decisions, asthma and allergy risk, and indoor air guidance.",
+    chips:["What is the AQI today and how risky is it?","Should I wear a mask?","Advice for an asthma or allergy patient","Do I need an air purifier at home?","Should I keep the windows open or closed?","Is it safe for children and the elderly?"]},
+  commute:{icon:"🚗",name:"Daily Commuter & Nowcast",tag:"Next 2 hours · Leave time",
+    about:"For daily commuters — the next 2-hour rain nowcast and the right time to leave.",
+    chips:["Will it rain in the next 2 hours?","When should I leave home?","Bike or car — which is better today?","Is there a traffic or rain delay risk?","Is it safe to go out in the afternoon?","Travel time and route advice"]},
+  beach:{icon:"🏖️",name:"Beachgoers & Surfers",tag:"Waves · Tide · Sea temp",
+    about:"For beach trips and surfing — wave height, tide timing, sea temperature and safety advisories.",
+    chips:["What are the wave height and surf conditions today?","When will the tide rise or fall?","Is the sea temperature good for swimming?","Is it safe to swim or surf today?","What is the best time for a beach day?","What should I know about rip currents and safety?"]},
+  event:{icon:"🎉",name:"Event Planners & Gatherings",tag:"Comfort Index · Rain % · Timing",
+    about:"For weddings, parties and outdoor events — Comfort Index, rain probability and the best window.",
+    chips:["What is the Comfort Index today?","What is the best time for an outdoor event?","What is the probability of rain?","Which day this week is best?","Should I choose an indoor or outdoor venue?","Build me an event planning checklist"]}
+};
+
+const STATES={
+"Punjab":{soil:"Alluvial (fertile, well-drained)",kharif:["Rice (Paddy)","Maize","Cotton","Sugarcane","Bajra"],rabi:["Wheat","Mustard","Gram (Chana)","Barley","Potato"],zaid:["Moong","Watermelon","Fodder"],tip:"Grow moong after the rice-wheat cycle — it restores nitrogen to the soil."},
+"Haryana":{soil:"Alluvial + sandy patches",kharif:["Rice","Bajra","Cotton","Sugarcane","Jowar"],rabi:["Wheat","Mustard","Gram","Barley"],zaid:["Moong","Cucumber","Fodder"],tip:"Use drip or sprinkler irrigation — the water table is falling."},
+"Uttar Pradesh":{soil:"Alluvial (Ganga plain)",kharif:["Rice","Sugarcane","Maize","Bajra","Tur (Arhar)"],rabi:["Wheat","Mustard","Gram","Potato","Peas"],zaid:["Moong","Watermelon","Vegetables"],tip:"Intercrop sugarcane with potato or mustard to increase income."},
+"Bihar":{soil:"Alluvial + calcareous",kharif:["Rice","Maize","Sugarcane","Jute"],rabi:["Wheat","Gram","Mustard","Lentil"],zaid:["Moong","Maize (fodder)","Vegetables"],tip:"In flood-prone belts, choose early-maturing rice varieties."},
+"West Bengal":{soil:"Alluvial / Deltaic",kharif:["Rice","Jute","Maize","Sugarcane"],rabi:["Rice (boro)","Potato","Mustard","Lentil"],zaid:["Vegetables","Sesame","Moong"],tip:"The Aman-Boro-Aus rice rotation is a classic; follow jute with potato."},
+"Madhya Pradesh":{soil:"Black (Regur) + Alluvial",kharif:["Soybean","Rice","Maize","Cotton","Tur"],rabi:["Wheat","Gram (Chana)","Garlic","Mustard"],zaid:["Moong","Watermelon"],tip:"Soybean-chana rotation is the most profitable in MP."},
+"Maharashtra":{soil:"Black (Regur) — moisture retentive",kharif:["Cotton","Soybean","Jowar","Bajra","Tur"],rabi:["Wheat","Gram","Jowar (rabi)","Onion"],zaid:["Onion","Watermelon","Groundnut"],tip:"Cotton with tur intercropping works best on black soil."},
+"Gujarat":{soil:"Black + Alluvial + Sandy",kharif:["Cotton","Groundnut","Bajra","Castor","Sesame"],rabi:["Wheat","Mustard","Gram","Cumin (Jeera)"],zaid:["Groundnut","Watermelon","Fodder"],tip:"Follow groundnut with cumin — a high-value rabi crop."},
+"Rajasthan":{soil:"Sandy / Arid (low organic matter)",kharif:["Bajra","Moth bean","Moong","Cotton","Guar"],rabi:["Wheat","Mustard","Barley","Gram","Cumin"],zaid:["Moong","Watermelon","Fodder"],tip:"Drip irrigation and mulching are a must; bajra-moth is the safest combination."},
+"Karnataka":{soil:"Red loam + Black",kharif:["Ragi (Finger millet)","Rice","Maize","Cotton","Sugarcane"],rabi:["Wheat","Jowar","Gram","Groundnut"],zaid:["Groundnut","Vegetables","Watermelon"],tip:"Ragi is drought-hardy — the best choice for low-rainfall areas."},
+"Tamil Nadu":{soil:"Red + Alluvial + Black",kharif:["Rice","Maize","Cotton","Sugarcane","Groundnut"],rabi:["Rice","Banana","Pulses","Groundnut"],zaid:["Rice (kuruvai)","Vegetables","Cotton"],tip:"Short-duration rice in the delta gives 2-3 crops per year."},
+"Andhra Pradesh":{soil:"Black + Alluvial + Red",kharif:["Rice","Cotton","Maize","Chilli","Tur"],rabi:["Rice","Pulses","Groundnut","Sugarcane"],zaid:["Vegetables","Sesame","Moong"],tip:"Drip plus mulching can raise chilli yields by up to 30%."},
+"Telangana":{soil:"Black + Red sandy",kharif:["Rice","Cotton","Maize","Turmeric","Chilli"],rabi:["Rice","Maize","Groundnut","Pulses"],zaid:["Vegetables","Watermelon"],tip:"Cotton with pigeon pea (tur) intercropping is recommended."},
+"Kerala":{soil:"Laterite (acidic, low fertility)",kharif:["Rice","Banana","Coconut","Rubber","Ginger"],rabi:["Rice","Vegetables","Pepper","Tapioca"],zaid:["Vegetables","Banana"],tip:"Laterite soil needs lime and organic compost."},
+"Odisha":{soil:"Red + Alluvial + Laterite",kharif:["Rice","Jute","Groundnut","Tur"],rabi:["Rice","Pulses","Mustard","Groundnut"],zaid:["Moong","Vegetables","Sesame"],tip:"In the coastal belt, choose saline-tolerant rice varieties."},
+"Jharkhand":{soil:"Red + Laterite (acidic)",kharif:["Rice","Maize","Groundnut","Tur"],rabi:["Wheat","Gram","Mustard","Peas"],zaid:["Moong","Vegetables"],tip:"Maize or ragi on uplands, rice on lowlands; apply lime for soil acidity."},
+"Chhattisgarh":{soil:"Red + Yellow (Matasi)",kharif:["Rice","Maize","Soybean","Tur"],rabi:["Gram","Wheat","Linseed","Mustard"],zaid:["Moong","Vegetables"],tip:"Follow rice with gram — it uses the residual soil moisture."},
+"Assam":{soil:"Alluvial (Brahmaputra, acidic)",kharif:["Rice","Jute","Sugarcane","Maize"],rabi:["Rice (boro)","Mustard","Potato","Pulses"],zaid:["Vegetables","Sesame"],tip:"The soil is acidic — add lime and increase organic matter."},
+"Himachal Pradesh":{soil:"Brown / Hilly (sloping)",kharif:["Maize","Rice","Potato","Vegetables"],rabi:["Wheat","Barley","Peas","Mustard"],zaid:["Off-season vegetables","Fodder"],tip:"Off-season vegetables give high profits."},
+"Uttarakhand":{soil:"Hilly / Brown forest",kharif:["Rice","Maize","Mandua (Ragi)","Soybean"],rabi:["Wheat","Barley","Mustard","Peas"],zaid:["Vegetables","Fodder"],tip:"Mandua (finger millet) is a traditional and nutritious cash crop."},
+"Jammu and Kashmir":{soil:"Hilly / Karewa (silt loam)",kharif:["Rice","Maize","Vegetables"],rabi:["Wheat","Mustard","Barley","Apple"],zaid:["Vegetables","Fodder"],tip:"Saffron and apple are high-value crops on Karewa soil."},
+"Goa":{soil:"Laterite + Coastal alluvial",kharif:["Rice","Cashew","Coconut","Sugarcane"],rabi:["Rice","Pulses","Vegetables"],zaid:["Vegetables","Banana"],tip:"Cashew-coconut intercropping gives additional income."},
+"Sikkim":{soil:"Mountain / Brown",kharif:["Maize","Rice","Ginger","Large cardamom"],rabi:["Wheat","Barley","Buckwheat"],zaid:["Vegetables"],tip:"A 100% organic state — certification earns a premium price."},
+"Tripura":{soil:"Red / Laterite",kharif:["Rice","Jute","Sugarcane"],rabi:["Rice","Mustard","Pulses"],zaid:["Vegetables","Pineapple"],tip:"Diversify with pineapple and rubber plantations."},
+"Manipur":{soil:"Alluvial / Brown",kharif:["Rice","Maize","Soybean"],rabi:["Rice","Mustard","Pulses"],zaid:["Vegetables"],tip:"Focus on terrace farming and horticulture."},
+"Meghalaya":{soil:"Red / Laterite (acidic)",kharif:["Rice","Maize","Turmeric","Potato"],rabi:["Potato","Mustard","Pulses"],zaid:["Vegetables","Ginger"],tip:"Lakadong turmeric is GI-tagged — a high-value export crop."},
+"Mizoram":{soil:"Red / Laterite",kharif:["Rice","Maize","Ginger"],rabi:["Rice","Mustard","Pulses"],zaid:["Vegetables"],tip:"Bamboo and ginger agro-forestry is profitable."},
+"Nagaland":{soil:"Red / Laterite",kharif:["Rice","Maize","Jhum crops"],rabi:["Rice","Mustard","Pulses"],zaid:["Vegetables"],tip:"Shift from jhum to permanent terrace rice cultivation."},
+"Arunachal Pradesh":{soil:"Hilly / Forest",kharif:["Rice","Maize","Millet"],rabi:["Wheat","Barley","Mustard"],zaid:["Vegetables","Fruits"],tip:"The kiwi and orange horticulture belt is strong."},
+"Delhi":{soil:"Alluvial (urban)",kharif:["Vegetables","Fodder"],rabi:["Wheat","Mustard","Vegetables"],zaid:["Vegetables","Fodder"],tip:"Vegetables are the most profitable in peri-urban farming."},
+"Puducherry":{soil:"Coastal alluvial",kharif:["Rice","Sugarcane","Groundnut"],rabi:["Rice","Pulses"],zaid:["Vegetables"],tip:"Make full use of the delta irrigation canals."},
+"Chandigarh":{soil:"Alluvial",kharif:["Maize","Fodder"],rabi:["Wheat","Mustard"],zaid:["Vegetables"],tip:"Kitchen gardening with organic vegetables works well."}
+};
+
+const CROPS={
+"Wheat":{s:"Rabi",sow:"Oct–Nov",harv:"Mar–Apr",water:"4–6 irrigations",soil:"Alluvial, loam",fert:"NPK 120:60:40 kg/ha + zinc",tip:"Irrigate at the CRI stage (20–25 days) — this can raise yield by 25%."},
+"Rice (Paddy)":{s:"Kharif",sow:"Jun–Jul",harv:"Oct–Nov",water:"Standing water 5cm",soil:"Clay loam, alluvial",fert:"NPK 100:50:50",tip:"Alternate wetting and drying saves about 30% of water."},
+"Maize":{s:"Kharif/Rabi",sow:"Jun–Jul / Oct–Nov",harv:"Sep–Oct / Mar–Apr",water:"Moderate; tasseling critical",soil:"Well-drained loam",fert:"NPK 120:60:40",tip:"Water shortage at the tasseling-silking stage reduces yield."},
+"Cotton":{s:"Kharif",sow:"Apr–Jun",harv:"Oct–Jan",water:"Moderate; avoid waterlogging",soil:"Black (Regur)",fert:"NPK 100:50:50 + boron",tip:"Use pheromone traps for pink bollworm."},
+"Sugarcane":{s:"Annual",sow:"Feb–Mar / Oct–Nov",harv:"12–18 months",water:"High (~2000 mm)",soil:"Deep loam, alluvial",fert:"NPK 250:100:120",tip:"Trench planting with drip irrigation saves about 40% of water."},
+"Soybean":{s:"Kharif",sow:"Jun–Jul",harv:"Oct",water:"450–700 mm",soil:"Black, loam",fert:"NPK 30:60:40 + rhizobium",tip:"Rhizobium + PSB seed treatment saves nitrogen."},
+"Groundnut":{s:"Kharif/Zaid",sow:"Jun–Jul / Jan–Feb",harv:"Oct / May",water:"500–600 mm",soil:"Sandy loam, red",fert:"NPK 25:50:75 + gypsum",tip:"Apply gypsum after flowering for better pod filling."},
+"Bajra":{s:"Kharif",sow:"Jun–Jul",harv:"Sep–Oct",water:"Low (~400 mm)",soil:"Sandy, arid",fert:"NPK 80:40:40",tip:"Drought-hardy — the best choice for low-rainfall belts."},
+"Jowar":{s:"Kharif/Rabi",sow:"Jun–Jul / Sep–Oct",harv:"Oct / Feb",water:"Low–moderate",soil:"Black, red loam",fert:"NPK 80:40:40",tip:"Rabi jowar gives a good yield with just 2 irrigations."},
+"Tur (Arhar)":{s:"Kharif",sow:"Jun–Jul",harv:"Dec–Jan",water:"Low–moderate",soil:"Black, loam",fert:"NPK 25:50:25 + rhizobium",tip:"Best when intercropped with cotton or soybean."},
+"Gram (Chana)":{s:"Rabi",sow:"Oct–Nov",harv:"Feb–Mar",water:"1–2 irrigations",soil:"Black, loam",fert:"NPK 20:40:20 + rhizobium",tip:"Use wilt-resistant varieties and avoid excess water."},
+"Mustard":{s:"Rabi",sow:"Sep–Oct",harv:"Feb–Mar",water:"1–2 irrigations",soil:"Loam, sandy loam",fert:"NPK 60:40:40 + sulphur",tip:"Sulphur increases oil content."},
+"Potato":{s:"Rabi",sow:"Oct–Nov",harv:"Jan–Feb",water:"6–8 irrigations",soil:"Well-drained sandy loam",fert:"NPK 150:100:100",tip:"Follow earthing up and a late blight spray schedule."},
+"Onion":{s:"Rabi/Kharif",sow:"Jun–Jul / Oct–Nov",harv:"4–5 months",water:"Moderate; stop before harvest",soil:"Well-drained loam",fert:"NPK 100:50:50 + sulphur",tip:"Stop irrigation 15 days before harvest — it improves storage life."},
+"Moong":{s:"Zaid/Kharif",sow:"Mar–Apr",harv:"Jun",water:"Low (~350 mm)",soil:"Loam, sandy loam",fert:"NPK 20:40:20 + rhizobium",tip:"A short 60–65 day crop — a perfect fit in gaps."},
+"Banana":{s:"Annual",sow:"Feb–Mar / Sep–Oct",harv:"11–14 months",water:"High; drip best",soil:"Deep alluvial, loam",fert:"High K; NPK 200:200:300",tip:"Sucker treatment plus drip fertigation can double the yield."},
+"Coconut":{s:"Perennial",sow:"Jun–Jul",harv:"Year-round (after 5-7 years)",water:"Drip + basin",soil:"Laterite, coastal sand",fert:"Organic + NPK in basins",tip:"Mulching and intercropping (banana/pineapple) are recommended."}
+};
+
+const SEASONS={kharif:{name:"Kharif",when:"June–October (Monsoon)",desc:"Crops grown with the monsoon rains."},
+ rabi:{name:"Rabi",when:"October–March (Winter)",desc:"Winter crops — less water, high quality grain."},
+ zaid:{name:"Zaid",when:"March–June (Summer)",desc:"Short-duration summer crops and vegetables."}};
+
+  return { PERSONAS: PERSONAS, STATES: STATES, CROPS: CROPS, SEASONS: SEASONS };
+});
+
+
+/* ===== js/engine.js ===== */
+/**
+ * MAUSAM AI - pure logic engine (no DOM).
+ * Shared by the browser and the Node backend, and unit-testable in isolation.
+ */
+(function (root, factory) {
+  var api = factory(root);
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else root.MAUSAM_ENGINE = api;
+})(typeof self !== 'undefined' ? self : this, function (root) {
+  'use strict';
+  var D = (typeof module === 'object' && module.exports)
+    ? require('./data.js')
+    : root.MAUSAM_DATA;
+  var PERSONAS = D.PERSONAS, STATES = D.STATES, CROPS = D.CROPS, SEASONS = D.SEASONS;
+
+  /* live state - written by the host app / server before calling into the engine */
+  var WX = null, AQ = null, MAR = null, CUR = 'agri';
+  var S = { name: 'Maharashtra', land: 2 };
+
+  function setWeather(v) { WX = v; }
+  function setAir(v) { AQ = v; }
+  function setMarine(v) { MAR = v; }
+  function setPersona(v) { CUR = v; }
+  function setProfile(name, land) { S = { name: name, land: land }; }
+  function getState() { return { WX: WX, AQ: AQ, MAR: MAR, CUR: CUR, S: S }; }
+
+function wIcon(c){if(c===0)return"☀️";if(c<=3)return"⛅";if(c<=48)return"🌫️";if(c<=67)return"🌧️";if(c<=77)return"❄️";if(c<=82)return"🌦️";return"⛈️"}
+function aqiCat(v){
+  if(v<=50)return{c:"Good",col:"#22c55e",r:"The air is clean — outdoor activity is completely safe."};
+  if(v<=100)return{c:"Moderate",col:"#eab308",r:"Mostly fine; sensitive people should take a little care."};
+  if(v<=150)return{c:"Unhealthy (Sensitive)",col:"#f97316",r:"Asthma patients, children and the elderly should reduce outdoor exercise."};
+  if(v<=200)return{c:"Unhealthy",col:"#ef4444",r:"Everyone should minimise outdoor activity; a mask is essential."};
+  if(v<=300)return{c:"Very Unhealthy",col:"#a855f7",r:"Avoid going outdoors; keep windows shut and run a purifier."};
+  return{c:"Hazardous",col:"#7f1d1d",r:"Emergency level! Stay indoors at all times."};
+}
+
+function wxAdvice(){
+  if(!WX)return"";
+  if(AQ&&AQ.aqi>150)return"😷 Air quality is poor — reduce outdoor activity and wear a mask.";
+  if(WX.rain3>25)return"🌧️ Rain over the next 3 days — stop spraying and irrigation, and check drainage.";
+  if(WX.temp>38)return"🔥 Extreme heat — work in the early morning or evening, and stay hydrated.";
+  if(WX.temp<8)return"❄️ Very cold — wear layers and protect the crop from frost.";
+  if(WX.hum>85)return"💦 High humidity — fungal risk, plan a preventive spray.";
+  if(WX.wind>30)return"🌬️ Strong wind — do not spray or fly a drone today.";
+  return"✅ Weather is favourable — you can follow your normal plan.";
+}
+
+function nextHours(n){ if(!WX)return[]; const r=[]; for(let i=WX.nowIdx;i<Math.min(WX.htime.length,WX.nowIdx+n);i++) r.push({t:WX.htime[i],temp:WX.htemp[i],feels:WX.hfeels[i],rain:WX.hrain[i]||0,prob:WX.hprob[i]||0,code:WX.hcode[i],wind:WX.hwind[i],hum:WX.hhum?WX.hhum[i]:null,uv:WX.huv?WX.huv[i]:null,aqi:AQ?AQ.haqi[i]:null}); return r; }
+function hhmm(iso){return iso.slice(11,16)}
+function bestWindow(){
+  if(!WX)return null; const arr=nextHours(24).filter(h=>{const hh=+hhmm(h.t).slice(0,2);return hh>=5&&hh<=21});
+  if(!arr.length)return null; let best=null;
+  for(const h of arr){ const a=h.aqi||AQ&&AQ.aqi||60;
+    const score=Math.abs(h.feels-22)*1.7 + h.rain*9 + h.prob*0.06 + Math.max(0,a-50)*0.45 + Math.max(0,h.wind-20)*0.5;
+    if(!best||score<best.score) best={...h,score};
+  }
+  const i=arr.indexOf(arr.find(x=>x.t===best.t));
+  return {from:best, to:arr[Math.min(arr.length-1,i+1)], arr};
+}
+function rainSummary(hs){
+  const wet=hs.filter(h=>h.rain>0.2||h.prob>50);
+  if(!wet.length) return {wet:false,html:"No rain signal — the weather is likely to stay clear."};
+  const first=wet[0], last=wet[wet.length-1];
+  const peak=wet.reduce((a,b)=>b.rain>a.rain?b:a);
+  return {wet:true,first,last,peak,html:`Rain is likely between ${hhmm(first.t)} and ${hhmm(last.t)}, peaking at ${hhmm(peak.t)} (${peak.rain.toFixed(1)}mm, ${peak.prob}% chance).`};
+}
+
+/* ===================== SUGGESTIONS (persona) ===================== */
+
+function bestDayText(){
+  if(!WX)return"";
+  let bi=0,bs=1e9;
+  for(let i=0;i<Math.min(5,WX.dmax.length);i++){
+    const sc=(WX.dsum[i]||0)*3 + Math.abs(WX.dmax[i]-26)*1.2 + (WX.duv[i]>9?6:0);
+    if(sc<bs){bs=sc;bi=i}
+  }
+  const d=new Date(WX.dtime[bi]);
+  return `Best day: <b>${WX.dtime[bi]}</b> (${["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][d.getDay()]}) — ${Math.round(WX.dmax[bi])}°/${Math.round(WX.dmin[bi])}°, rain ${(WX.dsum[bi]||0).toFixed(1)}mm.`;
+}
+function packText(){
+  const t=WX.temp,r=WX.rain3,uv=WX.duv[0],a=[]; 
+  if(r>10)a.push("☔ umbrella + raincoat + waterproof bag");
+  if(t<15)a.push("🧥 jacket/sweater (layers)");
+  if(t>=30)a.push("👕 cotton/light clothes, cap, sunglasses");
+  if(uv>=8)a.push("🧴 SPF 50 sunscreen");
+  if(WX.wind>25)a.push("🧣 windcheater");
+  a.push("💧 water bottle, power bank, medicines");
+  return a.join(" · ");
+}
+
+/* ---- comfort index (Event Planners) ---- */
+function comfortIndex(feels,hum,rainProb,wind,uv){
+  const t=100-Math.min(100,Math.abs((feels==null?24:feels)-24)*4.5);
+  const h=100-Math.min(100,Math.abs((hum==null?50:hum)-50)*1.6);
+  const r=100-Math.min(100,Math.max(0,rainProb||0));
+  const w=100-Math.min(100,Math.max(0,(wind||0)-15)*3);
+  const u=100-Math.min(100,Math.max(0,(uv||0)-6)*8);
+  return Math.max(0,Math.min(100,Math.round(0.35*t+0.20*h+0.30*r+0.10*w+0.05*u)));
+}
+function comfortInfo(sc){
+  if(sc>=80)return{s:sc,label:"Excellent — ideal conditions",col:"#22c55e",adv:"Perfect for an outdoor event — just keep a basic backup."};
+  if(sc>=65)return{s:sc,label:"Good — comfortable",col:"#84cc16",adv:"An outdoor event will run well; arrange water and shade."};
+  if(sc>=50)return{s:sc,label:"Fair — acceptable",col:"#eab308",adv:"Outdoor is possible but needs planning — shade, water and a tarp backup."};
+  if(sc>=35)return{s:sc,label:"Poor — uncomfortable",col:"#f97316",adv:"An outdoor event will be difficult; change the timing or keep an indoor backup."};
+  return{s:sc,label:"Bad — avoid outdoor",col:"#ef4444",adv:"Avoid an outdoor event; choose an indoor venue."};
+}
+function nowComfort(){if(!WX)return null;const p=nextHours(1)[0];return comfortIndex(WX.feels,WX.hum,p?p.prob:0,WX.wind,WX.duv[0]);}
+function dayComfort(i){
+  if(!WX)return 0;
+  const tmean=(WX.dmax[i]+WX.dmin[i])/2;
+  const rainProb=Math.min(100,(WX.dsum[i]||0)*12);
+  return comfortIndex(tmean,WX.hum,rainProb,15,WX.duv[i]||0);
+}
+function bestEventWindow(){
+  if(!WX)return null;const arr=nextHours(24).filter(h=>{const hh=+hhmm(h.t).slice(0,2);return hh>=8&&hh<=21});
+  if(!arr.length)return null;let best=null;
+  for(const h of arr){const sc=comfortIndex(h.feels,h.hum==null?WX.hum:h.hum,h.prob,h.wind,h.uv==null?0:h.uv);if(!best||sc>best.sc)best={...h,sc}}
+  return best;
+}
+
+/* ---- marine helpers (Beachgoers & Surfers) ---- */
+function dirName(d){if(d==null)return"–";return ["N","NE","E","SE","S","SW","W","NW"][Math.round(((d%360)/45))%8]}
+function surfRating(w){
+  if(w==null)return{c:"–",col:"#9fb0d0",t:"No data available"};
+  if(w<0.5)return{c:"Flat",col:"#9fb0d0",t:"Surf is flat — good for a beach or swim day"};
+  if(w<1.0)return{c:"Small",col:"#22c55e",t:"Good for beginner surfers"};
+  if(w<1.5)return{c:"Fun",col:"#84cc16",t:"Best for intermediate surfers"};
+  if(w<2.5)return{c:"Good",col:"#eab308",t:"Solid conditions for advanced surfers"};
+  if(w<3.5)return{c:"Big",col:"#f97316",t:"Experts only — beginners should stay out"};
+  return{c:"Dangerous",col:"#ef4444",t:"Do not enter the water — life-threatening swell"};
+}
+function seaTempInfo(t){
+  if(t==null)return{c:"–",col:"#9fb0d0",t:""};
+  if(t<18)return{c:"Cold",col:"#38bdf8",t:"A wetsuit is needed; do not stay in the water long"};
+  if(t<22)return{c:"Cool",col:"#22d3ee",t:"Refreshing — a short swim is fine"};
+  if(t<28)return{c:"Perfect",col:"#22c55e",t:"Ideal for swimming"};
+  return{c:"Warm",col:"#eab308",t:"Warm as bath water — stay hydrated"};
+}
+function tideInfo(){
+  if(!MAR||!MAR.htime||!MAR.hlevel)return null;
+  const nowKey=(WX&&WX.htime?WX.htime[WX.nowIdx]:"").substring(0,13);
+  let i0=MAR.htime.findIndex(t=>t.substring(0,13)===nowKey); if(i0<0)i0=0;
+  const seg=[];
+  for(let i=i0;i<Math.min(MAR.htime.length,i0+25);i++) if(MAR.hlevel[i]!=null) seg.push({t:MAR.htime[i],v:MAR.hlevel[i]});
+  if(seg.length<6)return null;
+  const highs=[],lows=[];
+  for(let i=1;i<seg.length-1;i++){
+    if(seg[i].v>seg[i-1].v&&seg[i].v>=seg[i+1].v)highs.push(seg[i]);
+    if(seg[i].v<seg[i-1].v&&seg[i].v<=seg[i+1].v)lows.push(seg[i]);
+  }
+  return {high:highs[0]||null,low:lows[0]||null,rising:seg[seg.length-1].v>seg[0].v};
+}
+
+/* ===================== CROP PLANNER ===================== */
+function plan(){
+  const s=document.getElementById("state2").value,se=document.getElementById("season").value,fo=document.getElementById("focus").value;
+  const d=STATES[s];if(!d)return;const map={kharif:d.kharif,rabi:d.rabi,zaid:d.zaid};
+  const low=["Bajra","Jowar","Moong","Gram","Mustard","Groundnut","Tur","Barley","Moth"],high=["Cotton","Sugarcane","Onion","Banana","Vegetables","Cumin","Chilli","Turmeric","Ginger","Potato"];
+  let list=se==="all"?[...d.kharif,...d.rabi,...d.zaid]:map[se];
+  list=list.filter(c=>fo==="water"?low.some(x=>c.includes(x.split(" ")[0])):fo==="profit"?high.some(x=>c.includes(x.split(" ")[0])):true);
+  list=[...new Set(list)];
+  const seasonOf=c=>{for(const[k,v]of Object.entries(map))if(v.includes(c))return k;return null};
+  document.getElementById("planOut").innerHTML=`<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(275px,1fr))">
+    ${list.map(c=>{const key=Object.keys(CROPS).find(k=>c.startsWith(k)||k.startsWith(c.split(" ")[0]))||"";const ci=CROPS[key]||{};const sn=seasonOf(c);
+      return `<div class="card" style="padding:14px"><h3 style="margin-bottom:8px">🌾 ${c} ${sn?`<span style="color:var(--acc)">${SEASONS[sn].name}</span>`:""}</h3>
+      <div class="wmeta" style="font-size:12px;line-height:1.9">
+      ${ci.sow?`📅 <b>Sow:</b> ${ci.sow}<br>`:""}${ci.harv?`🌾 <b>Harvest:</b> ${ci.harv}<br>`:""}
+      ${ci.water?`💧 <b>Water:</b> ${ci.water}<br>`:""}${ci.soil?`🟤 <b>Soil:</b> ${ci.soil}<br>`:""}
+      ${ci.fert?`🧪 <b>Fertilizer:</b> ${ci.fert}<br>`:""}</div>
+      ${ci.tip?`<div class="note ok" style="margin-top:9px;font-size:11.5px">${ci.tip}</div>`:""}</div>`}).join("")}</div>`;
+}
+
+/* ===================== OFFLINE ENGINE (never fails) =====================
+   All answers are written in ENGLISH.
+   Keyword scanning understands Hindi (Devanagari), Hinglish and English. */
+function H(){const s=S.name,d=STATES[s]||{};
+  return `<div class="note ok" style="margin:0 0 10px">📍 <b>${PERSONAS[CUR].icon} ${PERSONAS[CUR].name}</b> ${WX?`· ${WX.city}: <b>${WX.temp}°C</b> ${AQ?`· AQI <b>${AQ.aqi}</b>`:""}`:""} ${CUR==="agri"?`· ${s} · soil <b>${d.soil||"-"}</b> · <b>${SEASONS[curSeason()].name}</b>`:""}</div>`;}
+
+function offline(q){
+  const ql=q.toLowerCase();
+  let ans=H()+({agri:offAgri,run:offRun,school:offSchool,travel:offTravel,aqi:offAqi,commute:offCommute,beach:offBeach,event:offEvent}[CUR])(ql,q);
+  // Persona routing: if the question belongs to another persona's domain, say so.
+  const dom=detectDomain(ql);
+  if(dom && dom!==CUR){
+    ans+=`<div class="note">💡 This question belongs to the <b>${PERSONAS[dom].icon} ${PERSONAS[dom].name}</b> persona. Switch persona above to get the exact answer.</div>`;
+  }
+  return ans;
+}
+
+/* ---- which persona does this question belong to? (Hindi + Hinglish + English) ---- */
+function detectDomain(ql){
+  const map={
+    agri:["soil","mitti","zameen","bhoomi","crop","fasal","kharif","rabi","zaid","sow","boye","lagau","khad","fertilizer","urea","dap","npk","pest","keeda","rog","mandi","msp","kisan","yojana","मिट्टी","माटी","फसल","बीज","खाद","कीट","कीड़ा","रोग","सिंचाई","पानी","मौसम","किसान","योजना","बुवाई"],
+    run:["run","running","jog","workout","gym","pace","stamina","cardio","warm-up","stretch","दौड़","व्यायाम","वर्कआउट"],
+    school:["school","bachch","bacche","kids","child","picnic","outing","umbrella","raincoat","family","स्कूल","बच्चे","बच्चों","पिकनिक","छाता"],
+    travel:["travel","trip","packing","pack ","flight","hotel","destination","itinerary","sightseeing","यात्रा","ट्रिप","घूमना","पैकिंग"],
+    aqi:["aqi","air quality","pm2.5","pm10","mask","asthma","allergy","purifier","pollen","smog","वायु","प्रदूषण","मास्क","धुआं"],
+    commute:["commute","office","traffic","nikalna","nikal","bike","car ","cab","route","leave time","nowcast","fog","यातायात","ऑफिस","गाड़ी","बस","धुंध"],
+    beach:["beach","wave","surf","tide","sea","swim","samudra","lifeguard","rip current","समुद्र","लहर","ज्वार","तैरना"],
+    event:["event","wedding","shaadi","party","function","venue","comfort index","gathering","शादी","समारोह","पार्टी","आयोजन"],
+  };
+  let best=null,bestN=0;
+  for(const [k,words] of Object.entries(map)){
+    const n=words.reduce((a,w)=>a+(ql.includes(w)?1:0),0);
+    if(n>bestN){bestN=n;best=k}
+  }
+  return bestN>0?best:null;
+}
+
+/* ---- AGRI ---- */
+function offAgri(ql,q){
+  const s=S.name,d=STATES[s]||{},sk=curSeason();
+  if(/soil|mitti|zameen|bhoomi|मिट्टी|माटी/.test(ql))return `<b>🌱 Soil in ${s}:</b> ${d.soil}<br><br><b>Best crops for this soil:</b><ul>${d.kharif.slice(0,3).map(c=>`<li>${c} (Kharif)</li>`).join("")}${d.rabi.slice(0,3).map(c=>`<li>${c} (Rabi)</li>`).join("")}</ul><b>Soil improvement:</b><ul><li>Get a soil test every 2 years (pH, N-P-K, organic carbon)</li><li>Grow green manure (dhaincha / sunhemp)</li><li>Add 5-10 tonnes of organic compost per acre</li><li>Do not burn crop residue</li></ul>`;
+  if(/weather|barish|rain|aaj|today|मौसम|बारिश/.test(ql)){ if(!WX)return "⚠️ First search your city on the <b>Home tab</b>.";return `<b>${WX.city} today:</b> ${wIcon(WX.code)} ${WX.temp}°C, humidity ${WX.hum}%, rain over the next 3 days ${WX.rain3.toFixed(1)}mm.<br><br><b>${wxAdvice()}</b><br><br><b>Today's field work:</b><ul><li>${WX.rain3>25?"Stop irrigation and check field drainage":"Light irrigation or weeding is fine"}</li><li>${WX.wind>30?"Do not spray today":"Spray between 7-10 am"}</li><li>${WX.hum>85?"Watch out for fungal disease":"Follow the nutrient schedule"}</li></ul>`}
+  if(/fertilizer|khad|urea|dap|npk|paani|water|irrigation|खाद|सिंचाई|पानी/.test(ql))return `<b>🧪 ${s} — fertilizer &amp; irrigation:</b><ul><li><b>Cereals (Wheat/Rice):</b> NPK 100-120:50-60:40-50 kg/ha</li><li><b>Pulses:</b> NPK 20-25:40-50:20-25 + rhizobium seed treatment</li><li><b>Oilseeds:</b> NPK + sulphur (raises oil content)</li><li><b>Cotton/Sugarcane:</b> high nitrogen + boron/zinc</li></ul><b>💧 Irrigation:</b><ul><li>Wheat: 4-6 irrigations; the CRI stage (20-25 days) is critical</li><li>Rice: alternate wetting and drying saves about 30% of water</li><li>Drip or sprinkler: saves 40-50%</li><li>${WX?"Today: "+wxAdvice():"Check the weather on the Home tab"}</li></ul>`;
+  if(/pest|keeda|rog|disease|insect|bimari|spray|कीट|कीड़ा|रोग/.test(ql))return `<b>🐛 IPM approach:</b><ul><li>Monitoring: light traps / pheromone traps / yellow sticky traps</li><li>Cultural: crop rotation, resistant varieties</li><li>Biological: neem oil 3-5 ml/L, Trichoderma, Bt, NPV</li><li>Chemical: label dose only, and rotate molecules</li></ul><b>Common problems in ${s}:</b><ul><li>Cotton → pink bollworm</li><li>Rice → stem borer, blast</li><li>Wheat → yellow rust</li></ul><div class="note">${WX?(WX.wind>30?"Strong wind — do not spray":WX.rain3>25?"Rain expected — the spray will wash off":"Weather is fine — spray in the morning"):""}</div>`;
+  if(/yojana|scheme|msp|subsid|loan|bima|kisan|योजना|सब्सिडी|बीमा/.test(ql))return `<b>🏛️ Government schemes:</b><ul><li><b>PM-KISAN:</b> ₹6,000/year</li><li><b>PM Fasal Bima Yojana:</b> crop insurance — 2% kharif and 1.5% rabi premium</li><li><b>KCC:</b> Kisan Credit Card at 4% effective interest</li><li><b>Soil Health Card:</b> free soil testing</li><li><b>e-NAM:</b> online mandi trading</li><li><b>PM Krishi Sinchai:</b> 55-90% subsidy on drip and sprinkler</li></ul>📞 <b>Kisan Call Centre: 1800-180-1551</b>`;
+  return `<b>🌾 Crop plan for ${s}:</b><ul><li><b>Kharif:</b> ${d.kharif.join(", ")}</li><li><b>Rabi:</b> ${d.rabi.join(", ")}</li><li><b>Zaid:</b> ${d.zaid.join(", ")}</li></ul><b>Right now (${SEASONS[sk].name}):</b> ${(d[sk]||[]).join(", ")}<br><br>Soil: <b>${d.soil}</b><div class="note ok">${d.tip}</div>`;
+}
+
+/* ---- RUNNING ---- */
+function offRun(ql){
+  if(!WX)return "⚠️ First search your city on the <b>Home tab</b> — then I can plan the exact best time, heat and AQI guidance.<br><br><b>General rules:</b><ul><li>Best: 5:30-7:30 am or after sunset</li><li>Slow your pace by 30-60 sec/km in heat</li><li>Drink 150-250 ml every 15-20 min</li></ul>";
+  const b=bestWindow(),ac=AQ?aqiCat(AQ.aqi):null;
+  const heat=WX.feels>32?"high":WX.feels>27?"moderate":"low";
+  let s=`<b>🏃 Running plan — ${WX.city}</b><br>Now: ${WX.temp}°C (feels ${WX.feels}°C), humidity ${WX.hum}%, wind ${WX.wind} km/h${AQ?`, AQI ${AQ.aqi} (${ac.c})`:""}.<br><br>`;
+  if(b)s+=`<b>✅ Best window:</b> <b>${hhmm(b.from.t)} – ${hhmm(b.to.t)}</b> (feels ${b.from.feels}°C, rain ${b.from.rain.toFixed(1)}mm, AQI ${b.from.aqi??(AQ&&AQ.aqi)??"–"})<br><br>`;
+  s+=`<b>🌡️ Heat risk: ${heat.toUpperCase()}</b><ul>
+    <li>${WX.feels>32?"Slow your pace by 45-60 sec/km and take walk breaks":"Normal pace is fine"}</li>
+    <li>${WX.hum>75?"Humidity is high — sweat evaporates slowly, so fatigue builds faster. Take electrolytes.":"Humidity is normal"}</li>
+    <li>Hydration: 300-500 ml 30 min before the run; 150-250 ml every 20 min${WX.feels>32?"; ORS or electrolytes are a must":""}</li>
+    <li>Clothing: ${WX.temp>28?"light synthetic moisture-wicking gear, cap and sunglasses":"light layers, plus a windcheater if the wind picks up"}</li></ul>`;
+  if(ac)s+=`<b>😷 Air quality: ${ac.c}</b><ul><li>${AQ.aqi>150?"AVOID outdoor runs — use a treadmill or train indoors; wear an N95 if you must go out.":AQ.aqi>100?"Sensitive runners should cut outdoor runs short; early morning has the lowest AQI.":"Outdoor running is safe ✅"}</li></ul>`;
+  s+=`<b>🏋️ Today's recommendation:</b> ${(WX.rain3>15||(ac&&AQ.aqi>150))?"Indoor or gym session (cardio + strength) — avoid going outside.":"An outdoor run is great today! Warm up 8-10 min and cool down with 5 min of stretching."}`;
+  return s;
+}
+
+/* ---- SCHOOL / FAMILY ---- */
+function offSchool(ql){
+  if(!WX)return "⚠️ Search your city on the <b>Home tab</b> — then you get the exact umbrella, heat and outing plan.<br><br><b>Quick rules:</b><ul><li>Umbrella or raincoat when rain probability is above 50%</li><li>Limit outdoor time 11am-4pm in heat; a water bottle is a must</li><li>Sunscreen and a cap when UV is above 8</li></ul>";
+  const rs=rainSummary(nextHours(12)),ac=AQ?aqiCat(AQ.aqi):null,uv=WX.duv[0];
+  let s=`<b>🎒 School commute — ${WX.city}</b><br>${WX.temp}°C, humidity ${WX.hum}%, rain 3d ${WX.rain3.toFixed(1)}mm${AQ?`, AQI ${AQ.aqi}`:""}.<br><br>
+  <b>☔ Umbrella / raincoat:</b> ${rs.wet?"<b>YES</b> — "+rs.html:"<b>NO</b> — "+rs.html}<br><br>
+  <b>👧 Checklist for the kids:</b><ul>
+   <li>${WX.temp>34?"🥵 Very hot — light cotton clothes, a cap and a 1L water bottle; avoid outdoor games 11am-4pm":"✅ Temperature is comfortable"}</li>
+   <li>${uv>=8?"🧴 UV "+uv+" (very high) — sunscreen, full sleeves and a cap":"UV "+uv+" — normal protection is enough"}</li>
+   <li>${WX.hum>85?"💦 High humidity — change clothes quickly and guard against fungal infection":"—"}</li>
+   <li>${ac&&AQ.aqi>150?"😷 AQI "+AQ.aqi+" — make them wear a mask and skip outdoor PT":"Air is fine"}</li>
+   <li>${rs.wet?"🌧️ Rain gear plus a waterproof bag cover; allow extra time for the bus or auto (delays likely)":"Normal timings"}</li></ul>`;
+  s+=`<b>👨‍👩‍👧 Family outing:</b><br>${bestDayText()}<br><ul>
+   <li>Best time: 7-10 am or after 5 pm (lower UV and heat)</li>
+   <li>Carry: water, snacks, a cap, ${rs.wet?"an umbrella":"sunscreen"}${WX.hum>80?", and mosquito repellent":""}</li>
+   <li>Indoor option: ${(rs.wet||WX.temp>36)?"the weather is not great — a mall, museum or indoor play zone is better":"perfect for a park or picnic"}</li></ul>`;
+  return s;
+}
+
+/* ---- TRAVEL ---- */
+function offTravel(ql){
+  if(!WX)return "⚠️ Search your destination city on the <b>Home tab</b> — without weather I cannot give useful packing or trip advice.<br><br><b>Quick packing rule:</b> below 15°C = layers, above 30°C = cotton, rain above 10mm = a raincoat.";
+  const rs=rainSummary(nextHours(12));
+  let s=`<b>✈️ Travel brief — ${WX.city}, ${WX.state||""}</b><br>
+  Now: ${wIcon(WX.code)} ${WX.temp}°C (feels ${WX.feels}°C) · humidity ${WX.hum}% · wind ${WX.wind} km/h<br>
+  Rain next 3 days: <b>${WX.rain3.toFixed(1)} mm</b> · UV max <b>${WX.duv[0]}</b><br><br>
+  <b>🧳 Packing list:</b><br>${packText()}<br><br>
+  <b>📍 Next 12h:</b> ${rs.wet?rs.html:"Clear — no rain expected"}<br><br>
+  <b>📅 5-day outlook &amp; best day:</b><br>${bestDayText()}<br>
+  <table style="width:100%;font-size:12px;margin-top:8px;border-collapse:collapse">
+  ${WX.dtime.map((t,i)=>`<tr style="border-bottom:1px solid var(--line)"><td style="padding:5px 0">${t}</td><td>${wIcon(WX.dcode[i])}</td><td>${Math.round(WX.dmax[i])}°/${Math.round(WX.dmin[i])}°</td><td>${(WX.dsum[i]||0).toFixed(1)}mm</td></tr>`).join("")}</table><br>
+  <b>⚠️ Travel advisories:</b><ul>
+   <li>${WX.rain3>30?"Monsoon-like rain — a higher risk of flight and train delays; keep buffer time":WX.rain3>10?"Moderate rain — keep a backup for outdoor plans":"Dry weather — travel should be smooth"}</li>
+   <li>${WX.wind>30?"Strong wind — possible flight and ferry delays":"Wind is normal"}</li>
+   <li>${WX.temp>38?"Extreme heat — avoid activity 12pm-4pm and stay hydrated":"Temperature is manageable"}</li>
+   <li>${WX.temp<5?"Very cold — pack heavy woollens and thermals":"—"}</li></ul>`;
+  return s;
+}
+
+/* ---- AQI ---- */
+function offAqi(ql){
+  if(!AQ)return "⚠️ Search your city on the <b>Home tab</b> for AQI data.<br><br><b>AQI scale (US AQI):</b><ul><li>0–50 Good</li><li>51–100 Moderate</li><li>101–150 Unhealthy for sensitive groups</li><li>151–200 Unhealthy</li><li>201–300 Very Unhealthy</li><li>301+ Hazardous</li></ul>";
+  const c=aqiCat(AQ.aqi),bad=AQ.aqi>150;
+  let s=`<b>😷 Air Quality — ${WX?WX.city:""}</b><br>US AQI: <b style="color:${c.col}">${AQ.aqi} · ${c.c}</b><br>
+  PM2.5 ${AQ.pm25} µg/m³ · PM10 ${AQ.pm10} µg/m³<br>
+  <div class="aqib"><i style="left:${Math.min(99,AQ.aqi/500*100)}%"></i></div><br>
+  <b>🩺 Health risk:</b> ${c.r}<br><br>
+  <b>Decision guide:</b><ul>
+   <li><b>Mask:</b> ${bad?"YES — wear an N95 or KN95; a cloth mask is not enough":"Not required (optional)"}</li>
+   <li><b>Outdoor exercise:</b> ${AQ.aqi>150?"Stop it / move indoors":AQ.aqi>100?"Reduce it — early morning is best":"Safe ✅"}</li>
+   <li><b>Windows:</b> ${AQ.aqi>100?"Keep them shut and run the AC or purifier":"You can keep them open"}</li>
+   <li><b>Air purifier:</b> ${AQ.aqi>100?"Recommended — a HEPA filter with a PM2.5 sensor":"Optional"}</li>
+   <li><b>High-risk groups:</b> asthma, COPD, children under 5, the elderly (60+), pregnant women and heart patients — ${AQ.aqi>100?"stay indoors and keep an inhaler handy":"normal routine"}</li></ul>
+  <b>🏠 Indoor air tips:</b><ul><li>Even when it is sealed, schedule some ventilation</li><li>Avoid incense, mosquito coils and smoking indoors</li><li>Add indoor plants (snake plant, areca palm) and a HEPA purifier</li><li>Shift morning walks when AQI is high</li></ul>
+  <div class="note ${bad?'d':'ok'}">Sensitive groups should take care once AQI crosses 100, and stay strictly indoors above 150.</div>`;
+  return s;
+}
+
+/* ---- COMMUTER ---- */
+function offCommute(ql){
+  if(!WX)return "⚠️ Search your city on the <b>Home tab</b> for the nowcast.<br><br><b>Quick rule:</b> if rain probability is above 50% in the next 2-3 hours, leave early or wait it out.";
+  const h2=nextHours(3),h4=nextHours(4),rs=rainSummary(h2),ac=AQ?aqiCat(AQ.aqi):null;
+  let s=`<b>🚗 Commute nowcast — ${WX.city}</b><br>Now: ${wIcon(WX.code)} ${WX.temp}°C, wind ${WX.wind} km/h${AQ?`, AQI ${AQ.aqi}`:""}.<br><br>
+  <b>⏱️ Next 4 hours:</b><div class="wstats" style="grid-template-columns:repeat(4,1fr)">${h4.map(h=>`<div class="stat"><b>${hhmm(h.t)}</b><span>${wIcon(h.code)} ${h.temp}°<br>${h.rain.toFixed(1)}mm · ${h.prob}%</span></div>`).join("")}</div><br>
+  <b>🌧️ Rain answer:</b> ${rs.wet?"<b>YES</b> — "+rs.html:"<b>NO</b> — "+rs.html}<br><br>
+  <b>🕐 Leave time advice:</b><ul>
+   <li>${rs.wet?`Leave <b>20-30 min before</b> the peak rain (${rs.peak?hhmm(rs.peak.t):""}) to avoid jams and getting soaked`:"Leaving now is best — there is no rain risk"}</li>
+   <li>${WX.wind>30?"Strong wind — take care on a two-wheeler; use the car if you can":"Wind is normal — a two-wheeler is fine"}</li>
+   <li>${WX.temp>38?"Strong sun — carry a cap, water and pick a shaded route":"Temperature is comfortable"}</li></ul>
+  <b>🏍️ Bike or car?</b> ${(rs.wet||WX.wind>30)?"<b>Car is better</b> — a two-wheeler is risky in rain or wind.":"<b>Bike is fine</b> — the weather is clear."}<br><br>
+  ${ac?`<b>😷 Air:</b> ${ac.c} — ${AQ.aqi>150?"use AC and recirculation mode, and wear a mask":"normal travel is fine"}`:""}
+  <div class="note ok">Smart suggestion: ${rs.wet?"Leaving a little early today means less rain and less traffic.":"Your commute will be smooth today — normal timing works."}</div>`;
+  return s;
+}
+
+/* ---- BEACHGOERS & SURFERS ---- */
+function offBeach(ql){
+  if(!WX)return "⚠️ Search a <b>coastal city</b> on the <b>Home tab</b> (Goa, Mumbai, Chennai, Visakhapatnam, Kochi, Puri, Digha, Mangalore) — then you get the full wave, tide and sea temperature brief.<br><br><b>Quick sea rules:</b><ul><li>Waves under 1 m = fine for beginners</li><li>1–1.5 m = fun, intermediate level</li><li>Above 2.5 m = experts only, beginners stay out</li><li>Red flag or lifeguard warning = do not enter the water at all</li></ul>";
+  if(!MAR)return `<b>🌊 Marine data is not available (no coastal grid point found)</b> — ${WX.city} may be inland. Try a coastal city: Goa, Mumbai, Chennai, Vizag, Kochi, Puri.<br><br><b>City conditions:</b> ${WX.temp}°C, humidity ${WX.hum}%, UV ${WX.duv[0]}, wind ${WX.wind} km/h.`;
+  const sr=surfRating(MAR.wave), st=seaTempInfo(MAR.sst), ti=tideInfo();
+  let s=`<b>🌊 Sea &amp; Surf report — ${WX.city}</b><br>
+  Wave height <b>${MAR.wave} m</b> · period <b>${MAR.per||"–"} s</b> · swell <b>${MAR.swell??"–"} m</b> · direction <b>${dirName(MAR.dir)}</b><br>
+  Sea surface temp <b>${MAR.sst??"–"}°C</b> · air temp ${WX.temp}°C · wind ${WX.wind} km/h<br><br>
+  <b>🏄 Surf rating:</b> <b style="color:${sr.col}">${sr.c}</b> — ${sr.t}<br><br>`;
+  if(ti)s+=`<b>🌊 Tides:</b><ul><li>Next high tide: <b>${ti.high?hhmm(ti.high.t)+" ("+ti.high.v.toFixed(2)+" m)":"–"}</b></li><li>Next low tide: <b>${ti.low?hhmm(ti.low.t)+" ("+ti.low.v.toFixed(2)+" m)":"–"}</b></li><li>Tide is currently ${ti.rising?"<b>rising ↑</b> (water level going up)":"<b>falling ↓</b> (water level going down)"}</li></ul><b>Plan tip:</b> ${ti.rising?"Swimming is fine on a rising tide, but stay away from rocks and the shoreline.":"A falling tide is best for tide-pooling and beach walks."}<br><br>`;
+  s+=`<b>🩺 Sea temperature:</b> <b style="color:${st.col}">${st.c}</b> — ${st.t}<br><br>
+  <b>☀️ Beach safety:</b><ul>
+  <li>${MAR.wave>2?"⚠️ Large swell — avoid swimming; only use lifeguard-monitored beaches":"✅ Wave conditions are manageable"}</li>
+  <li>UV max <b>${WX.duv[0]}</b> — ${WX.duv[0]>=8?"SPF 50+ is essential; stay in shade 11am-3pm":"sunscreen and a cap are enough"}</li>
+  <li>${WX.rain3>15?"🌧️ Rain expected — lightning and rip-current risk, stay off the beach":"Rain is low — a beach day is fine"}</li>
+  <li>${WX.wind>30?"🌬️ Strong wind — sand-blast and rough sea, take care":"Wind is normal"}</li>
+  <li>If caught in a rip current, <b>swim parallel to the shore</b> to get out — do not fight it directly</li>
+  <li>Always swim with a partner and stay near a lifeguard tower</li></ul>`;
+  return s;
+}
+
+/* ---- EVENT PLANNERS ---- */
+function offEvent(ql){
+  if(!WX)return "⚠️ Search your event city on the <b>Home tab</b> — then you get the Comfort Index, rain probability and best window.<br><br><b>What the Comfort Index means:</b><ul><li>80+ = Excellent (outdoor is perfect)</li><li>65–79 = Good</li><li>50–64 = Fair</li><li>35–49 = Poor</li><li>Below 35 = Bad (choose indoor)</li></ul>";
+  const nc=nowComfort(), ci=comfortInfo(nc), bw=bestEventWindow();
+  let s=`<b>🎉 Event planner brief — ${WX.city}</b><br>
+  <b>Comfort Index (now): <span style="color:${ci.col};font-size:20px">${ci.s}/100</span> — ${ci.label}</b><br>
+  <div class="aqib"><i style="left:${ci.s}%"></i></div>
+  ${ci.adv}<br><br>
+  <b>📊 Inputs (ideal ranges):</b><ul>
+  <li>Temperature: ${WX.feels}°C feels <span style="color:#9fb0d0">(ideal 20–26°C)</span></li>
+  <li>Humidity: ${WX.hum}% <span style="color:#9fb0d0">(ideal 40–60%)</span></li>
+  <li>Rain probability (next hour): ${nextHours(1)[0]?nextHours(1)[0].prob:0}%</li>
+  <li>Wind: ${WX.wind} km/h <span style="color:#9fb0d0">(ideal below 20)</span></li>
+  <li>UV index: ${WX.duv[0]} <span style="color:#9fb0d0">(ideal below 6)</span></li></ul>
+  <b>⏰ Best event window (next 24h):</b> ${bw?`<b>around ${hhmm(bw.t)}</b> — comfort ${bw.sc}/100, ${bw.feels}°C, rain ${bw.prob}%`:"–"}<br><br>
+  <b>📅 5-day Comfort Index:</b><div class="wstats" style="grid-template-columns:repeat(3,1fr)">
+  ${WX.dtime.map((t,i)=>{const sc=dayComfort(i),k=comfortInfo(sc);return `<div class="stat"><b style="color:${k.col}">${sc}</b><span>${t.slice(5)} · ${k.label.split(" — ")[0]}<br>${(WX.dsum[i]||0).toFixed(1)}mm</span></div>`}).join("")}</div><br>
+  <b>🌧️ Rain probability:</b><ul><li>Total rain over the next 3 days: <b>${WX.rain3.toFixed(1)} mm</b></li><li><b>${bestDayText()}</b></li></ul>
+  <b>✅ Planning checklist:</b><ul>
+  <li>Venue: ${ci.s>=65?"An outdoor venue is fine":"Indoor or covered venue recommended"}</li>
+  <li>Shade / canopy: ${WX.feels>30||WX.duv[0]>7?"Essential — the sun is strong":"Optional"}</li>
+  <li>Rain backup: ${WX.rain3>10?"Must — arrange tents, tarps and an indoor fallback":"Low risk — a light backup is enough"}</li>
+  <li>Hydration: ${WX.feels>30?"Arrange 150 ml+ per person per hour":"A normal water station"}</li>
+  <li>Timing: ${bw?"Shift to "+hhmm(bw.t)+" for the best comfort":"Best between 8-11 am or after 5 pm"}</li>
+  <li>Wind: ${WX.wind>25?"Secure banners and standees — it is windy":"Wind is normal"}</li></ul>`;
+  return s;
+}
+
+  function curSeason(){ var m = new Date().getMonth() + 1; return (m >= 6 && m <= 10) ? 'kharif' : (m === 11 || m === 12 || m <= 3) ? 'rabi' : 'zaid'; }
+
+  return {
+    PERSONAS: PERSONAS, STATES: STATES, CROPS: CROPS, SEASONS: SEASONS,
+    setWeather: setWeather, setAir: setAir, setMarine: setMarine,
+    setPersona: setPersona, setProfile: setProfile, getState: getState,
+    wIcon: wIcon, aqiCat: aqiCat, wxAdvice: wxAdvice,
+    nextHours: nextHours, hhmm: hhmm, bestWindow: bestWindow, rainSummary: rainSummary,
+    bestDayText: bestDayText, packText: packText,
+    comfortIndex: comfortIndex, comfortInfo: comfortInfo, nowComfort: nowComfort,
+    dayComfort: dayComfort, bestEventWindow: bestEventWindow,
+    dirName: dirName, surfRating: surfRating, seaTempInfo: seaTempInfo, tideInfo: tideInfo,
+    H: H, offline: offline, detectDomain: detectDomain,
+    offAgri: offAgri, offRun: offRun, offSchool: offSchool, offTravel: offTravel,
+    offAqi: offAqi, offCommute: offCommute, offBeach: offBeach, offEvent: offEvent,
+    curSeason: curSeason
+  };
+});
+
+
+/* ===== js/geo.js ===== */
+/**
+ * MAUSAM AI — geocoding helpers, shared by the browser and the Node backend.
+ *
+ * Why this exists:
+ *   • A plain lookup for "Panaji" returns a village in Guatemala, and "Goa"
+ *     returns a place in the Philippines. We always try India first.
+ *   • Open-Meteo lists some Indian cities under an older name ("Panjim", not
+ *     "Panaji"), so we keep a small alias table.
+ *   • Results are scored (exact name, Indian match, population) instead of
+ *     blindly taking the first hit.
+ */
+(function (root, factory) {
+  var api = factory();
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else root.MAUSAM_GEO = api;
+})(typeof self !== 'undefined' ? self : this, function () {
+  'use strict';
+
+  /** Old / alternate spellings common in India -> the name the geocoder knows. */
+  var CITY_ALIASES = {
+    panaji: 'Panjim',
+    bangalore: 'Bengaluru',
+    bombay: 'Mumbai',
+    calcutta: 'Kolkata',
+    madras: 'Chennai',
+    mysore: 'Mysuru',
+    trivandrum: 'Thiruvananthapuram',
+    pondicherry: 'Puducherry',
+    cochin: 'Kochi',
+    ernakulam: 'Kochi',
+    banaras: 'Varanasi',
+    benares: 'Varanasi',
+    gurgaon: 'Gurugram',
+    simla: 'Shimla',
+    poona: 'Pune',
+    calicut: 'Kozhikode',
+    mangalore: 'Mangaluru',
+    baroda: 'Vadodara',
+    allahabad: 'Prayagraj',
+    orissa: 'Odisha'
+  };
+
+  /** Strip diacritics and case so "Panāji" and "Panaji" compare equal. */
+  function normalizeName(s) {
+    var v = String(s == null ? '' : s).trim().toLowerCase();
+    if (v.normalize) v = v.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    return v;
+  }
+
+  /** What to actually send to the geocoder for a user-typed city. */
+  function queryFor(city) {
+    var n = normalizeName(city);
+    return CITY_ALIASES[n] || city;
+  }
+
+  /** Score a result set and return the most likely intended place. */
+  function pickPlace(results, query) {
+    if (!results || !results.length) return null;
+    var q = normalizeName(query);
+    var best = null;
+    var bestScore = -Infinity;
+
+    for (var i = 0; i < results.length; i++) {
+      var r = results[i];
+      var name = normalizeName(r.name);
+      var score = 0;
+
+      if (name === q) score += 100;
+      else if (name.indexOf(q) === 0) score += 55;
+      else if (name.indexOf(q) !== -1) score += 25;
+
+      if (r.country_code === 'IN') score += 45;      // India-first for this app
+      if (r.feature_code === 'PPLC') score += 12;    // national capital
+      else if (r.feature_code === 'PPLA') score += 8; // state capital
+      score += Math.log10((r.population || 0) + 1) * 6;
+
+      if (score > bestScore) { bestScore = score; best = r; }
+    }
+    return best;
+  }
+
+  function shape(p) {
+    return {
+      name: p.name,
+      state: p.admin1 || '',
+      country: p.country || '',
+      countryCode: p.country_code || '',
+      lat: p.latitude,
+      lon: p.longitude
+    };
+  }
+
+  return {
+    CITY_ALIASES: CITY_ALIASES,
+    normalizeName: normalizeName,
+    queryFor: queryFor,
+    pickPlace: pickPlace,
+    shape: shape
+  };
+});
+
+
+/* ===== js/context.js ===== */
+/**
+ * MAUSAM AI — persona-scoped CONTEXT builder.
+ * Shared by the browser (standalone mode) and the Node backend.
+ *
+ * IMPORTANT: only the ACTIVE persona's data is included. Sending the full
+ * agriculture context to every persona made the model answer everything like a
+ * crop advisory — that bug is fixed here.
+ */
+(function (root, factory) {
+  var api = factory(root);
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else root.MAUSAM_CONTEXT = api;
+})(typeof self !== 'undefined' ? self : this, function (root) {
+  'use strict';
+
+  var isNode = typeof module === 'object' && module.exports;
+  var D = isNode ? require('./data.js') : root.MAUSAM_DATA;
+  var E = isNode ? require('./engine.js') : root.MAUSAM_ENGINE;
+
+  function buildContext(personaKey, bundle, profile) {
+    bundle = bundle || {};
+    profile = profile || { state: 'Maharashtra', land: 2 };
+    var WX = bundle.weather || null, AQ = bundle.air || null, MAR = bundle.marine || null;
+
+    E.setWeather(WX); E.setAir(AQ); E.setMarine(MAR);
+    E.setPersona(personaKey); E.setProfile(profile.state, profile.land);
+
+    var p = D.PERSONAS[personaKey];
+    var out = [];
+    out.push('ACTIVE PERSONA: ' + p.name + ' (' + p.tag + ')');
+    out.push('Persona brief: ' + p.about);
+
+    out.push('\n-- WEATHER (shared) --');
+    if (WX) {
+      out.push('City: ' + WX.city + (WX.state ? ', ' + WX.state : '') +
+        ' | Temp ' + WX.temp + '\u00B0C (feels ' + WX.feels + '\u00B0C)' +
+        ' | Humidity ' + WX.hum + '% | Wind ' + WX.wind + ' km/h' +
+        ' | Rain now ' + WX.rain + 'mm' +
+        ' | Rain next 3 days ' + Number(WX.rain3 || 0).toFixed(1) + 'mm' +
+        ' | UV max ' + WX.duv[0]);
+      out.push('Next 8h hourly: ' + E.nextHours(8).map(function (h) {
+        return E.hhmm(h.t) + ' ' + h.temp + '\u00B0 ' + h.rain.toFixed(1) + 'mm ' + h.prob + '%';
+      }).join(' | '));
+      out.push('5-day: ' + WX.dtime.map(function (t, i) {
+        return t + ' ' + Math.round(WX.dmax[i]) + '/' + Math.round(WX.dmin[i]) + '\u00B0 rain ' +
+          Number(WX.dsum[i] || 0).toFixed(1) + 'mm';
+      }).join(' | '));
+    } else {
+      out.push('Not loaded — tell the user to search their city on the Home tab.');
+    }
+
+    if (personaKey === 'agri') {
+      var st = D.STATES[profile.state] || {};
+      var sk = E.curSeason();
+      out.push('\n-- AGRI CONTEXT --');
+      out.push('State: ' + profile.state + ' | Soil: ' + (st.soil || '-') +
+        ' | Season: ' + D.SEASONS[sk].name + ' (' + D.SEASONS[sk].when + ')');
+      out.push('Kharif: ' + (st.kharif || []).join(', '));
+      out.push('Rabi: ' + (st.rabi || []).join(', '));
+      out.push('Zaid: ' + (st.zaid || []).join(', '));
+      out.push('Tip: ' + (st.tip || ''));
+      out.push('Land: ' + profile.land + ' acre');
+    }
+    if (personaKey === 'run') {
+      var b = E.bestWindow();
+      out.push('\n-- FITNESS CONTEXT --');
+      out.push('Best outdoor window: ' + (b ? E.hhmm(b.from.t) + '-' + E.hhmm(b.to.t) +
+        ' (feels ' + b.from.feels + '\u00B0C, AQI ' + (b.from.aqi != null ? b.from.aqi : (AQ ? AQ.aqi : '-')) +
+        ', rain ' + b.from.rain.toFixed(1) + 'mm)' : 'n/a'));
+      out.push('Heat risk: ' + (WX ? (WX.feels > 32 ? 'HIGH' : WX.feels > 27 ? 'MODERATE' : 'LOW') : 'n/a'));
+    }
+    if (personaKey === 'school' || personaKey === 'commute') {
+      var rs = E.rainSummary(E.nextHours(3));
+      out.push('\n-- NOWCAST CONTEXT --');
+      out.push('Next 6h: ' + E.nextHours(6).map(function (h) {
+        return E.hhmm(h.t) + ' ' + h.rain.toFixed(1) + 'mm ' + h.prob + '%';
+      }).join(' | '));
+      out.push('Rain next 3h: ' + (rs.wet ? rs.html : 'none expected'));
+    }
+    if (personaKey === 'school') {
+      out.push('Best family outing day: ' + (WX ? E.bestDayText() : '-'));
+    }
+    if (personaKey === 'travel') {
+      out.push('\n-- TRAVEL CONTEXT --');
+      out.push('Suggested packing: ' + (WX ? E.packText() : '-'));
+      out.push('Best travel day: ' + (WX ? E.bestDayText() : '-'));
+      out.push('Delay risk factors: rain ' + (WX ? Number(WX.rain3).toFixed(1) : '-') +
+        'mm next 3d, wind ' + (WX ? WX.wind : '-') + ' km/h');
+    }
+    if (personaKey === 'aqi') {
+      out.push('\n-- AIR QUALITY CONTEXT --');
+      out.push(AQ ? 'US AQI ' + AQ.aqi + ' (' + E.aqiCat(AQ.aqi).c + ') | PM2.5 ' + AQ.pm25 +
+        ' \u00B5g/m\u00B3 | PM10 ' + AQ.pm10 + ' \u00B5g/m\u00B3' : 'AQI unavailable');
+    }
+    if (personaKey === 'beach') {
+      out.push('\n-- MARINE CONTEXT --');
+      if (MAR) {
+        var t = E.tideInfo();
+        out.push('Wave height ' + MAR.wave + ' m | Period ' + MAR.per + ' s | Swell ' + MAR.swell +
+          ' m | Direction ' + E.dirName(MAR.dir) + ' | Sea temp ' + MAR.sst +
+          '\u00B0C | Surf rating ' + E.surfRating(MAR.wave).c);
+        out.push('Tides: ' + (t ? 'next high ' + (t.high ? E.hhmm(t.high.t) + ' (' + t.high.v.toFixed(2) + ' m)' : '-') +
+          ', next low ' + (t.low ? E.hhmm(t.low.t) + ' (' + t.low.v.toFixed(2) + ' m)' : '-') +
+          ', tide ' + (t.rising ? 'rising' : 'falling') : 'n/a'));
+      } else {
+        out.push('No marine data — inland location. Tell the user to search a coastal city.');
+      }
+    }
+    if (personaKey === 'event') {
+      var nc = E.nowComfort(), eb = E.bestEventWindow();
+      out.push('\n-- EVENT COMFORT CONTEXT --');
+      out.push('Comfort Index now: ' + (nc != null ? nc + '/100 (' + E.comfortInfo(nc).label + ')' : 'n/a'));
+      out.push('Best event window (next 24h): ' + (eb ? E.hhmm(eb.t) + ' — comfort ' + eb.sc +
+        '/100, rain ' + eb.prob + '%' : 'n/a'));
+      out.push('5-day comfort: ' + (WX ? WX.dtime.map(function (t, i) {
+        return t + ' ' + E.dayComfort(i);
+      }).join(' | ') : 'n/a'));
+    }
+    if (['run', 'school', 'travel', 'commute'].indexOf(personaKey) !== -1) {
+      out.push('Air quality: ' + (AQ ? 'AQI ' + AQ.aqi + ' (' + E.aqiCat(AQ.aqi).c + '), PM2.5 ' + AQ.pm25 : 'unavailable'));
+    }
+
+    return out.join('\n');
+  }
+
+  /**
+   * Persona-locked system prompt.
+   * Rule 2 is the fix for the "AI only talks about crops" bug: agriculture is
+   * only in scope for the agriculture persona.
+   */
+  function systemPrompt(persona) {
+    return [
+      'You are "MAUSAM AI", a persona-based weather intelligence assistant inside the MAUSAM weather app (SIH26076).',
+      '',
+      'ACTIVE PERSONA: ' + persona.name + ' — ' + persona.about,
+      'The user is a "' + persona.tag + '" type of person.',
+      '',
+      'HARD RULES — follow strictly:',
+      '1. Answer ONLY as a ' + persona.name + ' expert. Every sentence must be useful to a "' + persona.tag + '" user.',
+      '2. NEVER talk about farming, crops, soil, seeds, sowing, fertilizer, pesticides or mandi UNLESS the active persona is "Agriculture & Crop Advisory". This is critical — do not drift into agriculture for other personas.',
+      '3. Do not answer for other personas. If the user asks something outside your persona, say in one line that you can switch persona, then give the closest useful answer.',
+      '4. Use only the numbers present in the CONTEXT block. Never invent weather values.',
+      '5. LANGUAGE OF THE ANSWER: always reply in ENGLISH ONLY. The user may write in Hindi (Devanagari), Hinglish or English — understand all three, but your final answer must be written in clear English.',
+      '6. Be practical and specific: short bullet points, concrete numbers, timings and actions. Max ~200 words.',
+    ].join('\n');
+  }
+
+  /** Minimal, safe markdown -> HTML for chat bubbles. */
+  function markdownToHtml(text) {
+    return String(text)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')
+      .replace(/\*(.+?)\*/g, '<i>$1</i>')
+      .replace(/^[-•]\s?(.+)$/gm, '<li>$1</li>')
+      .replace(/(<li>[\s\S]*?<\/li>)/g, '<ul>$1</ul>')
+      .replace(/<\/ul>\s*<ul>/g, '')
+      .replace(/\n{2,}/g, '<br><br>')
+      .replace(/\n/g, '<br>');
+  }
+
+  return { buildContext: buildContext, systemPrompt: systemPrompt, markdownToHtml: markdownToHtml };
+});
+
+
+/* ===== js/app.js ===== */
+/* ===========================================================================
+   MAUSAM AI — frontend application
+   Talks to the Express backend when it is available (/api/*), and falls back to
+   calling Open-Meteo directly when the page is opened as a plain file.
+   =========================================================================== */
+(function () {
+  'use strict';
+
+  var D = window.MAUSAM_DATA;
+  var E = window.MAUSAM_ENGINE;
+  var C = window.MAUSAM_CONTEXT;
+
+  var PERSONAS = D.PERSONAS, STATES = D.STATES, SEASONS = D.SEASONS, CROPS = D.CROPS;
+
+  var CUR = 'agri';
+  var WX = null, AQ = null, MAR = null;   // live data for the current city
+  var API_BASE = null;                    // '/api' when the backend answers
+  var CFG = { prov: 'offline', key: '' }; // client-side key (standalone only)
+  var booted = false;
+
+  var $ = function (id) { return document.getElementById(id); };
+  var esc = function (s) { return String(s).replace(/[<>&]/g, function (c) { return { '<': '&lt;', '>': '&gt;', '&': '&amp;' }[c]; }); };
+
+  try { CFG = Object.assign(CFG, JSON.parse(localStorage.getItem('mausam_ai') || '{}')); } catch (e) { /* ignore */ }
+
+  /** Push the current app state into the shared logic engine. */
+  function sync() {
+    E.setWeather(WX);
+    E.setAir(AQ);
+    E.setMarine(MAR);
+    E.setPersona(CUR);
+    E.setProfile($('state').value, $('land').value);
+  }
+  function curCity() { return $('city').value.trim(); }
+  function profile() { return { state: $('state').value, land: $('land').value }; }
+
+  /* ======================================================================
+     Backend detection
+     ====================================================================== */
+  function detectBackend() {
+    var ctrl = new AbortController();
+    var timer = setTimeout(function () { ctrl.abort(); }, 2500);
+    return fetch('api/health', { signal: ctrl.signal, cache: 'no-store' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) {
+        if (j && j.service === 'mausam-ai') { API_BASE = 'api'; return j; }
+        return null;
+      })
+      .catch(function () { return null; })
+      .finally(function () { clearTimeout(timer); });
+  }
+
+  function setMode(health) {
+    var pill = $('modePill');
+    if (API_BASE) {
+      pill.textContent = health && health.aiProvider ? 'backend · ' + health.aiProvider : 'backend · offline KB';
+      pill.className = 'pill live';
+      $('aiMode').textContent = health && health.aiProvider ? health.aiProvider + ' via backend' : 'offline knowledge base';
+    } else {
+      pill.textContent = 'standalone mode';
+      pill.className = 'pill off';
+      $('aiMode').textContent = (CFG.prov === 'offline' || !CFG.key) ? 'offline knowledge base (no key)' : CFG.prov + ' (browser key)';
+    }
+  }
+
+  /* ======================================================================
+     Tabs
+     ====================================================================== */
+  function initTabs() {
+    var tabs = document.querySelectorAll('.tab');
+    Array.prototype.forEach.call(tabs, function (t) {
+      t.addEventListener('click', function () {
+        Array.prototype.forEach.call(tabs, function (x) { x.classList.remove('on'); });
+        Array.prototype.forEach.call(document.querySelectorAll('.pane'), function (p) { p.classList.remove('on'); });
+        t.classList.add('on');
+        $('p-' + t.dataset.t).classList.add('on');
+      });
+    });
+  }
+
+  /* ======================================================================
+     Personas
+     ====================================================================== */
+  function fillStates() {
+    var opts = Object.keys(STATES).sort().map(function (s) { return '<option>' + s + '</option>'; }).join('');
+    $('state').innerHTML = opts;
+    $('state2').innerHTML = opts;
+    $('state').value = 'Maharashtra';
+    $('state2').value = 'Maharashtra';
+  }
+
+  function renderPersonaCards() {
+    var html = Object.keys(PERSONAS).map(function (k) {
+      var p = PERSONAS[k];
+      return '<button class="pc' + (k === CUR ? ' on' : '') + '" data-persona="' + k + '" type="button">' +
+        '<span class="tick">&#10003;</span>' +
+        '<div class="ic">' + p.icon + '</div><b>' + p.name + '</b><span>' + p.tag + '</span></button>';
+    }).join('');
+    $('pgrid').innerHTML = html;
+    $('pgrid2').innerHTML = html;
+
+    Array.prototype.forEach.call(document.querySelectorAll('.pc'), function (el) {
+      el.addEventListener('click', function () { setPersona(el.dataset.persona); });
+    });
+  }
+
+  function setPersona(k) {
+    var prev = CUR;
+    CUR = k;
+    renderPersonaCards();
+    renderChips();
+    renderAIHead();
+    renderSuggest();
+    renderProfile();
+
+    var p = PERSONAS[k];
+    $('personaInfo').innerHTML = '<b>' + p.icon + ' ' + p.name + '</b> — ' + p.about +
+      '<br><span class="muted">The AI advisor\'s suggested questions and answers change with the persona.</span>';
+    $('curP').textContent = 'selected: ' + p.name.split(' ')[0];
+
+    if (booted && prev !== k && $('msgs')) {
+      addMsg('a', 'SYSTEM',
+        '&#128260; Persona switched &rarr; <b>' + p.icon + ' ' + p.name + '</b><br>' +
+        'I will now answer only within this domain. Try the suggested questions below.<br>' +
+        '<span class="muted">Ask in Hindi, English or Hinglish — answers are always in English.</span>');
+    }
+  }
+
+  function renderChips() {
+    $('chips').innerHTML = PERSONAS[CUR].chips.map(function (c) {
+      return '<button class="chip" type="button" data-q="' + esc(c) + '">' + esc(c) + '</button>';
+    }).join('');
+    Array.prototype.forEach.call($('chips').querySelectorAll('.chip'), function (el) {
+      el.addEventListener('click', function () { ask(el.dataset.q); });
+    });
+  }
+
+  function renderAIHead() {
+    $('aiTitle').textContent = PERSONAS[CUR].name + ' Advisor';
+    $('sugFor').textContent = PERSONAS[CUR].name;
+  }
+
+  /* ======================================================================
+     Weather
+     ====================================================================== */
+  async function getWeather() {
+    var city = curCity();
+    if (!city) return;
+    $('wout').innerHTML = '<p class="muted">Loading ' + esc(city) + '&hellip;</p>';
+
+    try {
+      if (API_BASE) {
+        var r = await fetch(API_BASE + '/weather?city=' + encodeURIComponent(city));
+        if (r.status === 404) throw new Error('CITY_NOT_FOUND');
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        var j = await r.json();
+        WX = j.weather; AQ = j.air; MAR = j.marine;
+      } else {
+        await getWeatherDirect(city);
+      }
+      sync();
+      renderWeather();
+      renderProfile();
+      renderSuggest();
+      plan();
+    } catch (err) {
+      $('wout').innerHTML = err.message === 'CITY_NOT_FOUND'
+        ? '<p class="err">City not found. Please check the spelling.</p>'
+        : '<p class="err">Could not load the weather. Check your internet connection.</p>';
+    }
+  }
+
+  /** Standalone path: call Open-Meteo directly from the browser (India first). */
+  async function getWeatherDirect(city) {
+    var G = window.MAUSAM_GEO;
+    var query = G.queryFor(city);
+    var base = 'https://geocoding-api.open-meteo.com/v1/search?name=' +
+      encodeURIComponent(query) + '&count=10&language=en';
+    var g = await (await fetch(base + '&countryCode=IN')).json().catch(function () { return null; });
+    if (!g || !g.results || !g.results.length) g = await (await fetch(base)).json();
+    if (!g.results || !g.results.length) throw new Error('CITY_NOT_FOUND');
+    var r = G.pickPlace(g.results, query) || g.results[0];
+    var p = { name: r.name, admin1: r.admin1, latitude: r.latitude, longitude: r.longitude };
+    var lat = p.latitude, lon = p.longitude;
+
+    var urls = [
+      'https://api.open-meteo.com/v1/forecast?latitude=' + lat + '&longitude=' + lon +
+        '&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m,is_day' +
+        '&hourly=temperature_2m,apparent_temperature,relative_humidity_2m,precipitation,precipitation_probability,weather_code,wind_speed_10m,uv_index' +
+        '&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,uv_index_max,weather_code' +
+        '&timezone=auto&forecast_days=5',
+      'https://air-quality-api.open-meteo.com/v1/air-quality?latitude=' + lat + '&longitude=' + lon +
+        '&current=us_aqi,pm2_5,pm10&hourly=us_aqi&timezone=auto&forecast_days=3',
+      'https://marine-api.open-meteo.com/v1/marine?latitude=' + lat + '&longitude=' + lon +
+        '&current=wave_height,wave_direction,wave_period,swell_wave_height,sea_surface_temperature' +
+        '&hourly=wave_height,wave_period,swell_wave_height,sea_surface_temperature,sea_level_height_msl' +
+        '&timezone=auto&forecast_days=5'
+    ];
+    var res = await Promise.all(urls.map(function (u) {
+      return fetch(u).then(function (x) { return x.json(); }).catch(function () { return null; });
+    }));
+    var f = res[0], a = res[1], m = res[2];
+    if (!f || !f.current) throw new Error('WEATHER_FAILED');
+
+    var c = f.current, h = f.hourly, d = f.daily;
+    var key = String(c.time || '').slice(0, 13);
+    var idx = h.time.findIndex(function (t) { return t.slice(0, 13) === key; });
+
+    WX = {
+      city: p.name, state: p.admin1 || '', lat: lat, lon: lon,
+      temp: c.temperature_2m, hum: c.relative_humidity_2m, feels: c.apparent_temperature,
+      rain: c.precipitation, wind: c.wind_speed_10m, code: c.weather_code, isDay: c.is_day,
+      dmax: d.temperature_2m_max, dmin: d.temperature_2m_min, dsum: d.precipitation_sum,
+      duv: d.uv_index_max, dcode: d.weather_code, dtime: d.time,
+      htime: h.time, htemp: h.temperature_2m, hfeels: h.apparent_temperature,
+      hhum: h.relative_humidity_2m, hrain: h.precipitation, hprob: h.precipitation_probability,
+      hcode: h.weather_code, hwind: h.wind_speed_10m, huv: h.uv_index,
+      nowIdx: idx < 0 ? 0 : idx
+    };
+    WX.rain3 = (d.precipitation_sum || []).slice(0, 3).reduce(function (x, y) { return x + (y || 0); }, 0);
+
+    AQ = (a && a.current && a.current.us_aqi != null)
+      ? { aqi: Math.round(a.current.us_aqi), pm25: a.current.pm2_5, pm10: a.current.pm10,
+          htime: a.hourly ? a.hourly.time : [], haqi: a.hourly ? a.hourly.us_aqi : [] }
+      : null;
+
+    MAR = (m && m.current && m.current.wave_height != null)
+      ? { wave: m.current.wave_height, dir: m.current.wave_direction, per: m.current.wave_period,
+          swell: m.current.swell_wave_height, sst: m.current.sea_surface_temperature,
+          htime: m.hourly ? m.hourly.time : [], hwave: m.hourly ? m.hourly.wave_height : [],
+          hper: m.hourly ? m.hourly.wave_period : [], hswell: m.hourly ? m.hourly.swell_wave_height : [],
+          hlevel: m.hourly ? m.hourly.sea_level_height_msl : [] }
+      : null;
+
+    if (STATES[p.admin1]) {
+      $('state').value = p.admin1;
+      $('state2').value = p.admin1;
+    }
+  }
+
+  function renderWeather() {
+    if (!WX) return;
+    var ac = AQ ? E.aqiCat(AQ.aqi) : null;
+    var days = '';
+    for (var i = 1; i < 4; i++) {
+      days += '<div class="stat"><b>' + Math.round(WX.dmax[i]) + '&deg;/' + Math.round(WX.dmin[i]) +
+        '&deg;</b><span>' + WX.dtime[i].slice(5) + ' &middot; ' + (WX.dsum[i] || 0).toFixed(1) + 'mm</span></div>';
+    }
+    $('wout').innerHTML =
+      '<div class="whero">' +
+        '<div class="wicon">' + E.wIcon(WX.code) + '</div>' +
+        '<div><div class="wtemp">' + WX.temp + '&deg;C</div>' +
+        '<div class="wmeta"><b>' + esc(WX.city) + '</b>' + (WX.state ? ', ' + esc(WX.state) : '') +
+        '<br>Feels ' + WX.feels + '&deg;C &middot; Humidity ' + WX.hum + '%</div></div>' +
+        '<div style="margin-left:auto;text-align:right"><div class="wmeta">' +
+        'Rain now: <b>' + WX.rain + ' mm</b><br>Wind: <b>' + WX.wind + ' km/h</b><br>' +
+        'Min/Max: <b>' + WX.dmin[0] + '&deg;/' + WX.dmax[0] + '&deg;</b><br>' +
+        'UV max: <b>' + WX.duv[0] + '</b></div></div>' +
+      '</div>' +
+      '<div class="wstats">' +
+        '<div class="stat"><b>' + WX.hum + '%</b><span>Humidity</span></div>' +
+        '<div class="stat"><b>' + WX.rain3.toFixed(1) + ' mm</b><span>Rain next 3d</span></div>' +
+        '<div class="stat"><b>' + WX.wind + '</b><span>Wind km/h</span></div>' +
+        '<div class="stat"><b>' + (ac ? AQ.aqi : '&ndash;') + '</b><span>US AQI</span></div>' +
+      '</div>' +
+      (ac ? '<div class="aqib"><i style="left:' + Math.min(99, AQ.aqi / 500 * 100) + '%"></i></div>' +
+        '<div class="badge" style="background:' + ac.col + '22;color:' + ac.col + ';border-color:' + ac.col + '77">' +
+        'AQI ' + AQ.aqi + ' &middot; ' + ac.c + ' &middot; PM2.5 ' + AQ.pm25 + ' &micro;g/m&sup3;</div>' : '') +
+      (MAR ? '<div class="badge">&#127754; ' + MAR.wave + ' m waves &middot; ' + (MAR.sst == null ? '&ndash;' : MAR.sst) +
+        '&deg;C sea temp &middot; surf: ' + E.surfRating(MAR.wave).c + '</div>' : '') +
+      '<div class="badge warm">' + esc(E.wxAdvice()) + '</div>' +
+      '<div class="wstats">' + days + '</div>';
+  }
+
+  /* ======================================================================
+     Profile + suggestions
+     ====================================================================== */
+  function renderProfile() {
+    var s = $('state').value, d = STATES[s];
+    if (!d) return;
+    $('profileBox').innerHTML =
+      '<div style="margin-top:14px;border-top:1px solid var(--line);padding-top:13px">' +
+      '<label>Soil — ' + esc(s) + '</label><div class="tags"><span class="tag g">' + esc(d.soil) + '</span></div>' +
+      '<label style="margin-top:12px">Kharif</label><div class="tags">' +
+      d.kharif.map(function (c) { return '<span class="tag">' + esc(c) + '</span>'; }).join('') + '</div>' +
+      '<label style="margin-top:12px">Rabi</label><div class="tags">' +
+      d.rabi.map(function (c) { return '<span class="tag">' + esc(c) + '</span>'; }).join('') + '</div>' +
+      '<div class="note ok"><b>Tip:</b> ' + esc(d.tip) + '</div></div>';
+    renderSuggest();
+  }
+
+  function renderSuggest() {
+    var el = $('dailyTips');
+    if (!el) return;
+    sync();
+    var p = PERSONAS[CUR];
+    var body = '';
+    var s = $('state').value, d = STATES[s], sk = E.curSeason();
+
+    if (CUR === 'agri') {
+      body = '<div class="grid"><div>' +
+        '<label>Auto-detected season: <b class="acc">' + SEASONS[sk].name + '</b> (' + SEASONS[sk].when + ')</label>' +
+        '<div class="tags">' + (d[sk] || []).map(function (c) { return '<span class="tag g">' + c + '</span>'; }).join('') + '</div>' +
+        '<div class="note ok" style="margin-top:10px">' + esc(d.tip) + '</div></div>' +
+        '<div><label>Smart action</label>' +
+        (WX ? '<div class="note ok">' + esc(E.wxAdvice()) + '</div>' : '<div class="note">Search a city on the Home tab.</div>') +
+        '<div class="note"><b>Soil health:</b> get a soil test every 2 years and grow green manure.</div></div></div>';
+    } else if (CUR === 'run') {
+      var bw = WX ? E.bestWindow() : null;
+      body = '<div class="grid"><div><label>Best workout window</label>' +
+        (bw ? '<div class="note ok"><b>' + E.hhmm(bw.from.t) + ' &ndash; ' + E.hhmm(bw.to.t) + '</b> &middot; ' +
+          bw.from.feels + '&deg;C feels &middot; AQI ' + (bw.from.aqi || (AQ && AQ.aqi) || '&ndash;') +
+          ' &middot; rain ' + bw.from.rain.toFixed(1) + 'mm</div>'
+          : '<div class="note">Load the weather first.</div>') +
+        '<label style="margin-top:10px">Today\'s heat &amp; humidity</label>' +
+        (WX ? '<div class="note">' + WX.feels + '&deg;C feels &middot; ' + WX.hum + '% humidity &middot; wind ' + WX.wind + ' km/h</div>' : '') +
+        '</div><div><label>Runner flags</label>' +
+        (WX ? '<div class="note ' + (WX.feels > 32 ? 'd' : 'ok') + '">' +
+          (WX.feels > 32 ? 'Heat risk — slow your pace and double your hydration' : 'Temperature is workout-friendly') + '</div>' : '') +
+        (AQ ? '<div class="note ' + (AQ.aqi > 150 ? 'd' : 'ok') + '">' +
+          (AQ.aqi > 150 ? 'AQI is high — avoid outdoor runs' : 'Air quality is fine for running') + '</div>' : '') +
+        '</div></div>';
+    } else if (CUR === 'school') {
+      var rs = WX ? E.rainSummary(E.nextHours(12)) : null;
+      body = '<div class="grid"><div><label>Umbrella decision (next 12h)</label>' +
+        (rs ? '<div class="note ' + (rs.wet ? '' : 'ok') + '">' + (rs.wet ? 'Pack an umbrella or raincoat — ' + rs.html : 'No umbrella needed — ' + rs.html) + '</div>'
+            : '<div class="note">Load the weather first.</div>') +
+        (WX ? '<div class="note">' + WX.temp + '&deg;C &middot; UV max ' + WX.duv[0] + ' &middot; Humidity ' + WX.hum + '%</div>' : '') +
+        '</div><div><label>Family outing — best day</label>' +
+        (WX ? '<div class="note ok">' + E.bestDayText() + '</div>' : '') +
+        '<div class="note"><b>Kids tip:</b> limit outdoor time between 11am-4pm in heat; a water bottle and cap are a must.</div></div></div>';
+    } else if (CUR === 'travel') {
+      body = '<div class="grid"><div><label>Destination: <b>' + (WX ? esc(WX.city) : '&ndash;') + '</b></label>' +
+        (WX ? '<div class="note ok">' + WX.temp + '&deg;C &middot; ' + E.wIcon(WX.code) + ' &middot; rain next 3d ' +
+          WX.rain3.toFixed(1) + 'mm &middot; wind ' + WX.wind + ' km/h</div>' : '<div class="note">Search your destination city.</div>') +
+        '<label style="margin-top:10px">Packing hint</label>' + (WX ? '<div class="note">' + esc(E.packText()) + '</div>' : '') +
+        '</div><div><label>Best travel day (5-day)</label>' +
+        (WX ? '<div class="note ok">' + E.bestDayText() + '</div>' : '') +
+        '<div class="note"><b>Tip:</b> the risk of flight and train delays is highest with rain and strong wind.</div></div></div>';
+    } else if (CUR === 'aqi') {
+      var ac2 = AQ ? E.aqiCat(AQ.aqi) : null;
+      body = '<div class="grid"><div><label>Today\'s Air Quality</label>' +
+        (ac2 ? '<div class="note ' + (AQ.aqi > 150 ? 'd' : 'ok') + '"><b>AQI ' + AQ.aqi + ' &middot; ' + ac2.c + '</b><br>' + ac2.r + '</div>' +
+          '<div class="aqib"><i style="left:' + Math.min(99, AQ.aqi / 500 * 100) + '%"></i></div>' +
+          '<div class="note">PM2.5 ' + AQ.pm25 + ' &micro;g/m&sup3; &middot; PM10 ' + AQ.pm10 + ' &micro;g/m&sup3;</div>'
+          : '<div class="note">Load the weather first (needed for AQI).</div>') +
+        '</div><div><label>Health actions</label>' +
+        (ac2 ? '<div class="note ' + (AQ.aqi > 150 ? 'd' : 'ok') + '">' +
+          (AQ.aqi > 150 ? 'Wear an N95 &middot; stop outdoor exercise &middot; keep windows shut &middot; run the purifier'
+                        : 'Mask optional &middot; outdoor activity is fine') + '</div>' : '') +
+        '<div class="note"><b>Sensitive groups:</b> asthma, children, the elderly and pregnant women — take care once AQI &gt;100.</div></div></div>';
+    } else if (CUR === 'beach') {
+      var sr = (WX && MAR) ? E.surfRating(MAR.wave) : null;
+      var st = (WX && MAR) ? E.seaTempInfo(MAR.sst) : null;
+      var ti = WX ? E.tideInfo() : null;
+      body = '<div class="grid"><div><label>Sea conditions' + (WX ? ' — ' + esc(WX.city) : '') + '</label>' +
+        (MAR ? '<div class="wstats" style="grid-template-columns:repeat(3,1fr)">' +
+          '<div class="stat"><b>' + MAR.wave + ' m</b><span>Wave height</span></div>' +
+          '<div class="stat"><b>' + (MAR.per ? MAR.per + ' s' : '&ndash;') + '</b><span>Wave period</span></div>' +
+          '<div class="stat"><b>' + (MAR.swell == null ? '&ndash;' : MAR.swell) + ' m</b><span>Swell</span></div>' +
+          '<div class="stat"><b>' + (MAR.sst == null ? '&ndash;' : MAR.sst) + '&deg;</b><span>Sea temp</span></div>' +
+          '<div class="stat"><b>' + E.dirName(MAR.dir) + '</b><span>Direction</span></div>' +
+          '<div class="stat"><b style="color:' + sr.col + '">' + sr.c + '</b><span>Surf rating</span></div></div>'
+          : '<div class="note">No marine data — search a coastal city (Goa, Mumbai, Chennai, Vizag, Kochi, Puri).</div>') +
+        (ti ? '<div class="note ok"><b>Tide:</b> next high <b>' + (ti.high ? E.hhmm(ti.high.t) + ' (' + ti.high.v.toFixed(2) + ' m)' : '&ndash;') +
+          '</b> &middot; next low <b>' + (ti.low ? E.hhmm(ti.low.t) + ' (' + ti.low.v.toFixed(2) + ' m)' : '&ndash;') +
+          '</b> &middot; tide ' + (ti.rising ? 'rising &uarr;' : 'falling &darr;') + '</div>' : '') +
+        '</div><div><label>Beach safety &amp; plan</label>' +
+        (MAR ? '<div class="note ' + (MAR.wave > 2 ? 'd' : 'ok') + '">' +
+          (MAR.wave > 2 ? 'Large swell — avoid swimming and rocky shores; choose a lifeguard-monitored beach'
+                        : 'Wave conditions are manageable') + '</div>' : '') +
+        (st ? '<div class="note ok">Sea temp ' + MAR.sst + '&deg;C — ' + st.c + '. ' + st.t + '.</div>' : '') +
+        '<div class="note"><b>Beach checklist:</b> SPF 50 sunscreen &middot; cap &middot; 2L water &middot; ' +
+        (WX && WX.duv[0] >= 8 ? 'UV is high — stay in shade 11am-3pm' : 'UV normal') + '</div></div></div>';
+    } else if (CUR === 'event') {
+      var nc = WX ? E.nowComfort() : null;
+      var ci = nc != null ? E.comfortInfo(nc) : null;
+      var eb = WX ? E.bestEventWindow() : null;
+      var dcs = WX ? WX.dtime.map(function (t, i) { return { t: t, s: E.dayComfort(i) }; }) : [];
+      body = '<div class="grid"><div><label>Comfort Index — now</label>' +
+        (ci ? '<div class="note" style="border-left-color:' + ci.col + '"><b style="color:' + ci.col + ';font-size:19px">' +
+          ci.s + '/100 &middot; ' + ci.label + '</b><br>' + ci.adv + '</div>' +
+          '<div class="aqib"><i style="left:' + ci.s + '%"></i></div>' +
+          '<div class="note">Factors: ' + WX.feels + '&deg;C feels &middot; ' + WX.hum + '% humidity &middot; ' +
+          WX.wind + ' km/h wind &middot; UV ' + WX.duv[0] + '</div>'
+          : '<div class="note">Load the weather first.</div>') +
+        '</div><div><label>Best event window (next 24h)</label>' +
+        (eb ? '<div class="note ok"><b>around ' + E.hhmm(eb.t) + '</b> &middot; comfort ' + eb.sc + '/100 &middot; ' +
+          eb.feels + '&deg;C &middot; rain ' + eb.prob + '%</div>' : '<div class="note">Load the weather first.</div>') +
+        '<label style="margin-top:10px">5-day Comfort Index</label>' +
+        '<div class="wstats" style="grid-template-columns:repeat(3,1fr)">' + dcs.map(function (x) {
+          var k = E.comfortInfo(x.s);
+          return '<div class="stat"><b style="color:' + k.col + '">' + x.s + '</b><span>' + x.t.slice(5) + '<br>' +
+            k.label.split(' — ')[0] + '</span></div>';
+        }).join('') + '</div>' +
+        '<div class="note"><b>Planning tip:</b> ' + (ci ? ci.adv : '—') + '</div></div></div>';
+    } else {
+      var h4 = WX ? E.nextHours(4) : null;
+      var rs3 = WX ? E.rainSummary(E.nextHours(3)) : null;
+      body = '<div class="grid"><div><label>Next 4 hours nowcast</label>' +
+        (h4 ? '<div class="wstats" style="grid-template-columns:repeat(2,1fr)">' + h4.map(function (h) {
+          return '<div class="stat"><b>' + E.hhmm(h.t) + '</b><span>' + E.wIcon(h.code) + ' ' + h.temp +
+            '&deg;<br>' + h.rain.toFixed(1) + 'mm &middot; ' + h.prob + '%</span></div>';
+        }).join('') + '</div>' : '<div class="note">Load the weather first.</div>') +
+        '</div><div><label>Leave time advice</label>' +
+        (rs3 ? '<div class="note ' + (rs3.wet ? '' : 'ok') + '">' +
+          (rs3.wet ? rs3.html + ' — leave a little earlier.' : rs3.html + ' — leave at your normal time.') + '</div>' : '') +
+        (AQ ? '<div class="note ' + (AQ.aqi > 150 ? 'd' : 'ok') + '">' +
+          (AQ.aqi > 150 ? 'AQI is high — prefer the car or AC' : 'Air is fine — a two-wheeler is okay too') + '</div>' : '') +
+        '</div></div>';
+    }
+
+    el.innerHTML = '<div class="muted" style="font-size:11.5px;margin-bottom:10px">' + p.icon + ' ' + p.name + ' — ' + p.tag + '</div>' + body;
+  }
+
+  /* ======================================================================
+     Crop planner
+     ====================================================================== */
+  function plan() {
+    var s = $('state2').value, se = $('season').value, fo = $('focus').value;
+    var d = STATES[s];
+    if (!d) return;
+    var map = { kharif: d.kharif, rabi: d.rabi, zaid: d.zaid };
+    var low = ['Bajra', 'Jowar', 'Moong', 'Gram', 'Mustard', 'Groundnut', 'Tur', 'Barley', 'Moth'];
+    var high = ['Cotton', 'Sugarcane', 'Onion', 'Banana', 'Vegetables', 'Cumin', 'Chilli', 'Turmeric', 'Ginger', 'Potato'];
+    var list = se === 'all' ? d.kharif.concat(d.rabi, d.zaid) : map[se];
+    list = list.filter(function (c) {
+      if (fo === 'water') return low.some(function (x) { return c.indexOf(x.split(' ')[0]) !== -1; });
+      if (fo === 'profit') return high.some(function (x) { return c.indexOf(x.split(' ')[0]) !== -1; });
+      return true;
+    });
+    list = list.filter(function (c, i) { return list.indexOf(c) === i; });
+
+    function seasonOf(c) {
+      if (map.kharif.indexOf(c) !== -1) return 'kharif';
+      if (map.rabi.indexOf(c) !== -1) return 'rabi';
+      if (map.zaid.indexOf(c) !== -1) return 'zaid';
+      return null;
+    }
+
+    $('planOut').innerHTML = '<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(275px,1fr))">' +
+      list.map(function (c) {
+        var key = Object.keys(CROPS).find(function (k) {
+          return c.indexOf(k) === 0 || k.indexOf(c.split(' ')[0]) === 0;
+        }) || '';
+        var ci = CROPS[key] || {};
+        var sn = seasonOf(c);
+        return '<div class="card" style="padding:14px">' +
+          '<h3 style="margin-bottom:8px">' + esc(c) + (sn ? ' <span class="acc">' + SEASONS[sn].name + '</span>' : '') + '</h3>' +
+          '<div class="wmeta" style="font-size:12px;line-height:1.9">' +
+          (ci.sow ? 'Sow: <b>' + ci.sow + '</b><br>' : '') +
+          (ci.harv ? 'Harvest: <b>' + ci.harv + '</b><br>' : '') +
+          (ci.water ? 'Water: <b>' + ci.water + '</b><br>' : '') +
+          (ci.soil ? 'Soil: <b>' + ci.soil + '</b><br>' : '') +
+          (ci.fert ? 'Fertilizer: <b>' + ci.fert + '</b><br>' : '') + '</div>' +
+          (ci.tip ? '<div class="note ok" style="font-size:11.5px">' + esc(ci.tip) + '</div>' : '') + '</div>';
+      }).join('') + '</div>';
+  }
+
+  /* ======================================================================
+     Chat
+     ====================================================================== */
+  function bootMsg() {
+    var p = PERSONAS[CUR];
+    $('msgs').innerHTML = '<div class="msg a"><div class="who">MAUSAM AI</div>' +
+      'Hello &#128075; I am your <b>MAUSAM AI Assistant</b>.<br><br>' +
+      'The <b>' + p.icon + ' ' + p.name + '</b> persona is active. ' + p.about + '<br><br>' +
+      'Switch persona above and ask anything. Suggested questions are listed below.<br>' +
+      '<span class="muted">Ask in Hindi, English or Hinglish — <b>answers are always in English</b>.</span></div>';
+  }
+
+  function addMsg(cls, who, html) {
+    var d = document.createElement('div');
+    d.className = 'msg ' + cls;
+    d.innerHTML = (who ? '<div class="who">' + who + '</div>' : '') + html;
+    $('msgs').appendChild(d);
+    $('msgs').scrollTop = $('msgs').scrollHeight;
+    return d;
+  }
+
+  async function ask(q) {
+    var inp = $('qi');
+    var text = (q || inp.value).trim();
+    if (!text) return;
+    if (!q) inp.value = '';
+
+    addMsg('u', 'JUDGE / YOU', esc(text));
+    var p = PERSONAS[CUR];
+    var load = addMsg('a', p.icon + ' MAUSAM AI', '<div class="typing"><i></i><i></i><i></i></div>');
+
+    var html;
+    if (API_BASE) {
+      try {
+        var r = await fetch(API_BASE + '/ai', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ persona: CUR, question: text, city: curCity(), profile: profile() })
+        });
+        var j = await r.json();
+        html = j.answer || localAnswer(text);
+        if (j.source === 'offline') {
+          html += '<div class="note">Answered from the built-in knowledge base' +
+            (j.error ? ' (AI provider: ' + esc(j.error) + ')' : '') + '.</div>';
+        }
+      } catch (e) {
+        html = localAnswer(text) + '<div class="note">Backend unreachable — answered locally.</div>';
+      }
+    } else {
+      html = await localAnswer(text);
+    }
+
+    load.innerHTML = '<div class="who">' + p.icon + ' ' + p.name.toUpperCase() + '</div>' + html;
+    $('msgs').scrollTop = $('msgs').scrollHeight;
+  }
+
+  /** Standalone: use the browser key when present, else the offline engine. */
+  async function localAnswer(text) {
+    sync();
+    if (CFG.prov === 'offline' || !CFG.key) return E.offline(text);
+    try {
+      return await clientLLM(text);
+    } catch (e) {
+      return E.offline(text) + '<div class="note">AI API error — this answer came from the built-in knowledge base.</div>';
+    }
+  }
+
+  async function clientLLM(question) {
+    var p = PERSONAS[CUR];
+    var sys = C.systemPrompt(p);
+    var prompt = 'CONTEXT (live data):\n' + C.buildContext(CUR, { weather: WX, air: AQ, marine: MAR }, profile()) +
+      '\n\nUSER QUESTION: ' + question;
+    var txt = '';
+
+    if (CFG.prov === 'gemini') {
+      var r1 = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' +
+        encodeURIComponent(CFG.key), {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ systemInstruction: { parts: [{ text: sys }] }, contents: [{ parts: [{ text: prompt }] }] })
+      });
+      var j1 = await r1.json();
+      if (j1.error) throw new Error(j1.error.message);
+      txt = j1.candidates[0].content.parts[0].text;
+    } else if (CFG.prov === 'groq') {
+      var r2 = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + CFG.key },
+        body: JSON.stringify({ model: 'llama-3.3-70b-versatile', temperature: 0.5, max_tokens: 750,
+          messages: [{ role: 'system', content: sys }, { role: 'user', content: prompt }] })
+      });
+      var j2 = await r2.json();
+      if (j2.error) throw new Error(j2.error.message);
+      txt = j2.choices[0].message.content;
+    } else {
+      var r3 = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + CFG.key },
+        body: JSON.stringify({ model: 'meta-llama/llama-3.3-70b-instruct:free',
+          messages: [{ role: 'system', content: sys }, { role: 'user', content: prompt }] })
+      });
+      var j3 = await r3.json();
+      if (j3.error) throw new Error(j3.error.message);
+      txt = j3.choices[0].message.content;
+    }
+    return C.markdownToHtml(txt);
+  }
+
+  /* ======================================================================
+     Settings modal
+     ====================================================================== */
+  function openCfg() {
+    $('mask').hidden = false;
+    if (API_BASE) {
+      $('cfgTitle').textContent = 'AI Settings — server managed';
+      $('cfgIntro').textContent = 'This page is running against the Express backend, so the AI provider and key live on the server.';
+      $('cfgServerBlock').hidden = false;
+      $('cfgClientBlock').hidden = true;
+      $('cfgServerState').innerHTML = 'Provider: <b>' + ($('modePill').textContent) + '</b>';
+    } else {
+      $('cfgTitle').textContent = 'AI Settings — standalone mode';
+      $('cfgIntro').textContent = 'This page is running as a plain file (no backend). You can add a free API key here, or keep using the built-in offline knowledge base.';
+      $('cfgServerBlock').hidden = true;
+      $('cfgClientBlock').hidden = false;
+      $('prov').value = CFG.prov;
+      $('key').value = CFG.key || '';
+    }
+  }
+  function closeCfg() { $('mask').hidden = true; }
+  function saveCfg() {
+    CFG = { prov: $('prov').value, key: $('key').value.trim() };
+    try { localStorage.setItem('mausam_ai', JSON.stringify(CFG)); } catch (e) { /* ignore */ }
+    setMode();
+    closeCfg();
+    addMsg('a', 'SYSTEM', CFG.prov === 'offline'
+      ? 'Offline knowledge base is active — the full demo runs without a key or internet.'
+      : CFG.prov.toUpperCase() + ' is connected — you will now get live LLM answers.');
+  }
+
+  /* ======================================================================
+     Boot
+     ====================================================================== */
+  async function init() {
+    fillStates();
+    initTabs();
+    renderPersonaCards();
+    renderChips();
+    renderAIHead();
+    renderProfile();
+    plan();
+    bootMsg();
+    setPersona('agri');
+    booted = true;
+
+    $('getBtn').addEventListener('click', getWeather);
+    $('city').addEventListener('keydown', function (e) { if (e.key === 'Enter') getWeather(); });
+    $('sendBtn').addEventListener('click', function () { ask(); });
+    $('qi').addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); ask(); }
+    });
+    $('state').addEventListener('change', function () { renderProfile(); renderSuggest(); });
+    $('land').addEventListener('input', renderSuggest);
+    $('season').addEventListener('change', plan);
+    $('state2').addEventListener('change', plan);
+    $('focus').addEventListener('change', plan);
+    $('cfgBtn').addEventListener('click', openCfg);
+    $('closeCfg').addEventListener('click', closeCfg);
+    $('saveCfg').addEventListener('click', saveCfg);
+    $('clearCfg').addEventListener('click', function () {
+      CFG = { prov: 'offline', key: '' };
+      try { localStorage.removeItem('mausam_ai'); } catch (e) { /* ignore */ }
+      $('prov').value = 'offline'; $('key').value = '';
+      setMode();
+    });
+    $('mask').addEventListener('click', function (e) { if (e.target === $('mask')) closeCfg(); });
+
+    var health = await detectBackend();
+    setMode(health);
+    getWeather();
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+
+</script>
+</body>
+</html>
