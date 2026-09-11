@@ -4,12 +4,19 @@
 Smart India Hackathon **SIH26076** · Ministry of Earth Sciences (MoES) · India Meteorological Department (IMD)
 
 <p>
+  <a href="https://github.com/dhwaj-ux/-sih26076-mausam-app/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/dhwaj-ux/-sih26076-mausam-app/actions/workflows/ci.yml/badge.svg"></a>
   <img alt="Node 18+" src="https://img.shields.io/badge/node-18%2B-brightgreen">
   <img alt="Tests" src="https://img.shields.io/badge/tests-80%2F80%20passing-brightgreen">
   <img alt="Cost" src="https://img.shields.io/badge/running%20cost-%E2%82%B90-blue">
   <img alt="License" src="https://img.shields.io/badge/license-MIT-lightgrey">
   <img alt="Personas" src="https://img.shields.io/badge/personas-8-orange">
+  <img alt="SIH" src="https://img.shields.io/badge/SIH-26076-blueviolet">
 </p>
+
+```bash
+git clone https://github.com/dhwaj-ux/-sih26076-mausam-app.git
+cd -- -sih26076-mausam-app && npm install && npm start
+```
 
 > **Try it in 5 seconds:** open [`standalone/mausam-ai.html`](standalone/mausam-ai.html) in any browser —
 > the whole app (CSS, JS, logo) is inlined in that single file. No install, no server.
@@ -301,5 +308,8 @@ different persona. That single interaction demonstrates the whole personalisatio
 
 ## 📄 Licence
 
-MIT. Weather data © [Open-Meteo](https://open-meteo.com) (CC-BY-4.0).
-Logo and name depict the IMD / MoES **MAUSAM** app; used here for a hackathon prototype.
+MIT — see [LICENSE](LICENSE).
+
+Third-party attributions (Open-Meteo CC-BY-4.0 data, AI providers, IMD / MoES
+branding) are listed in [THIRD-PARTY.md](THIRD-PARTY.md).
+This repository is a hackathon prototype and is not an official IMD or MoES product.
